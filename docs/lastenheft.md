@@ -2,9 +2,9 @@
 
 | | |
 |---|---|
-| **Version** | 1.0 |
+| **Version** | 1.1 |
 | **Stand** | 13.10.2026 |
-| **Status** | Freigegeben durch Julius am 13.10.2026 |
+| **Status** | Freigegeben durch Julius am 13.10.2026; Zielwerte nach Konzept-Freigabe ergänzt (v1.1) |
 | **Auftraggeber** | Julius |
 | **Bearbeitung** | Claude (Entwicklungspartner) |
 | **Visuelle Übersicht** | [`lastenheft-uebersicht.html`](lastenheft-uebersicht.html) (Link zur veröffentlichten Seite siehe README) |
@@ -129,8 +129,8 @@ Damit wir dieselben Wörter für dieselben Dinge benutzen:
 | S-10 | Soll | Anzeige des eingespeisten Stroms in mA. Zeigt sofort, ob überhaupt ein Stromkreis zustande kommt. |
 | S-11 | Soll | Mindestens zwei Leistungsstufen (wenig Übersprechen ↔ große Reichweite). |
 | S-12 | Muss | Übersteht Fremdspannung an den Klemmen bis **60 V DC / 50 V AC** dauerhaft ohne Schaden (F-13). |
-| S-13 | Kann | **Fremdspannungswarnung:** misst vor dem Einspeisen und warnt. Nur, wenn sie zuverlässig ist und nicht als Spannungsprüfer missverstanden werden kann (eine Anzeige „0 V“ ist kein Feststellen der Spannungsfreiheit). Entscheidung mit Begründung in Phase 2. |
-| S-14 | Soll | **Durchgangs-/Schleifentest:** zeigt den Schleifenwiderstand in Ω und ob das Ende offen, gebrückt oder mit Abschlusswiderstand beschaltet ist. Nur, wenn das Ergebnis eindeutig ist; sonst wird nur der Messwert angezeigt. Entscheidung mit Begründung in Phase 2. |
+| S-13 | Kann | **Fremdspannungswarnung:** misst vor dem Einspeisen und warnt. Nur, wenn sie zuverlässig ist und nicht als Spannungsprüfer missverstanden werden kann (eine Anzeige „0 V“ ist kein Feststellen der Spannungsfreiheit). **Phase 2: umgesetzt als Sperre ohne „spannungsfrei“-Anzeige (E-022).** |
+| S-14 | Soll | **Durchgangs-/Schleifentest:** zeigt den Schleifenwiderstand in Ω und ob das Ende offen, gebrückt oder mit Abschlusswiderstand beschaltet ist. Nur, wenn das Ergebnis eindeutig ist; sonst wird nur der Messwert angezeigt. **Phase 2: umgesetzt, dazu Lastbild und Längenschätzung (E-023).** |
 | S-15 | Muss | Feste Messleitungen mit Zugentlastung: 3 × ca. 1 m Silikonlitze mit isolierten Krokodilklemmen in Rot (A), Schwarz (B), Grün-Gelb (Schirm/Erde) (F-14). |
 | S-16 | Soll | Batterielaufzeit im Dauerbetrieb mindestens ein Arbeitstag (8 h) bei normaler Leistungsstufe. |
 | S-17 | Soll | Signal mit Kennung, damit das Handgerät nur auf den eigenen Sender reagiert und nicht auf Störquellen oder fremde Tonsucher. |
@@ -155,8 +155,8 @@ Damit wir dieselben Wörter für dieselben Dinge benutzen:
 | H-11 | Soll | **So kompakt, wie es technisch sinnvoll ist** (F-17): Die Bauform legt das Konzept fest, unter anderem nach Abstand zwischen Sensor und Digitalteil und nach Lage der Sensorspule(n). Einhändig bedienbar, Display beim Suchen ablesbar. |
 | H-12 | Soll | Ruhige Anzeige: Wert springt nicht durch Rauschen, wenn das Gerät stillgehalten wird. |
 | H-13 | entfällt | ~~Kopfhöreranschluss~~ – ausdrücklich nicht gewünscht (F-18). |
-| H-14 | Kann | Richtungsanzeige links/rechts. Prüfung in Phase 2; Platine wird vorbereitet. |
-| H-15 | Kann | Tiefenschätzung. Geht nur bei Magnetfeld-Ortung und nur als Schätzung. Prüfung in Phase 2. |
+| H-14 | Kann | Richtungsanzeige links/rechts. **Phase 2: umgesetzt über H- und V-Spule, ohne Zusatzhardware.** |
+| H-15 | Kann | Tiefenschätzung. Geht nur bei Magnetfeld-Ortung und nur als Schätzung. **Phase 2: umgesetzt als geführte 45°-Methode.** |
 
 ---
 
@@ -228,28 +228,28 @@ Displaygröße und -typ (z. B. 0,96″, 1,3″ oder 2,42″ OLED) legt das Konze
 
 ## 9. Abnahmetests
 
-Die Zielwerte tragen wir in Phase 2 (Konzept) mit Begründung ein. Gemessen wird in Phase 3
-(Steckbrett, soweit möglich) und Phase 8 (fertiges Gerät). Testleitung und ein einfacher
-Tonsucher als Vergleich sind vorhanden (F-05).
+Zielwerte aus dem Konzept (Kap. 10, Begründung dort). Gemessen wird in Phase 3 (Steckbrett,
+soweit möglich) und Phase 8 (fertiges Gerät). Testleitung und ein einfacher Tonsucher als
+Vergleich sind vorhanden (F-05).
 
 | ID | Szenario | Prüft | Zielwert |
 |---|---|---|---|
-| T-01 | Freie Leitung (≥ 50 m, ausgelegt), Ende offen: Erkennungsabstand in Luft, je Einspeisemodus | U-05, H-03 | Phase 2 |
-| T-02 | Wie T-01, Ende gebrückt bzw. geerdet | U-05, S-03 | Phase 2 |
-| T-03 | Leitung unter Putz bzw. in Mauerwerk: Erkennungsabstand und Ortungsgenauigkeit | U-08, U-09 | Phase 2 |
-| T-04 | Leitung in bzw. unter Stahlbeton (reales Objekt) | U-09 | Phase 2 |
-| T-05 | Trasse mit ≥ 10 Leitungen (auch Metall-/Gitterrinne): gesuchte Leitung eindeutig finden und verfolgen, obwohl Nachbarleitungen übersprechen | U-10, U-13, H-04 | Phase 2 |
-| T-06 | Richtige Ader am abisolierten Ende finden | H-04 | Phase 2 |
-| T-07 | LED-Treiber, Schaltnetzteil, Leuchtstofflampe in 30 cm Abstand | H-05 | keine Fehlanzeige |
-| T-08 | Kurzschluss am Ausgang, 1 h, jede Klemmenkombination | S-05 | kein Schaden, Fehleranzeige |
-| T-09 | Endgerät angeschlossen (12-V-Melder, 12-V-Kamera), alle Einspeisemodi, auch verpolt | U-07 | kein Schaden, Gerät funktioniert danach |
-| T-10 | 60 V DC und 50 V AC an jeder Klemmenkombination | S-12, S-13 | kein Schaden; Warnung, falls S-13 umgesetzt |
-| T-11 | Lange Leitung (300 m bzw. 500 m oder verfügbare Trommel): Sender stabil, Signal am Ende ortbar | U-03, S-06 | Phase 2 |
-| T-12 | Batterielaufzeit und automatische Abschaltung, beide Geräte | S-08, S-16, H-08 | Phase 2 |
-| T-13 | Vergleich mit dem vorhandenen Tonsucher unter gleichen Bedingungen | Ziel aus Kap. 1 | deutlich größerer Erkennungsabstand (Wert Phase 2) |
-| T-14 | Durchgangstest: Ende offen, gebrückt, mit Abschlusswiderstand | S-14 | richtig erkannt bzw. richtiger Ω-Wert |
-| T-15 | NYM, freigeschaltet: Ortung und Durchgangsmessung | U-02b | Phase 2 |
-| T-16 | Anzeige: Stichprobe der angezeigten Werte gegen Multimeter bzw. Oszilloskop | A-01 | Abweichung im Rahmen der Angabe aus Phase 2 |
+| T-01 | Freie Leitung (≥ 50 m, ausgelegt), Ende offen: Erkennungsabstand in Luft, je Einspeisemodus | U-05, H-03 | Modus G: ≥ 1,0 m in der Leitungsmitte |
+| T-02 | Wie T-01, Ende gebrückt bzw. geerdet | U-05, S-03 | ≥ 2 m |
+| T-03 | Leitung unter Putz bzw. in Mauerwerk: Erkennungsabstand und Ortungsgenauigkeit | U-08, U-09 | ≥ 0,5 m ab Wand; ±1 cm bis 5 cm Tiefe (Null-Methode) |
+| T-04 | Leitung in bzw. unter Stahlbeton (reales Objekt) | U-09 | in 20 cm Decke ortbar, ±3 cm |
+| T-05 | Trasse mit ≥ 10 Leitungen (auch Metall-/Gitterrinne): gesuchte Leitung eindeutig finden und verfolgen, obwohl Nachbarleitungen übersprechen | U-10, U-13, H-04 | an der Trasse ≥ 9 von 10 richtig; Kunststoff-/Gittertrasse von unten ≥ 1 m über ≥ 80 % der Länge |
+| T-06 | Richtige Ader am abisolierten Ende finden | H-04 | 10 von 10 |
+| T-07 | LED-Treiber, Schaltnetzteil, Leuchtstofflampe in 30 cm Abstand | H-05 | ohne Sender keine Anzeige über der Erkennungsschwelle; mit Sender ≤ 3 dB Abweichung |
+| T-08 | Kurzschluss am Ausgang, 1 h, jede Klemmenkombination | S-05 | kein Schaden, Anzeige „Kurzschluss“, Strom ≤ Stufengrenze |
+| T-09 | Endgerät angeschlossen (12-V-Melder, 12-V-Kamera), alle Einspeisemodi, auch verpolt | U-07 | kein Schaden; Modus G: 0 V am Gerät; Modus A/P: ≤ 12 V Spitze |
+| T-10 | 60 V DC und 50 V AC an jeder Klemmenkombination | S-12, S-13 | kein Schaden; Warnung und Sperre < 1 s |
+| T-11 | Lange Leitung (300 m bzw. 500 m oder verfügbare Trommel): Sender stabil, Signal am Ende ortbar | U-03, S-06 | Sender stabil; bei 90 % der Länge aus ≥ 0,5 m ortbar |
+| T-12 | Batterielaufzeit und automatische Abschaltung, beide Geräte | S-08, S-16, H-08 | Sender ≥ 8 h (Stufe Normal, NiMH 2000 mAh), Handgerät ≥ 15 h |
+| T-13 | Vergleich mit dem vorhandenen Tonsucher (IP-Kamera-Tester) unter gleichen Bedingungen | Ziel aus Kap. 1 | ≥ 3-facher Erkennungsabstand an einer Unterputzleitung |
+| T-14 | Durchgangstest: Ende offen, gebrückt, mit Abschlusswiderstand | S-14 | offen > 1 MΩ; Brücke ±(2 % + 0,5 Ω); 1–50 kΩ ±2 % |
+| T-15 | NYM, freigeschaltet: Ortung und Durchgangsmessung | U-02b | wie T-03 und T-14 |
+| T-16 | Anzeige: Stichprobe der angezeigten Werte gegen Multimeter bzw. Oszilloskop | A-01 | Strom ±5 % ±0,1 mA; Spannung ±3 %; nT nach Kalibrierung ±20 %; Länge aus Kapazität ±25 % |
 
 ---
 
@@ -366,5 +366,6 @@ Ausführlich erklärt und gelöst werden diese Punkte im Konzept (Phase 2).
 | Version | Datum | Änderung |
 |---|---|---|
 | 0.1 | 13.10.2026 | Erster Entwurf aus dem Auftrag; offene Fragen F-01 … F-20 |
+| 1.1 | 13.10.2026 | Nach Freigabe des Konzepts: Zielwerte T-01 … T-16 eingetragen, Status von S-13, S-14, H-14, H-15 |
 | 1.0.1 | 13.10.2026 | Freigabe durch Julius; Antworten O-1 … O-3 eingetragen |
 | 1.0 | 13.10.2026 | Antworten F-01 … F-20 eingearbeitet: kein SMD-Löten (E-01), OLED in beiden Geräten mit Anzeige-Grundsätzen (Kap. 5a), Schwerpunkt Trasse/Unterputz mit Selektivität (U-13), Länge 300 m Muss / 500 m Soll, NYM als Kann, Durchgangstest auf Soll, kein Kopfhöreranschluss, Fremdspannung 60 V DC / 50 V AC; neue Tests T-14 … T-16 |

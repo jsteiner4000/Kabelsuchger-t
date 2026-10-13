@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Version** | 1.0 – zur Freigabe |
+| **Version** | 1.0 – freigegeben am 13.10.2026 (Änderungen danach: Kap. 14) |
 | **Stand** | 13.10.2026 |
 | **Grundlage** | [Lastenheft v1.0](lastenheft.md) (freigegeben) |
 | **Rechnung** | [`berechnungen/feldmodell.py`](berechnungen/feldmodell.py) – alle Zahlen in diesem Dokument sind damit nachvollziehbar |
@@ -534,6 +534,16 @@ FFT, das Handgerät rechnet selbst.
 - **H-14** (Links/Rechts) und **H-15** (Tiefe): umgesetzt ohne Zusatzhardware.
 - **Kap. 9:** Zielwerte aus Kap. 10 werden eingetragen.
 - **Neu:** Handgerät erkennt den Frequenzsatz selbst; Anzeige des Feldes in nT.
+
+---
+
+## 14. Änderungen nach der Freigabe
+
+| Datum | Änderung | Entscheidung |
+|---|---|---|
+| 13.10.2026 | Endstufe: TL072 + Gegentakt BD139/BD140 statt L272 (L272 bei onsemi abgekündigt, Lieferbarkeit unsicher). Funktion, Spannung (Brücke an 24 V) und Kosten bleiben gleich. | E-028 |
+| 13.10.2026 | Frequenzen exakt aus dem DAC-Takt: Standard 8333,3 + 4166,7 Hz, Tief 1041,7 + 520,8 Hz, Hoch 33 333 Hz (statt 8225/4112,5 usw.). Alle ≥ 8 Hz neben einer 50-Hz-Oberwelle. | E-029 |
+| 13.10.2026 | OLED über I²C (4 Pins) statt SPI: einfachere Verdrahtung, Bildrate reicht. | E-030 |
 
 ---
 
