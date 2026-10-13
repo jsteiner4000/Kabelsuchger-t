@@ -180,7 +180,7 @@ dann den Rest aufbauen.
 | S7 | +24 V | C1 220 µF/35 V (+), C2 100 nF, D6 P6KE30A (Ring an +24 V) | GND | Puffer, Überspannungsschutz |
 | S8 | +24 V | R1 10 kΩ | Knoten **VMID** | Mittenspannung |
 | S9 | VMID | R2 10 kΩ und C3 47 µF (+ an VMID) | GND | ergibt 12 V |
-| S10 | S2 mini GPIO17 (DAC) | R3 2,2 kΩ | Knoten F1 | Tiefpass Stufe 1 |
+| S10 | S2 mini GPIO18 (DAC) | R3 2,2 kΩ | Knoten F1 | Tiefpass Stufe 1 |
 | S11 | F1 | C4 2,2 nF | GND | |
 | S12 | F1 | R4 2,2 kΩ | Knoten F2 (TP2) | Tiefpass Stufe 2 |
 | S13 | F2 | C5 2,2 nF | GND | |
@@ -214,7 +214,7 @@ dann den Rest aufbauen.
 BD139/BD140-Anschlüsse (Schrift zu dir, Beinchen nach unten): **E – C – B** von links nach rechts.
 TL072: Pin 1 links oben neben der Kerbe/dem Punkt, gegen den Uhrzeigersinn weiterzählen.
 
-**Messpunkte Sender:** TP1 = GPIO17 · TP2 = F2 · TP3 = OA · TP4 = OB · TP5 = PGND (Mittelwert des Stroms =
+**Messpunkte Sender:** TP1 = GPIO18 · TP2 = F2 · TP3 = OA · TP4 = OB · TP5 = PGND (Mittelwert des Stroms =
 Spannung an TP5 ÷ 10 Ω).
 
 ### 5.2 Handgerät (ESP32-S3 SuperMini, MCP6002, Spule, OLED)

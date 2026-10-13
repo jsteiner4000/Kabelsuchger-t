@@ -352,3 +352,22 @@ Spulen bestätigt.
   Das steht im Aufbauplan.
 - **Nachteil:** Mehr Lötarbeit (ca. 2–3 Abende für beide Geräte) und mehr Möglichkeiten für Verdrahtungsfehler.
   Der Aufbauplan zum Abhaken soll das abfangen.
+
+### E-043 Signalausgang des Senders an GPIO18
+- **Datum:** 13.10.2026 · **Status:** beschlossen
+- **Inhalt:** Der D/A-Wandler gibt das Signal auf Kanal 2 (GPIO18) statt Kanal 1 (GPIO17) aus.
+- **Begründung:** GPIO18 liegt beim LOLIN S2 mini auf der äußeren Stiftreihe. Dann reichen zwei Stiftleisten am
+  Modul, auf dem Steckbrett, auf Lochraster und auf einer Platine. GPIO17 liegt auf der inneren Reihe.
+- **Geändert:** `sender_test.ino` (DAC_CHANNEL_MASK_CH1), Steckbrett-Schaltplan, `machbarkeitstest.md`.
+
+### E-044 KiCad-Entwurf als Entscheidungshilfe Platine oder Lochraster
+- **Datum:** 13.10.2026 · **Status:** vorgeschlagen, Julius entscheidet (E-042 gilt bis dahin)
+- **Inhalt:** Beide Geräte als KiCad-7-Projekt in `hardware/kicad/`: Schaltplan, Platine (Handgerät 34 × 70 mm,
+  Sender 80 × 60 mm, 2 Lagen, nur bedrahtete Teile, Module auf Buchsenleisten), mit Freerouting vollständig
+  geroutet, DRC ohne elektrische Fehler, Gerber-Dateien. Erzeugt per Skript aus `netze.py` und `platzierung.py`.
+- **Empfehlung:** Platine, aber erst nach dem Mini-Test und nach Prüfung der Modulbelegung am gelieferten Teil
+  bestellen. Mehrkosten ca. 7–10 € pro Satz (dann ca. 38–41 €). Begründung und Vergleich:
+  [`platine-oder-lochraster.md`](platine-oder-lochraster.md).
+- **Unsicher:** Pinbelegung und Reihenabstand des ESP32-S3 SuperMini sowie die inneren/äußeren Reihen des S2 mini
+  sind im Netz nicht einheitlich beschrieben; vor der Bestellung am echten Modul nachmessen.
+

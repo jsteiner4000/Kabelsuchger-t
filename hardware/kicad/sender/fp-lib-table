@@ -1,0 +1,3 @@
+(fp_lib_table
+  (lib (name "Kabelsucher")(type "KiCad")(uri "${KIPRJMOD}/../lib/Kabelsucher.pretty")(options "")(descr "Module Kabelsuchgerät"))
+)

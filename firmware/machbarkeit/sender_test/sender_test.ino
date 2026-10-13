@@ -1,7 +1,7 @@
 // =============================================================================
 // Kabelsuchgerät – Sender-Testfirmware für den Mini-Test (Phase 3, Variante "Einfach")
 // -----------------------------------------------------------------------------
-// Hardware:  ESP32-S2 mini (LOLIN S2 Mini). Der eingebaute D/A-Wandler an GPIO17
+// Hardware:  ESP32-S2 mini (LOLIN S2 Mini). Der eingebaute D/A-Wandler an GPIO18
 //            gibt die Tonsumme aus; danach Tiefpass und Brücken-Endstufe an 24 V
 //            (Schaltplan: hardware/sender/testaufbau/). OLED 1,3" (SH1106, I²C),
 //            Strommessung über einen 10-Ω-Messwiderstand, eine Taste PEGEL.
@@ -43,7 +43,8 @@
 #endif
 
 // ------------------------------------------------------------- Pins (LOLIN S2 mini)
-// GPIO17 = D/A-Wandler Kanal 1 (fest)
+// GPIO18 = D/A-Wandler Kanal 2 (fest). Er liegt auf der äußeren Stiftreihe; damit reichen
+// zwei Stiftleisten am Modul (Kanal 1 an GPIO17 läge auf der inneren Reihe).
 constexpr int PIN_STROM = 3;               // Spannung am Messwiderstand (über RC-Glied)
 constexpr int PIN_BAT   = 5;               // Batterie über 100 kΩ / 47 kΩ
 constexpr int PIN_TASTE = 7;               // Taste PEGEL gegen GND
@@ -146,7 +147,7 @@ void starteDac() {
   const Satz& s = SAETZE[satz];
 
   dac_continuous_config_t cfg = {};
-  cfg.chan_mask = DAC_CHANNEL_MASK_CH0;     // GPIO17
+  cfg.chan_mask = DAC_CHANNEL_MASK_CH1;     // GPIO18
   cfg.desc_num = 4;
   cfg.buf_size = 2048;                      // 4 x 2048 >= Tabellenlänge
   cfg.freq_hz = s.fsDac;

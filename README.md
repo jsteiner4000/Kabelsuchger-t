@@ -26,6 +26,7 @@ für einen Satz bestellt, auf dem Steckbrett getestet und danach auf die Lochras
 | [`docs/machbarkeitstest.md`](docs/machbarkeitstest.md) | Mini-Test: Einkaufsliste, Steckbrett-Aufbau, Spule wickeln, Software, Messprogramm M1–M8 | <https://claude.ai/artifact/EqZmsoxrUWFYdXUHB5X285> |
 | [`docs/messprotokoll-phase3.md`](docs/messprotokoll-phase3.md) | Messprotokoll zum Ausfüllen | |
 | [`docs/variante-einfach.md`](docs/variante-einfach.md) | Variante „Einfach“: was bleibt, was fliegt, Kosten (freigegeben) | |
+| [`docs/platine-oder-lochraster.md`](docs/platine-oder-lochraster.md) | KiCad-Entwurf der Platinen, Vergleich mit Lochraster, Empfehlung | <https://claude.ai/artifact/UjBC8Tjy9ur99xCQnq3SMG> |
 | [`docs/entscheidungen.md`](docs/entscheidungen.md) | Jede Entscheidung mit Begründung | |
 | [`docs/berechnungen/feldmodell.py`](docs/berechnungen/feldmodell.py) | Feld- und Reichweitenrechnung (nur Python-Standardbibliothek) | |
 | [`stueckliste.csv`](stueckliste.csv) | Stückliste (ab Phase 4), Trennzeichen `;` | |
@@ -46,6 +47,7 @@ firmware/machbarkeit/
   test_host/                   Prüfung auf dem PC: Syntaxprüfung + Simulation der ganzen Kette (./build.sh)
 firmware/sender/               Endgültige Firmware (Phase 6)
 firmware/handgeraet/
+hardware/kicad/                KiCad-Entwurf beider Platinen (Schaltplan, Platine, Gerber), Generator-Skript
 gehaeuse/                      Gehäuse (Phase 7)
   konzept/                     Ansichtsmodell beider Geräte (OpenSCAD + Bilder)
 stueckliste.csv
@@ -57,7 +59,7 @@ stueckliste.csv
 2. Konzept – **erledigt**
 3. Machbarkeitstest (Mini-Test mit den endgültigen Teilen) – **läuft**
 4. Schaltung und Stückliste
-5. Lochraster-Aufbauplan
+5. Lochraster-Aufbauplan (oder Platine nach KiCad-Entwurf, Entscheidung offen)
 6. Firmware
 7. Gehäuse
 8. Inbetriebnahme und Bedienungsanleitung

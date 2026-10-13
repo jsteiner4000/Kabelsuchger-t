@@ -1,0 +1,246 @@
+** Drc report for /home/user/Kabelsuchger-t/hardware/kicad/handgeraet/handgeraet.kicad_pcb **
+** Created on 2026-10-13 22:56:22 **
+
+** Found 71 DRC violations **
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; Severity: warning
+    @(12.8250 mm, 52.2750 mm): Circle on F.Silkscreen
+    @(13.6250 mm, 53.3250 mm): Reference 'C1'
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; Severity: warning
+    @(19.7350 mm, 49.9050 mm): Reference 'R2'
+    @(17.7550 mm, 48.6250 mm): Circle on F.Silkscreen
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; Severity: warning
+    @(14.0950 mm, 49.9050 mm): Reference 'R1'
+    @(14.4750 mm, 49.7250 mm): Footprint Text 'K' of D1
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; Severity: warning
+    @(31.8000 mm, 52.6700 mm): Reference 'J6'
+    @(30.4700 mm, 52.5500 mm): Line on F.Silkscreen
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; Severity: warning
+    @(0.8700 mm, 60.4100 mm): Line on F.Silkscreen
+    @(2.2000 mm, 61.0700 mm): Reference 'J5'
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; Severity: warning
+    @(14.0950 mm, 56.5050 mm): Reference 'R14'
+    @(12.0050 mm, 56.6950 mm): Line on F.Silkscreen
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; Severity: warning
+    @(14.0950 mm, 56.5050 mm): Reference 'R14'
+    @(15.2450 mm, 56.6300 mm): Line on F.Silkscreen
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; Severity: warning
+    @(20.9350 mm, 22.1950 mm): Line on F.Silkscreen
+    @(24.5850 mm, 22.5050 mm): Reference 'R4'
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; Severity: warning
+    @(17.3850 mm, 18.9550 mm): Reference 'R10'
+    @(13.7750 mm, 19.0750 mm): Line on F.Silkscreen
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; Severity: warning
+    @(3.0250 mm, 22.3750 mm): Reference 'C12'
+    @(2.2250 mm, 21.3250 mm): Circle on F.Silkscreen
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; Severity: warning
+    @(3.4750 mm, 25.9250 mm): Reference 'C2'
+    @(1.4050 mm, 25.7450 mm): Line on F.Silkscreen
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; Severity: warning
+    @(16.4250 mm, 7.7950 mm): Reference 'U1'
+    @(12.6850 mm, 7.3950 mm): Line on F.Silkscreen
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; Severity: warning
+    @(8.6650 mm, 7.5750 mm): Reference 'C7'
+    @(7.8650 mm, 6.5250 mm): Circle on F.Silkscreen
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; Severity: warning
+    @(13.7300 mm, 3.6300 mm): Line on F.Silkscreen
+    @(14.3050 mm, 4.0250 mm): Reference 'C6'
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; Severity: warning
+    @(14.3050 mm, 4.0250 mm): Reference 'C6'
+    @(13.7300 mm, 3.6300 mm): Line on F.Silkscreen
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; Severity: warning
+    @(22.9250 mm, 7.8950 mm): Line on F.Silkscreen
+    @(24.6350 mm, 7.7050 mm): Reference 'R11'
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; Severity: warning
+    @(22.9250 mm, 7.8950 mm): Line on F.Silkscreen
+    @(29.8050 mm, 7.5750 mm): Reference 'C10'
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; Severity: warning
+    @(30.3650 mm, 5.1550 mm): Line on F.Silkscreen
+    @(29.8050 mm, 7.5750 mm): Reference 'C10'
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; Severity: warning
+    @(8.6450 mm, 22.5050 mm): Reference 'R3'
+    @(6.4950 mm, 22.6950 mm): Line on F.Silkscreen
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; Severity: warning
+    @(6.4950 mm, 22.6950 mm): Line on F.Silkscreen
+    @(13.8150 mm, 22.3750 mm): Reference 'C3'
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; Severity: warning
+    @(13.9350 mm, 19.9550 mm): Line on F.Silkscreen
+    @(13.8150 mm, 22.3750 mm): Reference 'C3'
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; Severity: warning
+    @(2.2250 mm, 6.5250 mm): Circle on F.Silkscreen
+    @(3.4950 mm, 7.7050 mm): Reference 'R8'
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; Severity: warning
+    @(8.6450 mm, 22.5050 mm): Reference 'R3'
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; Severity: warning
+    @(3.4750 mm, 25.9250 mm): Reference 'C2'
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; Severity: warning
+    @(18.9650 mm, 22.3750 mm): Reference 'C5'
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; Severity: warning
+    @(14.0950 mm, 56.5050 mm): Reference 'R14'
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; Severity: warning
+    @(30.2250 mm, 22.5050 mm): Reference 'R5'
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; Severity: warning
+    @(14.0950 mm, 49.9050 mm): Reference 'R1'
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; Severity: warning
+    @(13.6250 mm, 53.3250 mm): Reference 'C1'
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; Severity: warning
+    @(29.8050 mm, 7.5750 mm): Reference 'C10'
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; Severity: warning
+    @(24.6350 mm, 7.7050 mm): Reference 'R11'
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; Severity: warning
+    @(8.6650 mm, 7.5750 mm): Reference 'C7'
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; Severity: warning
+    @(9.5250 mm, 25.9250 mm): Reference 'C4'
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; Severity: warning
+    @(3.0250 mm, 22.3750 mm): Reference 'C12'
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; Severity: warning
+    @(3.4950 mm, 7.7050 mm): Reference 'R8'
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; Severity: warning
+    @(13.8150 mm, 22.3750 mm): Reference 'C3'
+[starved_thermal]: Thermal relief connection to zone incomplete (zone min spoke count 2; actual 1)
+    Local override; Severity: error
+    @(0.3000 mm, 0.3000 mm): Zone [GND] on B.Cu
+    @(4.2750 mm, 24.6250 mm): PTH pad 2 [GND] of C12
+[lib_footprint_issues]: Footprint 'R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical' not found in library 'Resistor_THT'.
+    Local override; Severity: warning
+    @(7.3750 mm, 24.8750 mm): Footprint R3
+[lib_footprint_issues]: Footprint 'PinHeader_1x04_P2.54mm_Vertical' not found in library 'Connector_PinHeader_2.54mm'.
+    Local override; Severity: warning
+    @(31.8000 mm, 43.6000 mm): Footprint J2
+[lib_footprint_issues]: Footprint 'R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical' not found in library 'Resistor_THT'.
+    Local override; Severity: warning
+    @(18.4650 mm, 52.2750 mm): Footprint R2
+[lib_footprint_issues]: Footprint 'CP_Radial_D5.0mm_P2.00mm' not found in library 'Capacitor_THT'.
+    Local override; Severity: warning
+    @(2.4750 mm, 29.6750 mm): Footprint C2
+[lib_footprint_issues]: Footprint 'PinHeader_1x03_P2.54mm_Vertical' not found in library 'Connector_PinHeader_2.54mm'.
+    Local override; Severity: warning
+    @(2.2000 mm, 54.0000 mm): Footprint J4
+[lib_footprint_issues]: Footprint 'C_Rect_L7.2mm_W2.5mm_P5.00mm_FKS2_FKP2_MKS2_MKP2' not found in library 'Capacitor_THT'.
+    Local override; Severity: warning
+    @(7.7150 mm, 21.3250 mm): Footprint C11
+[lib_footprint_issues]: Footprint 'C_Disc_D3.0mm_W2.0mm_P2.50mm' not found in library 'Capacitor_THT'.
+    Local override; Severity: warning
+    @(17.7150 mm, 24.6250 mm): Footprint C5
+[lib_footprint_issues]: Footprint 'PinHeader_1x05_P2.54mm_Vertical' not found in library 'Connector_PinHeader_2.54mm'.
+    Local override; Severity: warning
+    @(31.8000 mm, 55.0000 mm): Footprint J6
+[lib_footprint_issues]: Footprint 'PinHeader_1x03_P2.54mm_Vertical' not found in library 'Connector_PinHeader_2.54mm'.
+    Local override; Severity: warning
+    @(12.4600 mm, 2.3000 mm): Footprint J1
+[lib_footprint_issues]: Footprint 'DIP-8_W7.62mm' not found in library 'Package_DIP'.
+    Local override; Severity: warning
+    @(12.6150 mm, 10.1250 mm): Footprint U1
+[lib_footprint_issues]: Footprint 'C_Disc_D3.0mm_W2.0mm_P2.50mm' not found in library 'Capacitor_THT'.
+    Local override; Severity: warning
+    @(21.3050 mm, 21.0750 mm): Footprint C9
+[lib_footprint_issues]: Footprint 'R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical' not found in library 'Resistor_THT'.
+    Local override; Severity: warning
+    @(2.2250 mm, 21.3250 mm): Footprint R12
+[lib_footprint_issues]: Footprint 'R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical' not found in library 'Resistor_THT'.
+    Local override; Severity: warning
+    @(26.9050 mm, 21.3250 mm): Footprint R13
+[lib_footprint_issues]: Footprint 'R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical' not found in library 'Resistor_THT'.
+    Local override; Severity: warning
+    @(12.8250 mm, 58.8750 mm): Footprint R14
+[lib_footprint_issues]: Footprint 'R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical' not found in library 'Resistor_THT'.
+    Local override; Severity: warning
+    @(28.9550 mm, 24.8750 mm): Footprint R5
+[lib_footprint_issues]: Footprint 'PinHeader_1x02_P2.54mm_Vertical' not found in library 'Connector_PinHeader_2.54mm'.
+    Local override; Severity: warning
+    @(2.2000 mm, 47.0000 mm): Footprint J3
+[lib_footprint_issues]: Footprint 'R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical' not found in library 'Resistor_THT'.
+    Local override; Severity: warning
+    @(12.8250 mm, 52.2750 mm): Footprint R1
+[lib_footprint_issues]: Footprint 'C_Disc_D3.0mm_W2.0mm_P2.50mm' not found in library 'Capacitor_THT'.
+    Local override; Severity: warning
+    @(12.3750 mm, 55.5750 mm): Footprint C1
+[lib_footprint_issues]: Footprint 'R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical' not found in library 'Resistor_THT'.
+    Local override; Severity: warning
+    @(2.2250 mm, 6.5250 mm): Footprint R6
+[lib_footprint_issues]: Footprint 'C_Rect_L7.2mm_W2.5mm_P5.00mm_FKS2_FKP2_MKS2_MKP2' not found in library 'Capacitor_THT'.
+    Local override; Severity: warning
+    @(24.1450 mm, 6.5250 mm): Footprint C8
+[lib_footprint_issues]: Footprint 'C_Disc_D3.0mm_W2.0mm_P2.50mm' not found in library 'Capacitor_THT'.
+    Local override; Severity: warning
+    @(28.5550 mm, 9.8250 mm): Footprint C10
+[lib_footprint_issues]: Footprint 'R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical' not found in library 'Resistor_THT'.
+    Local override; Severity: warning
+    @(23.3650 mm, 10.0750 mm): Footprint R11
+[lib_footprint_issues]: Footprint 'C_Disc_D3.0mm_W2.0mm_P2.50mm' not found in library 'Capacitor_THT'.
+    Local override; Severity: warning
+    @(7.4150 mm, 9.8250 mm): Footprint C7
+[lib_footprint_issues]: Footprint 'D_DO-41_SOD81_P5.08mm_Vertical_KathodeUp' not found in library 'Diode_THT'.
+    Local override; Severity: warning
+    @(12.6750 mm, 48.6250 mm): Footprint D1
+[lib_footprint_issues]: Footprint 'R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical' not found in library 'Resistor_THT'.
+    Local override; Severity: warning
+    @(7.8650 mm, 6.5250 mm): Footprint R7
+[lib_footprint_issues]: Footprint 'CP_Radial_D5.0mm_P2.00mm' not found in library 'Capacitor_THT'.
+    Local override; Severity: warning
+    @(8.5250 mm, 29.6750 mm): Footprint C4
+[lib_footprint_issues]: Footprint 'C_Disc_D3.0mm_W2.0mm_P2.50mm' not found in library 'Capacitor_THT'.
+    Local override; Severity: warning
+    @(1.7750 mm, 24.6250 mm): Footprint C12
+[lib_footprint_issues]: Footprint 'PinHeader_1x02_P2.54mm_Vertical' not found in library 'Connector_PinHeader_2.54mm'.
+    Local override; Severity: warning
+    @(2.2000 mm, 63.4000 mm): Footprint J5
+[lib_footprint_issues]: Footprint 'C_Disc_D3.0mm_W2.0mm_P2.50mm' not found in library 'Capacitor_THT'.
+    Local override; Severity: warning
+    @(13.0550 mm, 6.2750 mm): Footprint C6
+[lib_footprint_issues]: Footprint 'R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical' not found in library 'Resistor_THT'.
+    Local override; Severity: warning
+    @(18.6550 mm, 6.5250 mm): Footprint R9
+[lib_footprint_issues]: Footprint 'R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical' not found in library 'Resistor_THT'.
+    Local override; Severity: warning
+    @(23.3150 mm, 24.8750 mm): Footprint R4
+[lib_footprint_issues]: Footprint 'R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical' not found in library 'Resistor_THT'.
+    Local override; Severity: warning
+    @(2.2250 mm, 10.0750 mm): Footprint R8
+[lib_footprint_issues]: Footprint 'C_Disc_D3.0mm_W2.0mm_P2.50mm' not found in library 'Capacitor_THT'.
+    Local override; Severity: warning
+    @(12.5650 mm, 24.6250 mm): Footprint C3
+[lib_footprint_issues]: Footprint 'R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical' not found in library 'Resistor_THT'.
+    Local override; Severity: warning
+    @(16.1150 mm, 21.3250 mm): Footprint R10
+
+** Found 0 unconnected pads **
+
+** Found 0 Footprint errors **
+
+** End of Report **

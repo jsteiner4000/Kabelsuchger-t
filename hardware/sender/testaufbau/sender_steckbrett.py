@@ -55,7 +55,7 @@ with schemdraw.Drawing(file=OUT, show=False, transparent=True) as d:
                             elm.IcPin(name='GPIO7', side='right', pos=0.56, anchorname='g7'),
                             elm.IcPin(name='GPIO5', side='right', pos=0.37, anchorname='g5'),
                             elm.IcPin(name='GPIO3', side='right', pos=0.24, anchorname='g3'),
-                            elm.IcPin(name='GPIO17', side='right', pos=0.08, anchorname='dac')],
+                            elm.IcPin(name='GPIO18', side='right', pos=0.08, anchorname='dac')],
                       size=(4.4, 7.0), label='ESP32-S2\nmini').anchor('vbus').at((vbat[0] + 5.0, vbat[1])))
     d += elm.Line().at(vbat).to(s2.vbus)
     d += elm.Line().left(0.6).at(s2.gnd)
@@ -262,7 +262,7 @@ with schemdraw.Drawing(file=OUT, show=False, transparent=True) as d:
         'MT3608 vor dem Aufbau auf 24,0 V einstellen.',
         loc='right', fontsize=10)
     d += elm.Label().at((-8.0, ysm - 7.8)).label(
-        'Messpunkte: TP1 = GPIO17, TP2 = nach R4, TP3 = OA, TP4 = OB, TP5 = PGND (Strom: Mittelwert = Spannung ÷ 10 Ω).  '
+        'Messpunkte: TP1 = GPIO18, TP2 = nach R4, TP3 = OA, TP4 = OB, TP5 = PGND (Strom: Mittelwert = Spannung ÷ 10 Ω).  '
         'USB nur bei S1 = AUS anstecken.',
         loc='right', fontsize=10)
 print('geschrieben:', OUT)

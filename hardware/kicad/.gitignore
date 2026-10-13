@@ -1,0 +1,8 @@
+*.kicad_prl
+*-backups/
+fp-info-cache
+freerouting.log
+*/fertigung/
+*.dsn
+*.ses
+__pycache__/
