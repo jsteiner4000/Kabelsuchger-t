@@ -82,7 +82,7 @@ Verweise wie S-13 oder F-09 beziehen sich auf das [Lastenheft](lastenheft.md).
   versprechen.
 
 ### E-011 Durchgangstest auf Soll, NYM als Kann
-- **Datum:** 13.10.2026 · **Status:** beschlossen (F-08)
+- **Datum:** 13.10.2026 · **Status:** geändert durch E-034/E-038 (Durchgangstest entfällt, NYM-Ortung bleibt Kann)
 - **Inhalt:** S-14 (Durchgangs-/Schleifentest) von Kann auf Soll. NYM wird als Kann aufgenommen,
   nur freigeschaltet und gesichert (U-02b, N-04).
 - **Begründung:** Julius möchte Leitungen „durchmessen“ können, auch NYM. Eine Widerstandsmessung
@@ -121,14 +121,14 @@ Mit der Freigabe hat Julius auch das Budget von ca. 50 € pro Satz (E-027) und 
 Spulen bestätigt.
 
 ### E-015 Magnetfeld als Hauptprinzip, E-Feld als Spezialwerkzeug
-- **Datum:** 13.10.2026 · **Status:** beschlossen
+- **Datum:** 13.10.2026 · **Status:** Magnetfeld beschlossen; E-Feld-Spitze entfällt (E-036)
 - **Inhalt:** Ortung über das Magnetfeld (Ferritspulen). E-Feld-Spitze nur für Bündel und abisolierte Adern.
 - **Begründung:** Bei kHz schirmen feuchter Putz, Beton, Bewehrung und geerdete Schirme das E-Feld ab,
   das Magnetfeld nicht (Kap. 1.1, 1.5). Am offenen Ende fließt kein Strom, dort braucht man das E-Feld.
 - **Verworfen:** nur E-Feld (Variante A). Erfüllt U-09 und U-13 nicht.
 
 ### E-016 Hauptmodus „Bündel gegen Erde“ (G), dazu Modi A und P
-- **Datum:** 13.10.2026 · **Status:** beschlossen
+- **Datum:** 13.10.2026 · **Status:** G und A beschlossen, als Anklemm-Anleitung ohne Relais; P entfällt (E-037)
 - **Inhalt:** G: alle Adern + Schirm gemeinsam (WAGO) gegen Erde, Schirm am Anfang gelöst. A: eine Ader gegen
   den Rest (Identifikation am Ende). P: Paar (Durchgang, Länge, Paar finden). Umschaltung mit 2 Relais.
 - **Begründung:** Hin- und Rückstrom im selben Kabel heben sich auf (Ader/Ader: bei 10 cm ca. 1/70 des Feldes,
@@ -137,7 +137,7 @@ Spulen bestätigt.
 - **Verworfen:** Ader/Ader und Ader/Schirm als Ortungsmodus (Feld bleibt im Kabel).
 
 ### E-017 Zweiton-Signal und drei Frequenzsätze
-- **Datum:** 13.10.2026 · **Status:** beschlossen, Feinabstimmung nach Phase 3
+- **Datum:** 13.10.2026 · **Status:** Zweiton beschlossen; nur Satz Standard (E-029, E-037)
 - **Inhalt:** Standard 8225 Hz + 4112,5 Hz (Stromrichtung), Tief 1025 Hz + 512,5 Hz, Hoch 32,9 kHz.
   Frequenzen zwischen den 50-Hz-Oberwellen; Handgerät erkennt den Satz selbst.
 - **Begründung:** 8 kHz ist der Profi-Kompromiss. Tief: weniger Übersprechen, besser bei Stahl, braucht Erde am
@@ -151,7 +151,7 @@ Spulen bestätigt.
   falschem Pfeil bei unklarer Lage.
 
 ### E-019 Handgerät: 24-bit-Wandler PCM1808 und digitale Lock-in-Auswertung
-- **Datum:** 13.10.2026 · **Status:** beschlossen
+- **Datum:** 13.10.2026 · **Status:** Lock-in beschlossen; PCM1808 ersetzt durch E-035
 - **Inhalt:** H-Spule, V-Spule, E-Spitze → Vorverstärker (×1/×30) → PCM1808 (Stereo, ≈ 90 kHz) → ESP32-S3.
   IQ-Demodulation mit 2–10 Hz Bandbreite.
 - **Begründung:** Der ESP32-interne ADC (12 bit, max. 83 kS/s, verrauscht) reicht für Dynamik und Phase nicht.
@@ -172,21 +172,21 @@ Spulen bestätigt.
   unter 25 V eff (S-04).
 
 ### E-022 Fremdspannungswarnung (S-13): ja, als Sperre ohne „spannungsfrei“-Anzeige
-- **Datum:** 13.10.2026 · **Status:** beschlossen
+- **Datum:** 13.10.2026 · **Status:** ersetzt durch E-038 (entfällt)
 - **Begründung:** Zuverlässig, solange sie nur warnt und nie bestätigt (Kap. 6.5).
 
 ### E-023 Durchgang (S-14): ja, plus Lastbild und Längenschätzung
-- **Datum:** 13.10.2026 · **Status:** beschlossen
+- **Datum:** 13.10.2026 · **Status:** ersetzt durch E-038 (entfällt)
 - **Inhalt:** DC-Messung ≤ 1 mA / ≤ 3,3 V in beiden Polaritäten; AC-Lastbild aus Spannung, Strom und Phase;
   Länge offener Paare aus der Kapazität (≈ 100 nF/km), gekennzeichnet als Schätzung.
 
 ### E-024 Bauform Handgerät: Paddel-Stab ca. 22 cm mit Hals ≥ 6 cm
-- **Datum:** 13.10.2026 · **Status:** beschlossen, Halslänge nach Messung in Phase 3
+- **Datum:** 13.10.2026 · **Status:** geändert durch E-033 und E-036 (Kopf oben, eine Spule); Abstand Spule – Digitalteil ≥ 6 cm bleibt (Messung M4)
 - **Begründung:** Spulen weit weg vom Digitalteil (Störungen); Kopf 90 mm breit für 80-mm-Ferritstab; passt auf
   25,6 cm Bauraum. Handkontakt am Griff verbessert die E-Spitze.
 
 ### E-025 Anzeige: OLED 1,3″ in beiden Geräten, Feld in nT
-- **Datum:** 13.10.2026 · **Status:** beschlossen, Schnittstelle geändert durch E-030
+- **Datum:** 13.10.2026 · **Status:** OLED 1,3″ in beiden Geräten bleibt; Schnittstelle I²C (E-030); dB statt nT (E-039)
 - **Inhalt:** Handgerät über SPI für flüssige Grafik. Feld nach Kalibrierung mit dem Sender in nT (A-01).
 
 ### E-026 Aufbau: eigene Platinen (KiCad, JLCPCB), nur THT und Module
@@ -195,7 +195,7 @@ Spulen bestätigt.
   gewickelt (gedruckter Spulenkörper, Akkuschrauber).
 
 ### E-027 Variante C, Kosten ca. 50 € pro Satz
-- **Datum:** 13.10.2026 · **Status:** beschlossen (Julius hat mit der Freigabe zugestimmt, B-02)
+- **Datum:** 13.10.2026 · **Status:** ersetzt durch E-034 (Variante „Einfach“, ca. 38 €)
 - **Begründung:** Variante B wäre nur ca. 5 € billiger, kann aber keine Stromrichtung, kein Links/Rechts und
   keine Tiefe. Den Großteil der Kosten tragen Displays, Platinen, Batteriehalter und Messleitungen (Kap. 8, 11).
 
@@ -213,7 +213,7 @@ Spulen bestätigt.
 - **Prüfung:** M1 im Machbarkeitstest.
 
 ### E-029 Frequenzen exakt aus dem DAC-Takt
-- **Datum:** 13.10.2026 · **Status:** beschlossen
+- **Datum:** 13.10.2026 · **Status:** beschlossen; seit E-037 nur noch Standard (und Prüfton 1041,7 Hz im Test)
 - **Inhalt:** Standard 200 kHz/24 = 8333,3 Hz + 200 kHz/48 = 4166,7 Hz; Tief 50 kHz/48 = 1041,7 Hz +
   50 kHz/96 = 520,8 Hz; Hoch 400 kHz/12 = 33 333 Hz.
 - **Begründung:** Ganzzahlige Teiler des D/A-Takts ergeben exakt das Verhältnis 2 : 1 für die Stromrichtung und
@@ -236,11 +236,11 @@ Spulen bestätigt.
   in der Umgebung gesperrt). Das erledigt Julius in der Arduino IDE.
 
 ### E-032 Messkopf und Spulenkabel aus Elektro-Material
-- **Datum:** 13.10.2026 · **Status:** beschlossen
+- **Datum:** 13.10.2026 · **Status:** beschlossen; im Mini-Test nur mit der H-Spule (ein Paar des Kabels)
 - **Inhalt:** Stiel aus M20-Isolierrohr, Spulenkabel aus J-Y(St)Y-Reststück (je Spule ein Paar, Schirm an GND).
 - **Begründung:** Vorhandenes Material, abgeschirmt, definierte Geometrie für reproduzierbare Messungen.
 
-## Neuausrichtung (Phase 3)
+## Neuausrichtung „Variante Einfach“ (Phase 3, freigegeben am 13.10.2026)
 
 ### E-033 Abtastfläche des Handgeräts oben am Kopf
 - **Datum:** 13.10.2026 · **Status:** beschlossen (Vorgabe von Julius, ändert E-024)
@@ -251,9 +251,89 @@ Spulen bestätigt.
 - **Ansicht:** `gehaeuse/konzept/ansicht.scad` und die PNG-Bilder daneben.
 
 ### E-034 Variante „Einfach“ statt Variante C
-- **Datum:** 13.10.2026 · **Status:** vorgeschlagen, wartet auf Freigabe (würde E-027 ersetzen)
+- **Datum:** 13.10.2026 · **Status:** beschlossen (Freigabe durch Julius am 13.10.2026, ersetzt E-027)
 - **Inhalt:** Hardware wie Variante B (eine Spule, Wandler im ESP32-S3), Software wie Variante C (Zweiton, Lock-in,
-  Stromrichtung). Sender ohne Display, Relais und Messschaltung (3 LEDs). Keine E-Feld-Spitze, keine
-  Durchgangsprüfung, nur der Standard-Frequenzsatz. Ca. 35 € pro Satz.
+  Stromrichtung). Sender ohne Relais, Durchgangsprüfung und Lastmessung. Keine E-Feld-Spitze, nur der
+  Standard-Frequenzsatz. Antworten auf die offenen Fragen aus `variante-einfach.md`:
+  - V-1 Variante „Einfach“: **ja**
+  - V-2 Display im Sender: **ja, OLED in beiden Geräten** („kosten ja nicht viel“) statt der vorgeschlagenen 3 LEDs
+  - V-3 Platine oder Lochraster: **Platine** (beide Designs in einer Bestellung)
+  - V-4 Platz für eine zweite Spule: **ja**, vorbereitet, aber nicht bestückt
+- **Kosten:** ca. 38 € pro Satz (davon ca. 3 € für das Sender-Display); Julius zahlt ca. 35 €, weil der
+  ESP32-S2 mini vorhanden ist. Unter dem Ziel von 40 € (B-01).
 - **Begründung:** Variante C ist Julius zu teuer und zu aufwendig. Die Reichweite hängt hauptsächlich an
   Einspeisung, Strom und Spule, und die bleiben gleich. Details: `docs/variante-einfach.md`.
+
+### E-035 Handgerät: Wandler im ESP32-S3 mit zwei Verstärkerstufen statt PCM1808
+- **Datum:** 13.10.2026 · **Status:** beschlossen (ersetzt E-019 für die Hardware; die Lock-in-Auswertung bleibt)
+- **Inhalt:** Spule → Stufe 1 (MCP6002, ×5,7, Hochpass 340 Hz) → Stufe 2 (×40). Beide Ausgänge gehen an je einen
+  Eingang des ESP32-S3 (ADC1, 12 bit). Der Wandler tastet reihum NIEDRIG, HOCH und die Batteriespannung ab,
+  zusammen 81 000 Wandlungen pro Sekunde, also ca. 27 kHz je Kanal. Die Firmware misst die tatsächliche Rate beim
+  Start, wertet beide Kanäle gleichzeitig per Lock-in aus und nimmt den Kanal, der nicht übersteuert
+  (`lockin::DualRange`). Das genaue Verstärkungsverhältnis lernt sie im Betrieb nach.
+- **Begründung:** In Phase 2 hatte ich den internen Wandler abgelehnt (E-019), weil Variante C drei Sensoren
+  gleichzeitig mit großer Dynamik und genauer Phase brauchte (Links/Rechts, Tiefe, nT-Werte, E-Spitze). Das
+  entfällt. Für eine Spule mit Pegel und Stromrichtung reicht er: Die Simulation mit Wandlerrauschen
+  (3 LSB), Verstärkerrauschen, Anschlag und Zeitversatz zwischen den Kanälen ergibt eine Rauschgrenze von ca.
+  0,001 nT. Die praktische Grenze von ca. 0,1 nT setzen Störfelder in Gebäuden, nicht die Elektronik. Die zwei
+  Stufen geben zusammen gut 30 dB mehr Aussteuerbereich.
+- **Risiko:** Der Wandler des S3 kann Störlinien oder ungleichmäßige Abtastung haben, die die Simulation nicht
+  kennt. Das prüft der Mini-Test (M2, M3).
+- **Verworfen:** PCM1808 (Kosten, Verdrahtung, Taktleitungen); eine Stufe mit fester Verstärkung (zu wenig
+  Aussteuerbereich direkt an der Leitung).
+
+### E-036 Eine Spule im Kopf, zweite Spule vorbereitet, keine E-Feld-Spitze
+- **Datum:** 13.10.2026 · **Status:** beschlossen (V-4; ändert E-015 und E-024)
+- **Inhalt:** Eine Ferritspule (1000 Wdg. auf 10 × 80 mm) liegt quer im Kopf, direkt unter der Abtastfläche. Der
+  Kopf ist dafür ca. 92 mm breit. Auf der Platine sind Platz und zwei Wandlereingänge (GPIO5, GPIO6) für eine
+  zweite Spule frei (später Links/Rechts möglich, oder eine kleine Tastspule für Bündel). Die E-Feld-Spitze
+  entfällt.
+- **Ersatz für die E-Spitze:** Die richtige Ader am abisolierten Ende findet man mit dem Multimeter (Ader am
+  Anfang auf Erde legen, am Ende gegen Erde durchmessen).
+- **Wichtig für die Stromrichtung:** Mit einer Spule hängt der Pfeil davon ab, wie herum man das Gerät hält.
+  Regel: Display immer zu dir, beim Referenz-Setzen und beim Suchen gleich halten.
+
+### E-037 Sender mit zwei Klemmen, ohne Umschaltung, ein Frequenzsatz
+- **Datum:** 13.10.2026 · **Status:** beschlossen (ändert E-016 und E-017)
+- **Inhalt:** Nur die Klemmen A (rot) und E (grün-gelb). Die Einspeisemodi entstehen durch das Anklemmen: Modus G
+  = alle Adern + Schirm per WAGO an A, E an Erde; Modus A = eine Ader an A, Rest + Schirm per WAGO an E. Keine
+  Relais. Modus P und die Frequenzsätze „Tief“ und „Hoch“ entfallen; Standard bleibt (8333,3 Hz + 4166,7 Hz). Ein
+  Prüfton 1041,7 Hz (reiner Sinus) bleibt nur im Test, damit man mit dem Multimeter nachmessen kann.
+- **Begründung:** Weniger Teile, keine Bedienfehler bei der Umschaltung. Andere Frequenzen lassen sich später per
+  Software nachrüsten, die Hardware kann sie.
+
+### E-038 Sender misst den Strom, Schutz ohne Fremdspannungssperre
+- **Datum:** 13.10.2026 · **Status:** beschlossen (ersetzt E-022 und E-023; ändert E-011)
+- **Inhalt:** Ein 10-Ω-Messwiderstand liegt im Rückweg der beiden PNP-Transistoren. Durch ihn fließt der Betrag
+  des Ausgangsstroms; RC-Glied und ESP32-S2 messen den Mittelwert, die Firmware rechnet in mA (eff) um
+  (ca. ±10 %). Das OLED zeigt den Strom, ab 60 mA nimmt die Firmware den Pegel zurück. Schutz: 10 µF bipolar
+  (≥ 63 V) und 47 Ω 2 W und PTC 0,1 A je Klemme, Klemmdioden 1N4148 an beiden Brückenausgängen, TVS-Diode
+  P6KE30A an der 24-V-Schiene.
+- **Entfällt:** Durchgangs- und Schleifenmessung, Lastbild, Längenschätzung, Fremdspannungssperre.
+- **Begründung:** Der Strom ist der wichtigste Wert („kommt überhaupt ein Stromkreis zustande?“) und kostet nur drei
+  Bauteile. S-12 (60 V DC / 50 V AC ohne Schaden) bleibt Muss und wird durch die Koppelkondensatoren (kein
+  Gleichstrom), Klemmdioden, TVS und PTC erfüllt.
+
+### E-039 Anzeige: Pegel in dB statt nT
+- **Datum:** 13.10.2026 · **Status:** beschlossen (ändert E-025)
+- **Inhalt:** Das Handgerät zeigt den Pegel in dB, bezogen auf 1 µV an der Spule (ein echter Messwert, A-01), dazu
+  Balken mit Spitzenwert, Stromrichtung, Empfindlichkeit, Ton und Batterie. nT gibt es nur in der seriellen
+  Ausgabe zum Kalibrieren im Test. Der Sender zeigt Strom in mA, Pegel, Frequenz und Batterie.
+
+### E-040 Versorgung und Bedienung
+- **Datum:** 13.10.2026 · **Status:** beschlossen
+- **Inhalt:** Beide Geräte: 4 × AA → Schiebeschalter → 1N5817 → 5-V-Pin des Moduls, Batteriespannung über Teiler
+  100 kΩ / 47 kΩ gemessen. USB nur bei ausgeschaltetem Schalter anstecken (sonst speist die Batterie in den
+  Laptop). Handgerät: Tasten REF (kurz Referenz, lang Frequenzsuche) und MODUS (kurz Empfindlichkeit AUTO/1–5,
+  lang Ton laut/leise/aus), passiver Piezo. Sender: eine Taste PEGEL (kurz FEIN/NORMAL/MAX ≈ 5/9/17 V Spitze, lang
+  Ausgang aus/ein).
+- **Regel:** MAX nur in Modus G (gegen Erde). In Modus A mit angeschlossenem Gerät höchstens NORMAL
+  (≤ 12 V Spitze, U-07).
+- **Ton:** Die Tonhöhe ist auf Vielfache von 50 Hz gerundet. Ihre Oberwellen liegen dann wie die Netzoberwellen
+  neben der Sendefrequenz und stören die Auswertung nicht.
+
+### E-041 Phase 3 als Mini-Test mit den endgültigen Teilen
+- **Datum:** 13.10.2026 · **Status:** beschlossen (ersetzt den Einkauf aus Machbarkeitstest v1.0)
+- **Inhalt:** Statt eines eigenen Steckbrett-Einkaufs (ca. 57 €) werden die Teile für einen Satz einmal bestellt,
+  auf dem Steckbrett getestet und danach auf die Platine übernommen. Geprüft werden nur die Punkte, die neu oder
+  unsicher sind: Wandler des S3, Strommessung im Sender, Stromrichtung mit einer Spule, Reichweite im Vergleich.

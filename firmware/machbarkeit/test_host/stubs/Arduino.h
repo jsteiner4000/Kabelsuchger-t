@@ -10,6 +10,7 @@
 #define OUTPUT 0x03
 #define LOW 0
 #define HIGH 1
+#define IRAM_ATTR
 class String {
  public:
   String() {}
@@ -39,6 +40,15 @@ void delay(unsigned long);
 void pinMode(int, int);
 int digitalRead(int);
 void digitalWrite(int, int);
+// LEDC (arduino-esp32 3.x, esp32-hal-ledc.h)
+bool ledcAttach(uint8_t pin, uint32_t freq, uint8_t resolution);
+bool ledcWrite(uint8_t pin, uint32_t duty);
+uint32_t ledcChangeFrequency(uint8_t pin, uint32_t freq, uint8_t resolution);
+// ADC einfach (arduino-esp32 3.x, esp32-hal-adc.h)
+typedef enum { ADC_0db, ADC_2_5db, ADC_6db, ADC_11db, ADC_ATTENDB_MAX } adc_attenuation_t;
+void analogSetPinAttenuation(uint8_t pin, adc_attenuation_t attenuation);
+uint32_t analogReadMilliVolts(uint8_t pin);
+#include "esp_err.h"
 // FreeRTOS
 typedef int portMUX_TYPE;
 #define portMUX_INITIALIZER_UNLOCKED 0

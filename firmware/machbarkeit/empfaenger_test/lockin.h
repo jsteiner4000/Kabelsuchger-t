@@ -114,6 +114,8 @@ inline float smoothVarFactor(float alpha) {
 
 // Rauschschätzung: mittlere Leistung der Blockzeiger auf einer leeren Frequenz.
 // Daraus wird das Rauschen in der geglätteten Bandbreite berechnet.
+// Grenze: Das Spiegelbild eines sehr starken Signals (negative Frequenz) sickert etwa
+// 60 dB gedämpft in den Fühler ein. Die angezeigte SNR sättigt deshalb bei ca. 60 dB.
 struct NoiseEst {
   float pow = 0;
   bool init = false;
@@ -223,15 +225,15 @@ class Scanner {
   Tone tones_[MAXT];
   float sumI_[MAXT], sumQ_[MAXT];
   int nt_ = 0, blk_ = 0, stage_ = 0;
-  double f0_ = 0, fs_ = 96000, fBest_ = 0;
+  double f0_ = 0, fs_ = 27000, fBest_ = 0;
   float aBest_ = 0, contrast_ = 0;
   ScanStage coarse_{}, fine_{}, cur_{};
   bool active_ = false, done_ = false;
 };
 
 // ----------------------------------------------------------------- Empfänger-Kern
-// Zwei Kanäle (L = H-Spule, R = V-Spule oder E-Spitze), Ortungston fL,
-// Richtungston fL/2 (nur L), ein Rauschfühler neben fL (nur L).
+// Zwei Eingänge: L = Spule (Ortungston fL, Richtungston fL/2, Rauschfühler neben fL),
+// R = Reserve für eine zweite Spule (nur Ortungston). Ohne zweite Spule wird R = 0 übergeben.
 struct Result {
   float hAmp = 0, vAmp = 0, cdAmp = 0;   // Spitzenwerte in ADC-Vollausschlag-Einheiten
   float noise = 0;                        // Rauscheffektivwert in der Glättungsbandbreite
@@ -244,9 +246,11 @@ struct Result {
 
 class Receiver {
  public:
-  void begin(double fs, double fLocate, bool withCD) {
+  // fs = Abtastrate je Kanal, blockLen = Abtastwerte pro Auswerteblock (20 ms)
+  void begin(double fs, double fLocate, bool withCD, int blockLen) {
     fs_ = fs;
     withCD_ = withCD;
+    noiseOfs_ = 2.0 * fs / (double)blockLen;   // 2. Nullstelle des Blockfilters (100 Hz bei 20 ms)
     setLocate(fLocate);
     sH_.reset(); sV_.reset(); sCD_.reset();
     lastH_ = Cpx{};
@@ -257,7 +261,7 @@ class Receiver {
     uint32_t inc = Tone::incFor(f, fs_) & ~1u;   // gerade -> Hälfte ist exakt
     tH_.setInc(inc); tV_.setInc(inc);
     tCD_.setInc(inc >> 1);
-    tN_.setInc(Tone::incFor(f + NOISE_OFS_HZ, fs_));
+    tN_.setInc(Tone::incFor(f + noiseOfs_, fs_));
     fL_ = tH_.freq(fs_);
   }
   double locate() const { return fL_; }
@@ -315,19 +319,148 @@ class Receiver {
   }
   const Result& result() const { return res_; }
 
-  // Leere Frequenz neben fL für die Rauschmessung. 100 Hz liegt auf einer Nullstelle
-  // des 20-ms-Blockfilters (Vielfache von 50 Hz), dort sickert das eigene Signal nicht ein.
-  static constexpr double NOISE_OFS_HZ = 100.0;
-
  private:
+  // Leere Frequenz neben fL für die Rauschmessung: 2 / Blockdauer (100 Hz bei 20 ms).
+  // Sie liegt auf einer Nullstelle des Blockfilters, dort sickert das eigene Signal nicht ein.
+  double noiseOfs_ = 100.0;
+
   Tone tH_, tV_, tCD_, tN_;
   Smooth sH_, sV_, sCD_;
   NoiseEst noise_;
   Cpx lastH_;
   bool haveLast_ = false, withCD_ = true, afc_ = true;
-  double fs_ = 96000, fL_ = 0;
+  double fs_ = 27000, fL_ = 0;
   float tau_ = 0.15f;
   Result res_;
+};
+
+// ----------------------------------------------------------------- Bereichswahl
+// Das Handgerät tastet zwei Verstärkerausgänge ab: NIEDRIG (nach Stufe 1) und HOCH
+// (nach Stufe 2, ca. 40-fach mehr). Genommen wird HOCH, solange er nicht übersteuert.
+// Beide Kanäle laufen immer mit, deshalb springt beim Umschalten nichts.
+// Das genaue Verhältnis HOCH/NIEDRIG lernt die Bereichswahl im Betrieb nach, damit
+// der angezeigte Pegel beim Umschalten gleich bleibt (Bauteiltoleranzen).
+struct AutoRange {
+  float ratio = 40.0f;                  // Verstärkung HOCH / NIEDRIG
+  bool low = false;                     // true = NIEDRIG ist aktiv
+  int hold = 0;                         // Blöcke bis zum frühesten Zurückschalten
+  static constexpr float CLIP = 0.95f;  // Blockspitze HOCH (1 = Aussteuergrenze), ab der umgeschaltet wird
+  static constexpr float BACK = 0.6f;   // vorhergesagte Spitze HOCH, unter der zurückgeschaltet wird
+  static constexpr int HOLD = 25;       // mindestens 25 Blöcke (0,5 s) auf NIEDRIG bleiben
+
+  void begin(float ratioNominal) { ratio = ratioNominal; low = false; hold = 0; }
+
+  // Einmal pro Block. peakLo/peakHi: größter Ausschlag im Block, bezogen auf die
+  // Aussteuergrenze (1 = Anschlag); aLo/aHi: geglättete Lock-in-Beträge; nLo: Rauschen NIEDRIG.
+  void update(float peakLo, float peakHi, float aLo, float aHi, float nLo) {
+    if (peakHi > CLIP) {
+      low = true;
+      hold = HOLD;
+    } else if (low) {
+      if (hold > 0) hold--;
+      else if (peakLo * ratio < BACK) low = false;
+    }
+    // Verhältnis nachlernen, wenn beide Kanäle sauber sind
+    if (peakHi < 0.7f && aLo > 30.0f * nLo && aLo > 0) {
+      float r = aHi / aLo;
+      if (r > 0.5f * ratio && r < 2.0f * ratio) ratio += 0.05f * (r - ratio);
+    }
+  }
+  // Betrag in Einheiten des HOCH-Kanals (auch wenn NIEDRIG aktiv ist)
+  float level(float aLo, float aHi) const { return low ? aLo * ratio : aHi; }
+};
+
+// ----------------------------------------------------------------- Zwei-Bereich-Empfänger
+// Fasst zusammen, was das Handgerät pro Abtastpaar tut: Ruhepegel abziehen, beide Kanäle
+// (NIEDRIG, HOCH) per Lock-in auswerten, Aussteuerung messen, am Blockende den Bereich
+// wählen und den inaktiven Kanal auf der Frequenz des aktiven mitführen.
+// Rohwerte kommen vom 12-bit-Wandler (0 ... 4095), Ruhepegel ca. Mitte.
+class DualRange {
+ public:
+  static constexpr float ADC_MAX = 4095.0f;
+  static constexpr float SCALE = 1.0f / 2048.0f;   // 1 = halber Messbereich
+
+  void begin(double fs, int blockLen, double fLocate, float ratioNominal) {
+    block_ = blockLen;
+    blockSec_ = (float)((double)blockLen / fs);
+    lo_.begin(fs, fLocate, true, blockLen);
+    hi_.begin(fs, fLocate, true, blockLen);
+    range_.begin(ratioNominal);
+    n_ = 0; sumLo_ = sumHi_ = 0; pkLo_ = pkHi_ = 0;
+    dcInit_ = false;
+  }
+  void setTau(float t) { lo_.setTau(t); hi_.setTau(t); }
+  void setAfc(bool on) { afc_ = on; }
+  void force(int mode) { force_ = mode; }          // 0 AUTO, 1 nur NIEDRIG, 2 nur HOCH
+  void setLocate(double f) { lo_.setLocate(f); hi_.setLocate(f); }
+  double locate() const { return active().locate(); }
+  bool low() const { return range_.low; }
+
+  // Ein Abtastpaar. Rückgabe true = Blockende, neue Ergebnisse liegen vor.
+  // sc (optional) bekommt die Werte des aktiven Kanals für die Frequenzsuche.
+  inline bool sample(int rawLo, int rawHi, const float* T, Scanner* sc = nullptr) {
+    float l = (float)rawLo, h = (float)rawHi;
+    if (!dcInit_) { dcLo_ = l; dcHi_ = h; dcInit_ = true; }
+    float xl = (l - dcLo_) * SCALE, xh = (h - dcHi_) * SCALE;
+    lo_.sample(xl, 0.0f, T);
+    hi_.sample(xh, 0.0f, T);
+    if (sc) sc->sample(range_.low ? xl : xh, T);
+    sumLo_ += l; sumHi_ += h;
+    float dl = fabsf(l - dcLo_), dh = fabsf(h - dcHi_);
+    if (dl > pkLo_) pkLo_ = dl;
+    if (dh > pkHi_) pkHi_ = dh;
+    if (++n_ < block_) return false;
+    endBlock(sc);
+    return true;
+  }
+
+  // Ergebnisse (Beträge in Einheiten des HOCH-Kanals, 1 = halber Messbereich)
+  const Result& result() const { return active().result(); }
+  float level() const { return range_.level(lo_.result().hAmp, hi_.result().hAmp); }
+  float noise() const { return active().result().noise * gainFactor(); }
+  float cd() const { return active().result().cdAmp * gainFactor(); }
+  float ratio() const { return range_.ratio; }
+  float peakLo() const { return spLo_; }           // Aussteuerung (1 = Anschlag)
+  float peakHi() const { return spHi_; }
+  const Receiver& lowRx() const { return lo_; }
+  const Receiver& highRx() const { return hi_; }
+
+ private:
+  const Receiver& active() const { return range_.low ? lo_ : hi_; }
+  float gainFactor() const { return range_.low ? range_.ratio : 1.0f; }
+
+  void endBlock(Scanner* sc) {
+    lo_.setAfc(afc_ && range_.low);
+    hi_.setAfc(afc_ && !range_.low);
+    lo_.endBlock(blockSec_);
+    hi_.endBlock(blockSec_);
+    if (sc) sc->endBlock();
+
+    float headLo = fminf(dcLo_, ADC_MAX - dcLo_), headHi = fminf(dcHi_, ADC_MAX - dcHi_);
+    spLo_ = headLo > 1 ? pkLo_ / headLo : 1.0f;
+    spHi_ = headHi > 1 ? pkHi_ / headHi : 1.0f;
+    range_.update(spLo_, spHi_, lo_.result().hAmp, hi_.result().hAmp, lo_.result().noise);
+    if (force_ == 1) range_.low = true;
+    if (force_ == 2) range_.low = false;
+
+    // Der inaktive Kanal folgt der Frequenz des aktiven (AFC läuft nur im aktiven)
+    if (range_.low) hi_.setLocate(lo_.locate());
+    else lo_.setLocate(hi_.locate());
+
+    // Ruhepegel langsam nachführen
+    dcLo_ += 0.1f * ((float)(sumLo_ / n_) - dcLo_);
+    dcHi_ += 0.1f * ((float)(sumHi_ / n_) - dcHi_);
+    n_ = 0; sumLo_ = sumHi_ = 0; pkLo_ = pkHi_ = 0;
+  }
+
+  Receiver lo_, hi_;
+  AutoRange range_;
+  int block_ = 540, n_ = 0, force_ = 0;
+  float blockSec_ = 0.02f;
+  bool afc_ = true, dcInit_ = false;
+  float dcLo_ = 2048, dcHi_ = 2048;
+  double sumLo_ = 0, sumHi_ = 0;
+  float pkLo_ = 0, pkHi_ = 0, spLo_ = 0, spHi_ = 0;
 };
 
 // Richtungsentscheidung aus delta und Referenz: +1 HIN, -1 ZURÜCK, 0 unklar

@@ -2,9 +2,9 @@
 // Ansichtsmodell Kabelsuchgerät – Variante "Einfach" (Entwurf, KEIN Druckmodell)
 // -----------------------------------------------------------------------------
 // Handgerät in Stabform: Sensorkopf OBEN (vorn), darunter Display und Tasten,
-// unten der Griff mit den Batterien. Sender: kleine Box mit LEDs, einer Taste
-// und zwei Messleitungen (A rot, E grün-gelb). Maße vorläufig; das druckbare
-// Gehäuse entsteht erst, wenn die Platinen feststehen.
+// unten der Griff mit den Batterien. Sender: kleine Box mit OLED (Strom in mA),
+// einer Taste PEGEL und zwei Messleitungen (A rot, E grün-gelb). Maße vorläufig;
+// das druckbare Gehäuse entsteht erst, wenn die Platinen feststehen.
 //
 //   teil = "hand" | "roentgen" | "sender" | "beide"
 //   openscad -o hand.png --imgsize=1200,900 -D 'teil="hand"' ansicht.scad
@@ -35,7 +35,7 @@ module ttext(t, s, x, y, z, h = 0.4, halign = "center", font = "DejaVu Sans:styl
 GW = 40; GD = 30;              // Griff/Körper Breite, Tiefe
 BODY_H = 130;                  // Griff + Bedienteil (z 0 ... 130)
 NECK_Z = 128; NECK_H = 48;     // Hals
-HEAD_Z = 172; HEAD_W = 76; HEAD_D = 28; HEAD_H = 30;
+HEAD_Z = 172; HEAD_W = 92; HEAD_D = 28; HEAD_H = 30;   // 92 mm für den 80-mm-Ferritstab
 
 module hand_form(a = 1) {
   color(C_BODY, a) {
@@ -86,7 +86,7 @@ module hand() { hand_form(); hand_details(); }
 module innen() {
   // Spule quer im Sensorkopf, dicht unter der Abtastfläche
   translate([0, 0, HEAD_Z + HEAD_H - 11]) rotate([0, 90, 0]) {
-    color(C_FERRIT) cylinder(h = 60, d = 10, center = true);
+    color(C_FERRIT) cylinder(h = 80, d = 10, center = true);
     color(C_COPPER) cylinder(h = 40, d = 13, center = true);
   }
   // Kabel durch den Hals
@@ -96,10 +96,10 @@ module innen() {
     color("#2e6db0") cylinder(h = 47, d = 14.3);
     color(C_METAL) translate([0, 0, 47]) cylinder(h = 3, d = 5);
   }
-  // Platine mit ESP32-S2 mini, Vorverstärker, Summer
+  // Platine mit ESP32-S3 SuperMini, Vorverstärker (MCP6002), Piezo
   translate([0, 6, 62]) {
     color(C_PCB) translate([-17, 0, 0]) cube([34, 1.6, 62]);
-    color("#2b3a8f") translate([-13, -3, 8]) cube([26, 3, 34]);       // ESP32-S2 mini
+    color("#2b3a8f") translate([-9, -3, 10]) cube([18, 3, 23]);        // ESP32-S3 SuperMini
     color("#111") translate([-6, -4, 46]) cube([10, 4, 7]);            // OPV
   }
   color("#111") translate([0, -8, 120]) rotate([90, 0, 0]) cylinder(h = 4, d = 12);   // Summer
@@ -108,7 +108,7 @@ module innen() {
 
 module sensor_markierung(a = 1) {
   color(C_RED, a) {
-    translate([0, 0, HEAD_Z + HEAD_H - 0.3]) slab(58, 11, 3, 0.6);
+    translate([0, 0, HEAD_Z + HEAD_H - 0.3]) slab(74, 11, 3, 0.6);
     translate([0, 0, HEAD_Z + HEAD_H - 11]) slab(HEAD_W + 0.6, HEAD_D + 0.6, 7, 3);
   }
 }
@@ -131,11 +131,14 @@ module klemme(c) {
 module sender() {
   color(C_BODY) rbox(SX, SY, SZ, 7);
   color(C_RED) translate([0, 0, SZ - 7]) difference() { slab(SX + 0.6, SY + 0.6, 7, 2); translate([0, 0, -1]) slab(SX - 2, SY - 2, 6, 4); }
-  // LEDs mit Beschriftung
-  leds = [[-30, "#3fd16a", "EIN"], [-12, "#f2c230", "STROM"], [6, C_RED, "BATT"]];
-  for (l = leds) {
-    color(l[1]) translate([l[0], 8, SZ - 0.5]) sphere(d = 5);
-    color(C_TEXT) ttext(l[2], 2.4, l[0], 1, SZ);
+  // OLED mit Strom in mA
+  color("#15191d") translate([-14, 8, SZ - 0.3]) linear_extrude(0.8) offset(r = 2) square([31, 21], center = true);
+  color(C_SCREEN) translate([-14, 8, SZ + 0.3]) linear_extrude(0.4) square([27, 14], center = true);
+  color(C_PIX) {
+    ttext("12.4", 4.6, -20, 10, SZ + 0.6, font = "DejaVu Sans Condensed:style=Bold");
+    ttext("mA", 1.8, -12.5, 9, SZ + 0.6, halign = "left");
+    translate([-25.5, 3.2, SZ + 0.6]) linear_extrude(0.3) square([14, 1.4]);
+    ttext("8333Hz", 1.6, -2.5, 13.2, SZ + 0.6);
   }
   // Taste Pegel
   color(C_RED) translate([32, 6, SZ - 0.5]) cylinder(h = 3, d = 11);
