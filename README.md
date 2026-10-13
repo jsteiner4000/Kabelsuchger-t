@@ -6,7 +6,7 @@ Ein **Sender** speist ein Suchsignal in eine spannungsfreie Leitung ein, ein
 
 Prinzip (Konzept): Ortung über das **Magnetfeld**. Alle Adern und der Schirm werden gemeinsam gegen Erde
 eingespeist, damit kein Rückstrom im selben Kabel das Feld aufhebt. Zwei gekoppelte Töne ermöglichen eine
-Stromrichtungsanzeige für volle Trassen. Gebaut wird die **Variante „Einfach“** (ca. 38 € pro Satz): Der Sender
+Stromrichtungsanzeige für volle Trassen. Gebaut wird die **Variante „Einfach“** (ca. 31 € pro Satz): Der Sender
 hat zwei Klemmen, ein Display mit Strom in mA und eine Taste. Das Handgerät ist ein Stab mit dem Sensorkopf oben,
 einer Ferritspule, zwei Verstärkerstufen und dem eingebauten Wandler des ESP32-S3 mit digitaler
 Lock-in-Auswertung.
@@ -14,8 +14,8 @@ Lock-in-Auswertung.
 ## Stand
 
 **Phase 3 von 8:** Mini-Test mit den endgültigen Teilen. Julius hat am 13.10.2026 die Variante „Einfach“
-freigegeben (E-034 bis E-041), mit Display in beiden Geräten und eigener Platine. Jetzt werden die Teile für einen
-Satz bestellt, auf dem Steckbrett getestet und danach auf die Platine übernommen.
+freigegeben (E-034 bis E-042), mit Display in beiden Geräten und Aufbau auf Lochraster. Jetzt werden die Teile
+für einen Satz bestellt, auf dem Steckbrett getestet und danach auf die Lochrasterplatine übernommen.
 
 ## Dokumente
 
@@ -57,7 +57,7 @@ stueckliste.csv
 2. Konzept – **erledigt**
 3. Machbarkeitstest (Mini-Test mit den endgültigen Teilen) – **läuft**
 4. Schaltung und Stückliste
-5. Platine (KiCad)
+5. Lochraster-Aufbauplan
 6. Firmware
 7. Gehäuse
 8. Inbetriebnahme und Bedienungsanleitung

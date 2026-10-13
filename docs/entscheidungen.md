@@ -104,7 +104,7 @@ Verweise wie S-13 oder F-09 beziehen sich auf das [Lastenheft](lastenheft.md).
   Reichweite das Hauptproblem, sondern dass Nachbarkabel mitleuchten.
 
 ### E-014 KiCad als Ziel für die Platine
-- **Datum:** 13.10.2026 · **Status:** beschlossen (F-02), Werkzeug offen
+- **Datum:** 13.10.2026 · **Status:** entfällt mit E-042 (Lochraster statt Platine)
 - **Inhalt:** Die Platinen werden als KiCad-Projekt geliefert, möglichst automatisiert erstellt
   (Wunsch: per KiCad-MCP).
 - **Stand der Werkzeugfrage:** In der aktuellen Cloud-Umgebung ist KiCad noch nicht installiert, und
@@ -190,7 +190,7 @@ Spulen bestätigt.
 - **Inhalt:** Handgerät über SPI für flüssige Grafik. Feld nach Kalibrierung mit dem Sender in nT (A-01).
 
 ### E-026 Aufbau: eigene Platinen (KiCad, JLCPCB), nur THT und Module
-- **Datum:** 13.10.2026 · **Status:** beschlossen
+- **Datum:** 13.10.2026 · **Status:** ersetzt durch E-042 (Lochraster); nur THT und Module bleibt
 - **Begründung:** E-01/E-006; Analogteil und Spulenumfeld brauchen ein sauberes Layout. Spulen werden selbst
   gewickelt (gedruckter Spulenkörper, Akkuschrauber).
 
@@ -226,7 +226,7 @@ Spulen bestätigt.
   für flüssige Balken und Verlaufsgraphen.
 
 ### E-031 Werkzeuge: Prüfung auf dem PC, KiCad und OpenSCAD in der Cloud-Umgebung
-- **Datum:** 13.10.2026 · **Status:** beschlossen
+- **Datum:** 13.10.2026 · **Status:** beschlossen; KiCad entfällt mit E-042 (Lochraster-Aufbauplan als Zeichnung)
 - **Inhalt:** Die Signalverarbeitung (`lockin.h`) wird auf dem PC mit simulierten Signalen getestet, beide Sketche
   werden gegen Ersatz-Header mit den Original-Signaturen auf Syntax geprüft (`firmware/machbarkeit/test_host/`).
   Druckteile entstehen in OpenSCAD, Schaltpläne der Testaufbauten mit schemdraw. KiCad 7 lässt sich in der
@@ -257,10 +257,10 @@ Spulen bestätigt.
   Standard-Frequenzsatz. Antworten auf die offenen Fragen aus `variante-einfach.md`:
   - V-1 Variante „Einfach“: **ja**
   - V-2 Display im Sender: **ja, OLED in beiden Geräten** („kosten ja nicht viel“) statt der vorgeschlagenen 3 LEDs
-  - V-3 Platine oder Lochraster: **Platine** (beide Designs in einer Bestellung)
+  - V-3 Platine oder Lochraster: zuerst „Platine“, kurz danach geändert auf **Lochraster** (E-042)
   - V-4 Platz für eine zweite Spule: **ja**, vorbereitet, aber nicht bestückt
-- **Kosten:** ca. 38 € pro Satz (davon ca. 3 € für das Sender-Display); Julius zahlt ca. 35 €, weil der
-  ESP32-S2 mini vorhanden ist. Unter dem Ziel von 40 € (B-01).
+- **Kosten:** ca. 31 € pro Satz mit Lochraster (davon ca. 3 € für das Sender-Display); Julius zahlt ca. 28 €,
+  weil der ESP32-S2 mini vorhanden ist. Unter dem Ziel von 40 € (B-01).
 - **Begründung:** Variante C ist Julius zu teuer und zu aufwendig. Die Reichweite hängt hauptsächlich an
   Einspeisung, Strom und Spule, und die bleiben gleich. Details: `docs/variante-einfach.md`.
 
@@ -285,7 +285,7 @@ Spulen bestätigt.
 ### E-036 Eine Spule im Kopf, zweite Spule vorbereitet, keine E-Feld-Spitze
 - **Datum:** 13.10.2026 · **Status:** beschlossen (V-4; ändert E-015 und E-024)
 - **Inhalt:** Eine Ferritspule (1000 Wdg. auf 10 × 80 mm) liegt quer im Kopf, direkt unter der Abtastfläche. Der
-  Kopf ist dafür ca. 92 mm breit. Auf der Platine sind Platz und zwei Wandlereingänge (GPIO5, GPIO6) für eine
+  Kopf ist dafür ca. 92 mm breit. Auf der Lochrasterplatine sind Platz und zwei Wandlereingänge (GPIO5, GPIO6) für eine
   zweite Spule frei (später Links/Rechts möglich, oder eine kleine Tastspule für Bündel). Die E-Feld-Spitze
   entfällt.
 - **Ersatz für die E-Spitze:** Die richtige Ader am abisolierten Ende findet man mit dem Multimeter (Ader am
@@ -335,5 +335,20 @@ Spulen bestätigt.
 ### E-041 Phase 3 als Mini-Test mit den endgültigen Teilen
 - **Datum:** 13.10.2026 · **Status:** beschlossen (ersetzt den Einkauf aus Machbarkeitstest v1.0)
 - **Inhalt:** Statt eines eigenen Steckbrett-Einkaufs (ca. 57 €) werden die Teile für einen Satz einmal bestellt,
-  auf dem Steckbrett getestet und danach auf die Platine übernommen. Geprüft werden nur die Punkte, die neu oder
+  auf dem Steckbrett getestet und danach auf die Lochrasterplatine übernommen. Geprüft werden nur die Punkte, die neu oder
   unsicher sind: Wandler des S3, Strommessung im Sender, Stromrichtung mit einer Spule, Reichweite im Vergleich.
+
+### E-042 Aufbau auf Lochraster statt eigener Platine
+- **Datum:** 13.10.2026 · **Status:** beschlossen (Julius, ändert E-034 V-3, ersetzt E-026 und E-014)
+- **Inhalt:** Sender und Handgerät werden auf je einer Lochrasterplatine aufgebaut (einseitig, Raster 2,54 mm,
+  Lötaugen). ESP32-Module und OLED sitzen auf Stift- bzw. Buchsenleisten, alle anderen Teile sind bedrahtet.
+  Phase 5 liefert statt eines KiCad-Projekts einen **Lochraster-Aufbauplan**: Bauteilplatzierung, Verdrahtung
+  (Ansicht von oben und gespiegelt von unten), Schnittstellen zum Gehäuse.
+- **Kosten:** ca. 2 € statt ca. 9 €. Gesamt ca. 31 € pro Satz, Julius zahlt ca. 28 €.
+- **Begründung:** Julius' Wunsch. Bei 8 kHz und den kleinen Strömen ist Lochraster technisch unkritisch. Eine
+  Änderung nach dem Test ist mit dem Lötkolben gemacht, ohne neue Bestellung.
+- **Worauf es ankommt:** Analogteil des Handgeräts kompakt und weg vom ESP32, eine durchgehende Masseleitung,
+  kurze Wege um den MCP6002; im Sender die Leitungen der Endstufe und des Messwiderstands kräftig (0,5 mm²).
+  Das steht im Aufbauplan.
+- **Nachteil:** Mehr Lötarbeit (ca. 2–3 Abende für beide Geräte) und mehr Möglichkeiten für Verdrahtungsfehler.
+  Der Aufbauplan zum Abhaken soll das abfangen.

@@ -291,8 +291,8 @@ td.keep{font-weight:600}
       <div><span class="tb-k">Grundlage</span><span class="tb-v">Variante „Einfach“ (E-034)</span></div>
       <div><span class="tb-k">Quelle</span><span class="tb-v mono" style="font-size:.85rem">docs/machbarkeitstest.md</span></div>
     </div>
-    <h1>Einmal kaufen, testen, dann Platine</h1>
-    <p class="lead">Du bestellst die Teile für einen Satz, steckst Sender und Handgerät auf dem Steckbrett zusammen und prüfst nur die Punkte, die neu oder unsicher sind. Danach wandern dieselben Teile auf die Platine. Ein eigener Testeinkauf entfällt. Ca. 38 € pro Satz, du zahlst ca. 35 €, weil der ESP32-S2 schon da ist.</p>
+    <h1>Einmal kaufen, testen, dann Lochraster</h1>
+    <p class="lead">Du bestellst die Teile für einen Satz, steckst Sender und Handgerät auf dem Steckbrett zusammen und prüfst nur die Punkte, die neu oder unsicher sind. Danach lötest du dieselben Teile auf je eine Lochrasterplatine. Ein eigener Testeinkauf entfällt. Ca. 31 € pro Satz, du zahlst ca. 28 €, weil der ESP32-S2 schon da ist.</p>
   </header>
 
   <section aria-labelledby="h-geraete">
@@ -328,6 +328,7 @@ td.keep{font-weight:600}
           <tr><td>Anzeige Handgerät</td><td>nT, Links/Rechts, Tiefe</td><td>dB, Balken mit Spitzenwert, Stromrichtung</td></tr>
           <tr><td>Ton</td><td>Verstärker + Lautsprecher</td><td>Piezo</td></tr>
           <tr><td>Ader am abisolierten Ende</td><td>E-Feld-Spitze</td><td>Multimeter: Ader am Anfang auf Erde, am Ende durchmessen</td></tr>
+          <tr><td>Aufbau</td><td>eigene Platinen (KiCad, bestellt)</td><td>Lochraster nach Aufbauplan, Module auf Stiftleisten</td></tr>
         </tbody>
       </table>
     </div>
@@ -344,7 +345,7 @@ td.keep{font-weight:600}
       <li><b>Aufbauen</b><span>Sender und Handgerät nach Verdrahtungsliste, ein Abend</span></li>
       <li><b>Software</b><span>Zwei Sketche über die Arduino IDE aufspielen (esp32 3.x, U8g2)</span></li>
       <li><b>Messen</b><span>Pflicht M1, M2, M3, M5, M7; der Rest, wenn es passt</span></li>
-      <li><b>Auswerten</b><span>Protokoll an mich, dann Phase 4: Schaltplan und Stückliste</span></li>
+      <li><b>Auswerten</b><span>Protokoll an mich, dann Schaltplan, Stückliste und Lochraster-Aufbauplan</span></li>
     </ol>
     <div class="warn-box">
       <h3>Wichtig: Der Sender „schwimmt“</h3>
@@ -545,7 +546,7 @@ td.keep{font-weight:600}
     <div class="sec-head">
       <span class="eyebrow">Machbarkeitstest Kap. 2</span>
       <h2 id="h-einkauf">Einkauf</h2>
-      <p class="muted">Die vollständige Liste mit Stückzahlen steht in docs/machbarkeitstest.md. Fast alles wandert später in die Geräte. Die Platinen (ca. 9 €) bestellen wir erst nach dem Test.</p>
+      <p class="muted">Die vollständige Liste mit Stückzahlen steht in docs/machbarkeitstest.md. Fast alles wandert später in die Geräte. Die Lochrasterplatinen kommen gleich mit in die Bestellung, gelötet wird nach dem Test.</p>
     </div>
     <div class="table-wrap">
       <table>
@@ -555,15 +556,16 @@ td.keep{font-weight:600}
           <tr><td>Spule</td><td>2 Ferritstäbe 10 × 80 mm, Kupferlackdraht 0,15 mm, Kupferfolie</td><td class="num">9</td><td>ja (Reste aus Packungen)</td></tr>
           <tr><td>Bauteile</td><td>Widerstände, Kondensatoren, Dioden, TVS, 2 × PTC 0,1 A</td><td class="num">7</td><td>ja</td></tr>
           <tr><td>Bedienteile</td><td>2 Batteriehalter 4 × AA, 2 Schalter, 3 Taster, Piezo, Messleitungen mit Krokoklemmen</td><td class="num">6</td><td>ja</td></tr>
+          <tr><td>Lochraster</td><td>Lochrasterplatinen 2,54 mm (5er-Pack), Stift- und Buchsenleisten</td><td class="num">3</td><td>ja</td></tr>
           <tr><td>Steckbrett-Material</td><td>2 Steckbretter, Steckbrücken</td><td class="num">7</td><td>nein</td></tr>
-          <tr class="rec"><td class="strong">Summe</td><td>davon ca. 26 € später in Sender und Handgerät</td><td class="num strong">≈ 43</td><td></td></tr>
+          <tr class="rec"><td class="strong">Summe</td><td>davon ca. 28 € später in Sender und Handgerät</td><td class="num strong">≈ 46</td><td></td></tr>
         </tbody>
       </table>
     </div>
   </section>
 
   <footer>
-    <span>Machbarkeitstest v2.0 · 13.10.2026 · Grundlage Variante „Einfach“ (E-034 bis E-041)</span>
+    <span>Machbarkeitstest v2.0 · 13.10.2026 · Grundlage Variante „Einfach“ (E-034 bis E-042)</span>
     <span>Nächster Schritt: bestellen, aufbauen, messen; dann das Protokoll an mich</span>
   </footer>
 </div>

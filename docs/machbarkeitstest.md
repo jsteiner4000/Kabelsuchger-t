@@ -13,7 +13,7 @@
 ## 0. Worum es geht
 
 Du kaufst die Teile für **einen Satz** einmal, steckst beide Geräte auf dem Steckbrett zusammen und prüfst
-die Punkte, die neu oder unsicher sind. Danach wandern dieselben Teile auf die Platine. Es gibt keinen
+die Punkte, die neu oder unsicher sind. Danach wandern dieselben Teile auf die Lochrasterplatine. Es gibt keinen
 eigenen Testeinkauf mehr (E-041).
 
 | Nr. | Frage | Messung | Pflicht? |
@@ -105,13 +105,15 @@ Sortiment-Preis ca. 6–8 €.
 | Piezo-Summer **passiv** (ohne eingebaute Elektronik), 12 mm | 1 | 0,30 |
 | Silikonlitze 0,5 mm², rot und grün-gelb, je 1 m | 1 | 2,00 |
 | Isolierte Krokodilklemmen rot und grün (oder gelb) | je 1 | 1,00 |
+| Lochrasterplatine einseitig, 2,54 mm, Lötaugen, ca. 50 × 70 mm (5er-Pack) | 1 Pack | 2,00 |
+| Stiftleisten und Buchsenleisten 2,54 mm (für Module und Stecker) | je 1 Streifen | 1,00 |
 | Steckbrett 830 Kontakte (Steckbrett-Material) | 2 | 4,00 |
 | Steckbrücken-Set (Steckbrett-Material) | 1 | 3,00 |
 | WAGO 221-415, Elektro-Isolierrohr M20 (1 m), J-Y(St)Y-Reststück 2×2×0,6 (1,5 m), Kabelbinder | vorhanden | – |
 
-**Summe ca. 43 €.** Davon landen ca. 26 € später im Gerät. Der Rest sind Packungsreste (Draht,
-Kupferfolie, MT3608-Fünferpack), Reserveteile und das Steckbrett-Material. Die Platinen (ca. 9 €) bestellen
-wir erst nach dem Test.
+**Summe ca. 46 €.** Davon landen ca. 28 € später im Gerät. Der Rest sind Packungsreste (Draht,
+Kupferfolie, MT3608-Fünferpack, Lochraster-Fünferpack), Reserveteile und das Steckbrett-Material. Die
+Lochrasterplatinen kommen gleich mit in die Bestellung, gelötet wird erst nach dem Test.
 
 **Tipp:** Die AliExpress-Teile jetzt bestellen. In der Wartezeit kannst du den Spulenkörper drucken und die
 Spule wickeln.
@@ -416,5 +418,6 @@ wenn die Störquelle ein- und ausgeschaltet wird? (Ziel ≤ 3 dB.)
 | K5 | Stromrichtung ≥ 80 % richtig an gespreizten Kabeln (Nachbarn am Sender geerdet) | M7 |
 | K6 | Endstufe ≥ 15 Vss je Ausgang ohne Begrenzung, stabil an 100 nF; Strommessung ±10 %; Strombegrenzung greift | M1 |
 
-Fällt ein Kriterium durch, passen wir die Schaltung an, bevor Schaltplan und Platine (Phase 4/5) entstehen. Die
+Fällt ein Kriterium durch, passen wir die Schaltung an, bevor Schaltplan und Lochraster-Aufbauplan (Phase 4/5)
+entstehen. Die
 gemessenen Werte bestimmen außerdem die Halslänge (M4).

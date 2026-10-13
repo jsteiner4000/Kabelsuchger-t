@@ -1,6 +1,7 @@
 # Vorschlag: Variante „Einfach“
 
-**Stand:** 13.10.2026 · **Status:** freigegeben durch Julius am 13.10.2026 (E-034), mit OLED auch im Sender
+**Stand:** 13.10.2026 · **Status:** freigegeben durch Julius am 13.10.2026 (E-034), mit OLED auch im Sender und
+Aufbau auf Lochraster (E-042)
 
 Anlass: Julius findet Variante C (ca. 50 € pro Satz, Phase-3-Einkauf ca. 57 €) zu teuer und zu aufwendig. Er möchte
 ein ganz normales, einfaches Kabelsuchgerät mit möglichst wenig Aufwand. Außerdem soll die Abtastfläche des
@@ -33,7 +34,7 @@ Julius' Wunsch das Display (zeigt Strom, Pegel und Batterie).
 | Handgerät: Anzeige | OLED 1,3″, nT, Links/Rechts, Tiefe | OLED 1,3″: dB, Balken, Stromrichtungspfeil |
 | Handgerät: Ton | Verstärker + Lautsprecher | Piezo (Tonhöhe steigt mit dem Signal) |
 | Handgerät: Bedienung | Drehgeber + Tasten | 2 Tasten: REF und MODUS |
-| Aufbau | 2 eigene Platinen | 2 eigene Platinen, Module gesteckt, nur bedrahtete Teile |
+| Aufbau | 2 eigene Platinen | 2 Lochrasterplatinen, Module gesteckt, nur bedrahtete Teile |
 
 ## 3. Was du verlierst und wie du es ersetzt
 
@@ -62,15 +63,17 @@ Die Stromrichtung auf vollen Trassen (U-13) bleibt erhalten. Sie braucht nur ein
 | Batteriehalter, Schalter, Tasten | ≈ 1,80 € | ≈ 2,10 € |
 | Kleinteile, Stiftleisten | ≈ 2 € | ≈ 1,50 € |
 | **Summe Teile** | **≈ 16 €** | **≈ 13 €** |
-| Platinen (beide Designs in einer Bestellung, 5 Stück je Design) | ≈ 9 € | |
-| **Gesamt pro Satz** | **≈ 38 €** (du zahlst ≈ 35 €) | |
+| Lochrasterplatinen (2 Stück, 2,54 mm) | ≈ 2 € | |
+| **Gesamt pro Satz** | **≈ 31 €** (du zahlst ≈ 28 €) | |
 
-Filament ist nicht eingerechnet. Im ersten Vorschlag (Sender mit LEDs) waren es ca. 35 €; das Sender-Display
-kostet ca. 3 € mehr.
+Filament ist nicht eingerechnet. Mit bestellten Platinen wären es ca. 38 € (Platinen ca. 9 € statt 2 €). Das
+Sender-Display kostet ca. 3 € mehr als die zuerst vorgeschlagenen LEDs.
 
-## 5. Eine Platine?
+## 5. Eine Platine? (Entscheidung: Lochraster, E-042)
 
-- **Je Gerät eine Platine: ja, das ist der Plan.** Alles sitzt auf einer Platine: ESP32-Modul und OLED auf
+Julius hat sich für **Lochraster** entschieden. Die Überlegungen von vorher bleiben hier zum Nachlesen:
+
+- **Je Gerät eine Platine:** Alles sitzt auf einer Platine: ESP32-Modul und OLED auf
   Stiftleisten, dazu die wenigen bedrahteten Bauteile. Batterie und Spule kommen über Stecker. Keine fliegende
   Verdrahtung, ca. 30 Lötstellen plus Stiftleisten pro Gerät.
 - **Beide Platinen in einer Bestellung:** ca. 9 € inkl. Versand für je 5 Stück. Die übrigen Platinen sind Ersatz.
@@ -78,19 +81,21 @@ kostet ca. 3 € mehr.
   berechnet mehrere Designs auf einem Stück oft extra.
 - **Fertig bestückt vom Hersteller (SMD):** lohnt sich erst ab ca. 10 Sätzen. Bei einem Satz kostet die Bestückung
   mehr als alle Teile zusammen.
-- **Lochraster** spart ca. 7 €, kostet aber deutlich mehr Zeit und ist fehleranfälliger.
+- **Lochraster** spart ca. 7 €, kostet aber mehr Zeit und ist fehleranfälliger. Dafür ist eine Änderung nach dem
+  Test schnell gelötet. Damit das Verdrahten sicher klappt, gibt es in Phase 5 einen Aufbauplan zum Abhaken.
 
 ## 6. Ablauf
 
 Der große Steckbrett-Test mit eigener Einkaufsliste (ca. 57 €) entfällt. Stattdessen:
 
 1. Die endgültigen Teile einmal bestellen (≈ 26 € Teile ohne den vorhandenen ESP32-S2, dazu Packungsreste und
-   Steckbrett-Material; später kommen die Platinen dazu).
+   Steckbrett-Material; die Lochrasterplatinen kosten ca. 2 €).
 2. Kurzer Test auf dem Steckbrett mit genau diesen Teilen, ein Abend:
    - Sender: sauberer Sinus an A/E?
    - Handgerät: reicht der Wandler im ESP32-S3 (Empfindlichkeit ca. 0,1 nT, sauberes Abtasten)?
    - Stromrichtung mit einer Spule an einer Testschleife.
-3. Danach Phase 4 (Schaltung) und Phase 5 (Platine). Die Teile wandern vom Steckbrett auf die Platine.
+3. Danach Phase 4 (Schaltung) und Phase 5 (Lochraster-Aufbauplan). Die Teile wandern vom Steckbrett auf die
+   Lochrasterplatine.
 
 ## 7. Entscheidungen (beantwortet am 13.10.2026)
 
@@ -98,7 +103,7 @@ Der große Steckbrett-Test mit eigener Einkaufsliste (ca. 57 €) entfällt. Sta
 |---|---|---|---|
 | V-1 | Variante „Einfach“ statt C? | ja | **ja** |
 | V-2 | Sender ohne Display, nur 3 LEDs? | LEDs | **nein: OLED in beiden Geräten** |
-| V-3 | Platine bestellen oder Lochraster? | Platine | **Platine** |
+| V-3 | Platine bestellen oder Lochraster? | Platine | **Lochraster** (erst „Platine“, kurz danach geändert, E-042) |
 | V-4 | Platz für eine zweite Spule vorsehen, erstmal nicht bestücken? | ja | **ja** |
 
-Eingetragen als E-034 bis E-041 in [`entscheidungen.md`](entscheidungen.md).
+Eingetragen als E-034 bis E-042 in [`entscheidungen.md`](entscheidungen.md).
