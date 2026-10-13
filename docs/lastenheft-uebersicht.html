@@ -1,0 +1,663 @@
+<title>Kabelsuchgerät Lastenheft</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: technisches Zeichnungsblatt. Schriftfeld oben, darunter die Blattinhalte untereinander, max. 1080 px breit. */
+:root{
+  --paper:#edf0f3;
+  --sheet:#ffffff;
+  --ink:#16202a;
+  --muted:#556371;
+  --rule:#c5cdd5;
+  --bma:#c41e2e;
+  --signal:#c08400;
+  --pe:#2e8a3d;
+  --wall:#e2e6ea;
+  --hatch:#b6c0c9;
+  --muss-bg:#fbe5e7; --muss-fg:#9a1523;
+  --soll-bg:#e2eaf3; --soll-fg:#22456a;
+  --kann-bg:#eceff2; --kann-fg:#4d5965;
+  --f-display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
+  --f-body:"IBM Plex Sans","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0f1419; --sheet:#171e25; --ink:#e3e8ed; --muted:#97a4b0; --rule:#2b3640;
+    --bma:#ff5d65; --signal:#efb33b; --pe:#5bc46b; --wall:#1c242c; --hatch:#34414c;
+    --muss-bg:#3b1a1f; --muss-fg:#ff9ca2; --soll-bg:#1a2b3c; --soll-fg:#9cc3ec; --kann-bg:#222a31; --kann-fg:#aab5bf;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0f1419; --sheet:#171e25; --ink:#e3e8ed; --muted:#97a4b0; --rule:#2b3640;
+  --bma:#ff5d65; --signal:#efb33b; --pe:#5bc46b; --wall:#1c242c; --hatch:#34414c;
+  --muss-bg:#3b1a1f; --muss-fg:#ff9ca2; --soll-bg:#1a2b3c; --soll-fg:#9cc3ec; --kann-bg:#222a31; --kann-fg:#aab5bf;
+  color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.55}
+.wrap{max-width:1080px;margin:0 auto;padding-inline:max(16px,3vw);padding-block:28px 72px;display:flex;flex-direction:column;gap:56px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.1}
+h1{font-size:clamp(2.6rem,7vw,4.2rem);font-weight:700;letter-spacing:.01em}
+h2{font-size:clamp(1.7rem,3.6vw,2.2rem);font-weight:600}
+h3{font-size:1.3rem;font-weight:600;letter-spacing:.02em}
+p{margin:0}
+.lead{font-size:1.08rem;max-width:62ch;color:var(--ink)}
+.muted{color:var(--muted)}
+.mono{font-family:var(--f-mono)}
+.eyebrow{font-family:var(--f-mono);font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+section{display:flex;flex-direction:column;gap:18px}
+.sec-head{display:flex;flex-direction:column;gap:6px;max-width:70ch}
+
+/* Schriftfeld */
+.titleblock{display:grid;grid-template-columns:2.2fr 1fr 1fr 1fr;border:1.5px solid var(--ink);background:var(--sheet)}
+.titleblock>div{padding:10px 14px;border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);min-width:0;display:flex;flex-direction:column;gap:2px}
+.titleblock>div:nth-child(4n){border-right:0}
+.titleblock>div:nth-last-child(-n+4){border-bottom:0}
+.tb-k{font-family:var(--f-mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.tb-v{font-weight:600}
+.tb-v.big{font-family:var(--f-display);font-size:1.5rem;font-weight:700;line-height:1.1}
+.status{display:inline-flex;align-items:center;gap:8px}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--bma);flex:none}
+.hero{display:flex;flex-direction:column;gap:14px}
+
+/* Abbildungen */
+.figure{background:var(--sheet);border:1px solid var(--rule);padding:18px 18px 12px;overflow-x:auto}
+.figure svg{display:block;width:100%;min-width:760px;height:auto}
+.figcap{font-size:.86rem;color:var(--muted);margin-top:8px;max-width:80ch}
+.s-dev{fill:var(--sheet);stroke:var(--ink);stroke-width:2}
+.s-head{fill:var(--ink)}
+.s-screen{fill:var(--paper);stroke:var(--ink);stroke-width:1}
+.s-bar{fill:var(--bma)}
+.s-wall{fill:var(--wall)}
+.s-hatchfill{fill:url(#hatch)}
+.hatch-line{stroke:var(--hatch);stroke-width:1.5}
+.s-wall-edge{fill:none;stroke:var(--muted);stroke-width:1.5}
+.s-cable{stroke:var(--bma);stroke-width:12;stroke-linecap:round;fill:none}
+.s-cabledot{fill:var(--bma)}
+.s-cablegrey{fill:var(--wall);stroke:var(--muted);stroke-width:1.5}
+.s-lead-a{stroke:var(--bma);stroke-width:3;fill:none}
+.s-lead-b{stroke:var(--ink);stroke-width:3;fill:none}
+.s-lead-e{stroke:var(--pe);stroke-width:3;fill:none;stroke-dasharray:9 5}
+.s-earth{stroke:var(--pe);stroke-width:2.5}
+.s-term{fill:var(--sheet);stroke:var(--ink);stroke-width:2}
+.s-field{stroke:var(--signal);stroke-width:2;fill:none;stroke-dasharray:5 5}
+.s-dim{stroke:var(--muted);stroke-width:1.2;fill:none}
+.s-ext{stroke:var(--muted);stroke-width:1;fill:none;stroke-dasharray:3 3}
+.s-fan{stroke:var(--muted);stroke-width:1.5;fill:none;stroke-dasharray:4 4}
+.s-arrow{fill:var(--muted)}
+.s-box{fill:var(--sheet);stroke:var(--rule);stroke-width:1.5}
+.s-tag{fill:var(--paper);stroke:var(--rule);stroke-width:1}
+.s-icon{stroke:var(--ink);stroke-width:2.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.s-core{stroke:var(--muted);stroke-width:3;fill:none;stroke-linecap:round}
+.s-core-hit{stroke:var(--signal);stroke-width:3.5;fill:none;stroke-linecap:round}
+.s-iconbox{fill:var(--paper);stroke:var(--ink);stroke-width:2}
+.s-t{fill:var(--ink);font-family:var(--f-body);font-size:13px}
+.s-tm{fill:var(--muted);font-family:var(--f-body);font-size:12px}
+.s-tt{fill:var(--ink);font-family:var(--f-mono);font-size:10.5px}
+.s-td{fill:var(--ink);font-family:var(--f-display);font-size:22px;font-weight:700;letter-spacing:.05em}
+.s-ts{fill:var(--ink);font-family:var(--f-display);font-size:17px;font-weight:600;letter-spacing:.03em}
+
+/* Suchaufgaben */
+.tasks{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:16px}
+.task{background:var(--sheet);border:1px solid var(--rule);padding:16px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.task svg{width:100%;max-width:220px;height:auto;display:block}
+.task .kind{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.note{border-left:3px solid var(--signal);padding:8px 14px;background:var(--sheet);max-width:80ch;font-size:.93rem}
+
+/* Anforderungen */
+.reqgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));gap:16px}
+.reqblock{background:var(--sheet);border:1px solid var(--rule);padding:16px 18px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.reqblock h3{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.reqblock h3 .eyebrow{font-weight:400}
+.reqs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.reqs li{display:grid;grid-template-columns:3.4rem 3.6rem 1fr;gap:10px;align-items:baseline;padding:6px 0;border-top:1px solid var(--rule)}
+.reqs li:first-child{border-top:0}
+.rid{font-family:var(--f-mono);font-size:.8rem;color:var(--muted)}
+.chip{font-family:var(--f-mono);font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;padding:2px 6px;border-radius:3px;text-align:center;justify-self:start}
+.muss{background:var(--muss-bg);color:var(--muss-fg)}
+.soll{background:var(--soll-bg);color:var(--soll-fg)}
+.kann{background:var(--kann-bg);color:var(--kann-fg);outline:1px dashed var(--rule)}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:.88rem;align-items:center}
+.legend span{display:inline-flex;gap:6px;align-items:center}
+.notlist{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:10px 24px;margin:0;padding:0;list-style:none}
+.notlist li{padding-left:18px;position:relative;font-size:.93rem}
+.notlist li::before{content:"";position:absolute;left:0;top:.62em;width:9px;height:2px;background:var(--muted)}
+
+/* Matrix */
+.split{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:20px;align-items:start}
+.matrix-wrap{overflow-x:auto}
+.matrix{display:grid;grid-template-columns:minmax(150px,1.1fr) 1fr 1fr;min-width:540px;border:1px solid var(--rule);background:var(--sheet)}
+.matrix>div{padding:10px 12px;border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);min-width:0}
+.matrix>div:nth-child(3n){border-right:0}
+.matrix>div:nth-last-child(-n+3){border-bottom:0}
+.mx-h{background:var(--paper);font-size:.88rem}
+.mx-h b{display:block;font-family:var(--f-display);font-size:1.1rem;font-weight:600}
+.mx-c{display:flex;flex-direction:column;gap:4px}
+.mx-c .case{font-family:var(--f-mono);font-size:.78rem;color:var(--muted)}
+.mx-c .q{font-weight:600}
+.risks{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.risks li{display:grid;grid-template-columns:2.4rem 1fr;gap:8px;font-size:.92rem}
+.risks b{font-weight:600}
+
+/* Tabellen */
+.table-wrap{overflow-x:auto;background:var(--sheet);border:1px solid var(--rule)}
+table{border-collapse:collapse;width:100%;min-width:620px;font-size:.92rem}
+th,td{text-align:left;padding:8px 12px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-family:var(--f-mono);font-size:.7rem;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);font-weight:500;background:var(--paper)}
+tr:last-child td{border-bottom:0}
+td.id{font-family:var(--f-mono);font-size:.82rem;color:var(--muted);white-space:nowrap}
+td.goal{white-space:nowrap;color:var(--muted)}
+
+/* Phasen */
+.phase-group{display:flex;flex-direction:column;gap:10px}
+.phase-label{display:flex;align-items:center;gap:12px}
+.phase-label::after{content:"";flex:1;height:1px;background:var(--rule)}
+.phases{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.phase{background:var(--sheet);border:1px solid var(--rule);padding:14px;display:flex;flex-direction:column;gap:6px;position:relative}
+.phase .n{font-family:var(--f-display);font-size:2rem;font-weight:700;line-height:1;color:var(--muted)}
+.phase .t{font-weight:600}
+.phase .d{font-size:.86rem;color:var(--muted)}
+.phase .gate{margin-top:auto;padding-top:8px;font-family:var(--f-mono);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border-top:1px dashed var(--rule)}
+.phase.now{border:2px solid var(--bma)}
+.phase.now .n{color:var(--bma)}
+.now-tag{position:absolute;top:10px;right:10px;font-family:var(--f-mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;background:var(--bma);color:var(--sheet);padding:2px 6px;border-radius:3px}
+.switch{display:flex;align-items:center;gap:10px;font-size:.88rem;color:var(--muted)}
+.switch::before,.switch::after{content:"";flex:1;height:0;border-top:2px dotted var(--signal)}
+
+/* Fragen */
+.qgroups{display:flex;flex-direction:column;gap:22px}
+.qgroup{display:flex;flex-direction:column;gap:10px}
+.qs{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));gap:10px}
+.qitem{background:var(--sheet);border:1px solid var(--rule);padding:12px 14px;display:grid;grid-template-columns:3.2rem 1fr;gap:4px 10px;min-width:0}
+.qitem .qid{font-family:var(--f-mono);font-size:.8rem;color:var(--bma);padding-top:2px}
+.qitem .qt{font-weight:500}
+.qitem .qv{grid-column:2;font-size:.88rem;color:var(--muted)}
+.qitem .qv b{color:var(--ink);font-weight:600}
+
+/* Lieferumfang + Budget */
+.deliver{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:16px;align-items:stretch}
+pre.tree{margin:0;background:var(--sheet);border:1px solid var(--rule);padding:16px 18px;overflow-x:auto;font-family:var(--f-mono);font-size:.82rem;line-height:1.7}
+pre.tree .c{color:var(--muted)}
+.budget{background:var(--sheet);border:1px solid var(--rule);padding:18px;display:flex;flex-direction:column;gap:10px}
+.budget .amount{font-family:var(--f-display);font-size:3.6rem;font-weight:700;line-height:1}
+.budget .amount small{font-size:1.2rem;font-weight:500;color:var(--muted);margin-left:6px}
+.budget ul{margin:0;padding-left:18px;font-size:.92rem;display:flex;flex-direction:column;gap:4px}
+footer{border-top:1.5px solid var(--ink);padding-top:14px;font-size:.86rem;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 24px}
+
+@media (max-width:860px){
+  .titleblock{grid-template-columns:1fr 1fr}
+  .titleblock>div{border-right:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+  .titleblock>div:nth-child(2n){border-right:0}
+  .titleblock>div:nth-last-child(-n+4){border-bottom:1px solid var(--rule)}
+  .titleblock>div:nth-last-child(-n+2){border-bottom:0}
+  .split,.deliver{grid-template-columns:1fr}
+  .phases{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:440px){
+  .phases{grid-template-columns:1fr}
+  .reqs li{grid-template-columns:3rem 1fr}
+  .reqs li .chip{grid-column:2;grid-row:1}
+  .reqs li .rtext{grid-column:1 / -1}
+}
+</style>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div class="titleblock" aria-label="Schriftfeld">
+      <div><span class="tb-k">Projekt</span><span class="tb-v big">Kabelsuchgerät · Sender + Handgerät</span></div>
+      <div><span class="tb-k">Dokument</span><span class="tb-v">Lastenheft</span></div>
+      <div><span class="tb-k">Version</span><span class="tb-v mono">0.1 Entwurf</span></div>
+      <div><span class="tb-k">Datum</span><span class="tb-v mono">13.10.2026</span></div>
+      <div><span class="tb-k">Status</span><span class="tb-v status"><span class="dot" aria-hidden="true"></span>Rückfragen offen (F-01 … F-20)</span></div>
+      <div><span class="tb-k">Phase</span><span class="tb-v mono">1 von 8</span></div>
+      <div><span class="tb-k">Auftraggeber</span><span class="tb-v">Julius</span></div>
+      <div><span class="tb-k">Quelle</span><span class="tb-v mono" style="font-size:.85rem">docs/lastenheft.md</span></div>
+    </div>
+    <h1>Kabelsuchgerät</h1>
+    <p class="lead">Ein Sender speist ein Suchsignal in eine spannungsfreie EMA/BMA-Leitung ein, ein Handgerät verfolgt sie von außen, auch durch Wände. Diese Seite zeigt auf einen Blick, <b>was</b> wir bauen wollen. <b>Wie</b> wir es bauen, klärt das Konzept in Phase 2.</p>
+  </header>
+
+  <section id="system" aria-labelledby="h-system">
+    <div class="sec-head">
+      <span class="eyebrow">Lastenheft Kap. 1–3</span>
+      <h2 id="h-system">Das System</h2>
+    </div>
+    <div class="figure">
+      <svg viewBox="0 0 1000 320" role="img" aria-labelledby="sysT">
+        <title id="sysT">Sender am Leitungsanfang mit drei Klemmen A, B und Schirm/Erde; die Leitung läuft durch eine Wand; das Handgerät erkennt das Feld von außen; am fernen Ende ist die Leitung offen, gebrückt oder mit einem Gerät verbunden.</title>
+        <defs>
+          <pattern id="hatch" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <line x1="0" y1="0" x2="0" y2="10" class="hatch-line"/>
+          </pattern>
+        </defs>
+
+        <!-- Wand -->
+        <rect x="380" y="150" width="400" height="110" class="s-wall"/>
+        <rect x="380" y="150" width="400" height="110" class="s-hatchfill"/>
+        <rect x="380" y="150" width="400" height="110" class="s-wall-edge"/>
+        <text x="580" y="282" text-anchor="middle" class="s-tm">Wand oder Decke: Putz · Mauerwerk · Beton · Stahlbeton</text>
+
+        <!-- Feld um die Leitung -->
+        <circle cx="580" cy="196" r="24" class="s-field"/>
+        <circle cx="580" cy="196" r="44" class="s-field" opacity=".7"/>
+        <circle cx="580" cy="196" r="64" class="s-field" opacity=".4"/>
+
+        <!-- Leitung -->
+        <line x1="298" y1="196" x2="830" y2="196" class="s-cable"/>
+        <line x1="460" y1="124" x2="460" y2="189" class="s-dim"/>
+        <text x="540" y="118" text-anchor="end" class="s-t">Leitung, z. B. J-Y(St)Y n×2×0,8</text>
+
+        <!-- Sender -->
+        <text x="24" y="134" class="s-tm">Leitungsanfang (Zentrale / Verteiler)</text>
+        <rect x="24" y="146" width="172" height="100" rx="10" class="s-dev"/>
+        <text x="40" y="178" class="s-td">SENDER</text>
+        <text x="40" y="198" class="s-tm">speist Suchsignal ein</text>
+        <rect x="40" y="212" width="34" height="18" rx="3" class="s-tag"/><text x="57" y="225" text-anchor="middle" class="s-tt">A·B</text>
+        <rect x="80" y="212" width="34" height="18" rx="3" class="s-tag"/><text x="97" y="225" text-anchor="middle" class="s-tt">A·S</text>
+        <rect x="120" y="212" width="34" height="18" rx="3" class="s-tag"/><text x="137" y="225" text-anchor="middle" class="s-tt">A·E</text>
+        <text x="186" y="172" text-anchor="end" class="s-tt">A</text>
+        <text x="186" y="200" text-anchor="end" class="s-tt">B</text>
+        <text x="186" y="228" text-anchor="end" class="s-tt">S/E</text>
+        <path d="M201 168 C 240 168, 255 190, 292 192" class="s-lead-a"/>
+        <path d="M201 196 C 240 196, 255 200, 292 200" class="s-lead-b"/>
+        <path d="M201 224 C 235 224, 246 250, 246 290" class="s-lead-e"/>
+        <circle cx="196" cy="168" r="5" class="s-term"/>
+        <circle cx="196" cy="196" r="5" class="s-term"/>
+        <circle cx="196" cy="224" r="5" class="s-term"/>
+        <line x1="228" y1="292" x2="264" y2="292" class="s-earth"/>
+        <line x1="234" y1="299" x2="258" y2="299" class="s-earth"/>
+        <line x1="240" y1="306" x2="252" y2="306" class="s-earth"/>
+        <text x="272" y="303" class="s-tm">Schirm oder Erde (z. B. PAS)</text>
+
+        <!-- Handgerät -->
+        <rect x="568" y="18" width="24" height="74" rx="8" class="s-dev"/>
+        <rect x="571" y="26" width="18" height="24" rx="2" class="s-screen"/>
+        <rect x="573" y="43" width="3" height="4" class="s-bar"/>
+        <rect x="577" y="40" width="3" height="7" class="s-bar"/>
+        <rect x="581" y="37" width="3" height="10" class="s-bar"/>
+        <rect x="585" y="33" width="3" height="14" class="s-bar"/>
+        <rect x="575" y="92" width="10" height="10" class="s-dev"/>
+        <rect x="558" y="102" width="44" height="24" rx="7" class="s-head"/>
+        <text x="612" y="40" class="s-td">HANDGERÄT</text>
+        <text x="612" y="58" class="s-tm">folgt der Leitung von außen</text>
+        <line x1="518" y1="114" x2="550" y2="114" class="s-dim"/>
+        <polygon points="514,114 523,109 523,119" class="s-arrow"/>
+        <line x1="610" y1="114" x2="642" y2="114" class="s-dim"/>
+        <polygon points="646,114 637,109 637,119" class="s-arrow"/>
+        <text x="612" y="100" class="s-tm">überstreichen</text>
+
+        <!-- Bemaßung Ortungsabstand -->
+        <line x1="606" y1="126" x2="708" y2="126" class="s-ext"/>
+        <line x1="700" y1="136" x2="700" y2="180" class="s-dim"/>
+        <polygon points="700,127 695,137 705,137" class="s-arrow"/>
+        <polygon points="700,189 695,179 705,179" class="s-arrow"/>
+        <text x="710" y="145" class="s-t">Erkennungsabstand</text>
+
+        <!-- Leitungsende -->
+        <text x="931" y="84" text-anchor="middle" class="s-ts">Leitungsende?</text>
+        <path d="M842 196 L872 122" class="s-fan"/>
+        <path d="M842 196 L872 196" class="s-fan"/>
+        <path d="M842 196 L872 270" class="s-fan"/>
+        <rect x="872" y="96" width="118" height="52" rx="6" class="s-box"/>
+        <line x1="886" y1="114" x2="908" y2="114" class="s-icon"/>
+        <line x1="886" y1="130" x2="908" y2="130" class="s-icon"/>
+        <text x="922" y="127" class="s-t">offen</text>
+        <rect x="872" y="170" width="118" height="52" rx="6" class="s-box"/>
+        <path d="M886 188 H906 V204 H886" class="s-icon"/>
+        <text x="922" y="201" class="s-t">gebrückt</text>
+        <rect x="872" y="244" width="118" height="52" rx="6" class="s-box"/>
+        <line x1="884" y1="262" x2="898" y2="262" class="s-icon"/>
+        <line x1="884" y1="278" x2="898" y2="278" class="s-icon"/>
+        <rect x="898" y="256" width="16" height="28" rx="3" class="s-iconbox"/>
+        <text x="922" y="275" class="s-t">Gerät</text>
+      </svg>
+      <p class="figcap">Der Sender hat drei Klemmen: Ader A, Ader B und Schirm/Erde. Welche Einspeisemodi es am Ende gibt (A·B, A·Schirm, A·Erde oder Kombinationen), entscheidet das Konzept. Die Leitung ist beim Suchen immer spannungsfrei, 2 m bis mehrere hundert Meter lang, der Schirm geerdet oder nicht.</p>
+    </div>
+  </section>
+
+  <section id="aufgaben" aria-labelledby="h-aufgaben">
+    <div class="sec-head">
+      <span class="eyebrow">Lastenheft Kap. 2, Frage F-06</span>
+      <h2 id="h-aufgaben">Drei Suchaufgaben</h2>
+      <p class="muted">Das Handgerät muss alle drei können. Wie wichtig welche ist, beantwortest du in F-06.</p>
+    </div>
+    <div class="tasks">
+      <article class="task">
+        <svg viewBox="0 0 160 90" role="img" aria-label="Handgerät über einer Wand, darin eine Leitung mit Feldlinien">
+          <rect x="8" y="44" width="144" height="42" class="s-wall"/>
+          <rect x="8" y="44" width="144" height="42" class="s-hatchfill"/>
+          <line x1="8" y1="44" x2="152" y2="44" class="s-wall-edge"/>
+          <circle cx="80" cy="68" r="15" class="s-field"/>
+          <circle cx="80" cy="68" r="25" class="s-field" opacity=".5"/>
+          <circle cx="80" cy="68" r="7" class="s-cabledot"/>
+          <rect x="74" y="2" width="12" height="12" class="s-dev"/>
+          <rect x="64" y="14" width="32" height="16" rx="5" class="s-head"/>
+          <line x1="34" y1="22" x2="56" y2="22" class="s-dim"/>
+          <polygon points="30,22 38,18 38,26" class="s-arrow"/>
+          <line x1="104" y1="22" x2="126" y2="22" class="s-dim"/>
+          <polygon points="130,22 122,18 122,26" class="s-arrow"/>
+        </svg>
+        <span class="kind">Ortung</span>
+        <h3>Verlauf durch Wand und Decke verfolgen</h3>
+        <p class="muted">Leitung liegt verdeckt. Das Handgerät zeigt beim Überstreichen, wo sie verläuft. Hier zählt die Tiefe.</p>
+      </article>
+      <article class="task">
+        <svg viewBox="0 0 160 90" role="img" aria-label="Feine Spitze zeigt auf eine Leitung in einem Bündel">
+          <circle cx="56" cy="62" r="9" class="s-cablegrey"/>
+          <circle cx="96" cy="62" r="9" class="s-cablegrey"/>
+          <circle cx="66" cy="78" r="9" class="s-cablegrey"/>
+          <circle cx="86" cy="78" r="9" class="s-cablegrey"/>
+          <circle cx="106" cy="78" r="9" class="s-cablegrey"/>
+          <circle cx="46" cy="78" r="9" class="s-cablegrey"/>
+          <circle cx="116" cy="62" r="9" class="s-cablegrey"/>
+          <circle cx="76" cy="58" r="9" class="s-cabledot"/>
+          <rect x="72" y="4" width="8" height="26" rx="3" class="s-head"/>
+          <polygon points="72,30 80,30 76,40" class="s-head"/>
+        </svg>
+        <span class="kind">Identifikation · Mantel zu</span>
+        <h3>Richtige Leitung im Bündel oder in der Trasse</h3>
+        <p class="muted">Viele Kabel nebeneinander. Bündel-Modus mit feiner Spitze und geringer Empfindlichkeit.</p>
+      </article>
+      <article class="task">
+        <svg viewBox="0 0 160 90" role="img" aria-label="Abisoliertes Kabelende mit aufgefächerten Adern, Spitze an einer Ader">
+          <rect x="6" y="50" width="58" height="16" rx="4" class="s-cabledot"/>
+          <path d="M64 54 C 84 54, 100 30, 120 30" class="s-core"/>
+          <path d="M64 58 H120" class="s-core"/>
+          <path d="M64 60 C 88 60, 102 72, 120 72" class="s-core"/>
+          <path d="M64 62 C 84 62, 100 86, 120 86" class="s-core"/>
+          <path d="M64 56 C 88 56, 102 44, 120 44" class="s-core-hit"/>
+          <rect x="136" y="40" width="22" height="8" rx="3" class="s-head"/>
+          <polygon points="136,40 136,48 128,44" class="s-head"/>
+        </svg>
+        <span class="kind">Identifikation · Ende offen</span>
+        <h3>Richtige Ader am abisolierten Ende</h3>
+        <p class="muted">Im Verteiler oder in der Dose liegen die Adern frei. Die Spitze findet die Ader mit dem Signal.</p>
+      </article>
+    </div>
+    <p class="note">Eine einzelne Ader in einem geschlossenen Kabel lässt sich von außen nicht von ihren Nachbaradern unterscheiden. Das geht nur am offenen Ende.</p>
+  </section>
+
+  <section id="anforderungen" aria-labelledby="h-anf">
+    <div class="sec-head">
+      <span class="eyebrow">Lastenheft Kap. 4–8</span>
+      <h2 id="h-anf">Was die Geräte können müssen</h2>
+      <div class="legend">
+        <span><span class="chip muss">Muss</span> ohne das kein Erfolg</span>
+        <span><span class="chip soll">Soll</span> wenn sauber machbar</span>
+        <span><span class="chip kann">Kann</span> nur ohne falsche Sicherheit</span>
+      </div>
+    </div>
+    <div class="reqgrid">
+      <div class="reqblock">
+        <h3>Sender <span class="eyebrow">S-01 … S-17</span></h3>
+        <ul class="reqs">
+          <li><span class="rid">S-01</span><span class="chip muss">Muss</span><span class="rtext">Suchsignal, das das Handgerät eindeutig erkennt</span></li>
+          <li><span class="rid">S-02</span><span class="chip muss">Muss</span><span class="rtext">Drei Anschlüsse: Ader A, Ader B, Schirm/Erde</span></li>
+          <li><span class="rid">S-03</span><span class="chip muss">Muss</span><span class="rtext">Umschaltbare Einspeisemodi, mind. A·B, A·Schirm, A·Erde</span></li>
+          <li><span class="rid">S-04</span><span class="chip muss">Muss</span><span class="rtext">Ausgang ≤ 25 V AC eff bzw. 60 V DC (Schutzkleinspannung)</span></li>
+          <li><span class="rid">S-05</span><span class="chip muss">Muss</span><span class="rtext">Dauerhaft kurzschlussfest, jede Klemmenkombination</span></li>
+          <li><span class="rid">S-06</span><span class="chip muss">Muss</span><span class="rtext">Stabil an langen Leitungen bis zur Maximallänge</span></li>
+          <li><span class="rid">S-07</span><span class="chip muss">Muss</span><span class="rtext">AA- oder AAA-Batterien, NiMH-tauglich</span></li>
+          <li><span class="rid">S-08</span><span class="chip muss">Muss</span><span class="rtext">Automatische Abschaltung, nicht zu früh (läuft unbeaufsichtigt)</span></li>
+          <li><span class="rid">S-09</span><span class="chip muss">Muss</span><span class="rtext">Anzeige: Betrieb, Modus, Batterie, Fehler</span></li>
+          <li><span class="rid">S-10</span><span class="chip soll">Soll</span><span class="rtext">Eingespeisten Strom anzeigen</span></li>
+          <li><span class="rid">S-11</span><span class="chip soll">Soll</span><span class="rtext">Mindestens zwei Leistungsstufen</span></li>
+          <li><span class="rid">S-12</span><span class="chip muss">Muss</span><span class="rtext">Übersteht Fremdspannung ohne Schaden (Wert: F-13)</span></li>
+          <li><span class="rid">S-13</span><span class="chip kann">Kann</span><span class="rtext">Fremdspannungswarnung, nur wenn zuverlässig</span></li>
+          <li><span class="rid">S-14</span><span class="chip kann">Kann</span><span class="rtext">Durchgangs-/Schleifentest, nur wenn eindeutig</span></li>
+          <li><span class="rid">S-15</span><span class="chip muss">Muss</span><span class="rtext">Krokodilklemmen, Zugentlastung</span></li>
+          <li><span class="rid">S-16</span><span class="chip soll">Soll</span><span class="rtext">Mindestens 8 h Dauerbetrieb</span></li>
+          <li><span class="rid">S-17</span><span class="chip soll">Soll</span><span class="rtext">Signalkennung: Handgerät reagiert nur auf den eigenen Sender</span></li>
+        </ul>
+      </div>
+      <div class="reqblock">
+        <h3>Handgerät <span class="eyebrow">H-01 … H-15</span></h3>
+        <ul class="reqs">
+          <li><span class="rid">H-01</span><span class="chip muss">Muss</span><span class="rtext">Ton ändert sich mit der Signalstärke</span></li>
+          <li><span class="rid">H-02</span><span class="chip muss">Muss</span><span class="rtext">OLED mit Balken und Zahlenwert</span></li>
+          <li><span class="rid">H-03</span><span class="chip muss">Muss</span><span class="rtext">Ortungsprinzip nach Konzept, aktiver Modus sichtbar</span></li>
+          <li><span class="rid">H-04</span><span class="chip muss">Muss</span><span class="rtext">Bündel-Modus: feine Spitze, Empfindlichkeit regelbar</span></li>
+          <li><span class="rid">H-05</span><span class="chip muss">Muss</span><span class="rtext">Zeigt nur das Sendersignal: 50 Hz, Schaltnetzteile, LED-Treiber werden unterdrückt</span></li>
+          <li><span class="rid">H-06</span><span class="chip muss">Muss</span><span class="rtext">Empfindlichkeit von Hand einstellbar</span></li>
+          <li><span class="rid">H-07</span><span class="chip soll">Soll</span><span class="rtext">Automatische Empfindlichkeit</span></li>
+          <li><span class="rid">H-08</span><span class="chip muss">Muss</span><span class="rtext">AA/AAA, NiMH-tauglich, Abschaltung stört nicht beim Suchen</span></li>
+          <li><span class="rid">H-09</span><span class="chip muss">Muss</span><span class="rtext">Batterieanzeige</span></li>
+          <li><span class="rid">H-10</span><span class="chip soll">Soll</span><span class="rtext">Lautstärke einstellbar, auch stumm</span></li>
+          <li><span class="rid">H-11</span><span class="chip soll">Soll</span><span class="rtext">Einhändig bedienbar, Display beim Suchen ablesbar</span></li>
+          <li><span class="rid">H-12</span><span class="chip soll">Soll</span><span class="rtext">Ruhige Anzeige ohne Rauschsprünge</span></li>
+          <li><span class="rid">H-13</span><span class="chip kann">Kann</span><span class="rtext">Kopfhöreranschluss</span></li>
+          <li><span class="rid">H-14</span><span class="chip kann">Kann</span><span class="rtext">Richtungsanzeige links/rechts</span></li>
+          <li><span class="rid">H-15</span><span class="chip kann">Kann</span><span class="rtext">Tiefenschätzung (nur magnetisch, nur Schätzung)</span></li>
+        </ul>
+      </div>
+      <div class="reqblock">
+        <h3>Gehäuse <span class="eyebrow">G-01 … G-09</span></h3>
+        <ul class="reqs">
+          <li><span class="rid">G-01</span><span class="chip muss">Muss</span><span class="rtext">PETG auf Bambu Lab</span></li>
+          <li><span class="rid">G-02</span><span class="chip soll">Soll</span><span class="rtext">Ohne Stützmaterial druckbar</span></li>
+          <li><span class="rid">G-03</span><span class="chip muss">Muss</span><span class="rtext">Kompakt, normal robust, nicht klobig</span></li>
+          <li><span class="rid">G-04</span><span class="chip muss">Muss</span><span class="rtext">Batteriewechsel, ohne an die Elektronik zu müssen</span></li>
+          <li><span class="rid">G-05</span><span class="chip muss">Muss</span><span class="rtext">Zugentlastung der Messleitungen</span></li>
+          <li><span class="rid">G-06</span><span class="chip muss">Muss</span><span class="rtext">Verschraubung, mehrfach zu öffnen</span></li>
+          <li><span class="rid">G-07</span><span class="chip muss">Muss</span><span class="rtext">Parametrischer Quellcode + STL + Druckeinstellungen</span></li>
+          <li><span class="rid">G-08</span><span class="chip muss">Muss</span><span class="rtext">Erst konstruieren, wenn Platinenmaße feststehen</span></li>
+          <li><span class="rid">G-09</span><span class="chip soll">Soll</span><span class="rtext">„Nur an spannungsfreien Leitungen“ mitgedruckt</span></li>
+        </ul>
+      </div>
+      <div class="reqblock">
+        <h3>Elektronik und Fertigung <span class="eyebrow">E-01 … E-07</span></h3>
+        <ul class="reqs">
+          <li><span class="rid">E-01</span><span class="chip muss">Muss</span><span class="rtext">Nur handlötbar (THT, 0805, SOIC) oder vom Hersteller bestückt</span></li>
+          <li><span class="rid">E-02</span><span class="chip muss">Muss</span><span class="rtext">Mikrocontroller in der Arduino IDE programmierbar</span></li>
+          <li><span class="rid">E-03</span><span class="chip soll">Soll</span><span class="rtext">Programmieren über USB, ohne Extra-Programmer</span></li>
+          <li><span class="rid">E-04</span><span class="chip muss">Muss</span><span class="rtext">Beschriftete Messpunkte für Multimeter und Oszilloskop</span></li>
+          <li><span class="rid">E-05</span><span class="chip muss">Muss</span><span class="rtext">Firmware kommentiert, Parameter an einer Stelle</span></li>
+          <li><span class="rid">E-06</span><span class="chip muss">Muss</span><span class="rtext">Steckbrett-Test vor der Platinenbestellung</span></li>
+          <li><span class="rid">E-07</span><span class="chip muss">Muss</span><span class="rtext">KiCad-Projekt, Netzliste oder Lochrasterplan</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="reqblock">
+      <h3>Bewusst nicht dabei <span class="eyebrow">Kap. 8.2</span></h3>
+      <ul class="notlist">
+        <li>Suche an Leitungen unter Spannung, Einspeisung in Netzspannung</li>
+        <li>Passive 50-Hz-Ortung von Netzleitungen als Bohrschutz: „kein Ausschlag“ hieße nicht „keine Leitung“ (Vorschlag E-005)</li>
+        <li>Funk oder App</li>
+        <li>CE-Verfahren (Eigenbau); trotzdem kleine Sendeleistung und übliche Frequenzbereiche</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="faelle" aria-labelledby="h-faelle">
+    <div class="sec-head">
+      <span class="eyebrow">Lastenheft U-05, U-06, Kap. 13</span>
+      <h2 id="h-faelle">Sechs Fälle, die das Konzept lösen muss</h2>
+      <p class="muted">Jede Kombination aus Leitungsende und Schirm kommt in der Praxis vor. Für jeden Fall legt Phase 2 fest, welcher Einspeisemodus am besten ortet und was realistisch erreichbar ist.</p>
+    </div>
+    <div class="split">
+      <div class="matrix-wrap">
+        <div class="matrix" role="table" aria-label="Fälle nach Leitungsende und Schirm">
+          <div class="mx-h" role="columnheader"><span class="eyebrow">Ende ↓ · Schirm →</span></div>
+          <div class="mx-h" role="columnheader"><b>Schirm geerdet</b>hält das E-Feld der Adern zurück</div>
+          <div class="mx-h" role="columnheader"><b>Schirm nicht geerdet</b>koppelt mit und gibt Signal teilweise weiter</div>
+
+          <div class="mx-h" role="rowheader"><b>Ende offen</b>nur kapazitiver Ladestrom, der zum Ende hin auf null fällt</div>
+          <div class="mx-c" role="cell"><span class="case">Fall 1</span><span class="q">Welcher Modus?</span><span class="muted">klärt Phase 2</span></div>
+          <div class="mx-c" role="cell"><span class="case">Fall 2</span><span class="q">Welcher Modus?</span><span class="muted">klärt Phase 2</span></div>
+
+          <div class="mx-h" role="rowheader"><b>Ende gebrückt</b>Strom fließt, aber hin und zurück im selben Kabel</div>
+          <div class="mx-c" role="cell"><span class="case">Fall 3</span><span class="q">Welcher Modus?</span><span class="muted">klärt Phase 2</span></div>
+          <div class="mx-c" role="cell"><span class="case">Fall 4</span><span class="q">Welcher Modus?</span><span class="muted">klärt Phase 2</span></div>
+
+          <div class="mx-h" role="rowheader"><b>Gerät am Ende</b>darf keinen Schaden nehmen; Stromfluss hängt vom Gerät ab</div>
+          <div class="mx-c" role="cell"><span class="case">Fall 5</span><span class="q">Welcher Modus?</span><span class="muted">klärt Phase 2</span></div>
+          <div class="mx-c" role="cell"><span class="case">Fall 6</span><span class="q">Welcher Modus?</span><span class="muted">klärt Phase 2</span></div>
+        </div>
+      </div>
+      <div class="reqblock">
+        <h3>Warum das schwierig ist <span class="eyebrow">Vorschau</span></h3>
+        <ul class="risks">
+          <li><span class="rid">R-1</span><span><b>Stahlbeton</b> schirmt das elektrische Feld ab. Durch kommt praktisch nur ein Magnetfeld.</span></li>
+          <li><span class="rid">R-2</span><span><b>Magnetfeld braucht Strom.</b> Bei offenem Ende fließt nur wenig.</span></li>
+          <li><span class="rid">R-3</span><span><b>Hin- und Rückstrom</b> in benachbarten Adern heben ihre Felder außen fast auf.</span></li>
+          <li><span class="rid">R-4</span><span><b>Geerdeter Schirm</b> hält das E-Feld zurück und schwächt das Magnetfeld.</span></li>
+          <li><span class="rid">R-5</span><span><b>Übersprechen:</b> Bei hoher Frequenz springt das Signal auf Nachbarkabel über.</span></li>
+          <li><span class="rid">R-6</span><span><b>Metall</b> (Stahlrohr, Trassen) dämpft und verbiegt die Felder.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="tests" aria-labelledby="h-tests">
+    <div class="sec-head">
+      <span class="eyebrow">Lastenheft Kap. 9</span>
+      <h2 id="h-tests">Woran wir das fertige Gerät messen</h2>
+      <p class="muted">Die Zielwerte trägt das Konzept in Phase 2 mit Begründung ein. Gemessen wird in Phase 3 und Phase 8.</p>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>ID</th><th>Szenario</th><th>Prüft</th><th>Zielwert</th></tr></thead>
+        <tbody>
+          <tr><td class="id">T-01</td><td>Freie Leitung (≥ 50 m), Ende offen: Erkennungsabstand in Luft, je Einspeisemodus</td><td class="id">U-05 H-03</td><td class="goal">Phase 2</td></tr>
+          <tr><td class="id">T-02</td><td>Wie T-01, Ende gebrückt bzw. geerdet</td><td class="id">U-05 S-03</td><td class="goal">Phase 2</td></tr>
+          <tr><td class="id">T-03</td><td>Leitung in oder hinter Mauerwerk: Erkennungsabstand, Ortungsgenauigkeit</td><td class="id">U-09</td><td class="goal">Phase 2</td></tr>
+          <tr><td class="id">T-04</td><td>Leitung in oder unter Stahlbeton (reales Objekt)</td><td class="id">U-09</td><td class="goal">Phase 2</td></tr>
+          <tr><td class="id">T-05</td><td>Richtige Leitung in einem Bündel von ≥ 10 Leitungen eindeutig finden</td><td class="id">H-04</td><td class="goal">Phase 2</td></tr>
+          <tr><td class="id">T-06</td><td>Richtige Ader am abisolierten Ende finden</td><td class="id">H-04</td><td class="goal">Phase 2</td></tr>
+          <tr><td class="id">T-07</td><td>LED-Treiber, Schaltnetzteil, Leuchtstofflampe in 30 cm Abstand</td><td class="id">H-05</td><td class="goal">keine Fehlanzeige</td></tr>
+          <tr><td class="id">T-08</td><td>Kurzschluss am Ausgang, 1 h, jede Klemmenkombination</td><td class="id">S-05</td><td class="goal">kein Schaden</td></tr>
+          <tr><td class="id">T-09</td><td>Endgerät angeschlossen (z. B. Melder, 12-V-Kamera), alle Modi</td><td class="id">U-07</td><td class="goal">kein Schaden</td></tr>
+          <tr><td class="id">T-10</td><td>Fremdspannung (Wert aus F-13) an den Klemmen</td><td class="id">S-12 S-13</td><td class="goal">kein Schaden</td></tr>
+          <tr><td class="id">T-11</td><td>Lange Leitung: Sender stabil, Signal am Ende noch ortbar</td><td class="id">S-06</td><td class="goal">Phase 2</td></tr>
+          <tr><td class="id">T-12</td><td>Batterielaufzeit und automatische Abschaltung, beide Geräte</td><td class="id">S-08 S-16 H-08</td><td class="goal">Phase 2</td></tr>
+          <tr><td class="id">T-13</td><td>Vergleich mit einem einfachen Tonsucher unter gleichen Bedingungen</td><td class="id">Kap. 1</td><td class="goal">deutlich weiter</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="ablauf" aria-labelledby="h-ablauf">
+    <div class="sec-head">
+      <span class="eyebrow">Lastenheft Kap. 12</span>
+      <h2 id="h-ablauf">Ablauf in acht Phasen</h2>
+      <p class="muted">Nach jeder Phase gibst du frei, erst dann geht es weiter. In den ersten vier Phasen fallen die Entscheidungen, die später teuer zu ändern sind.</p>
+    </div>
+    <div class="phase-group">
+      <div class="phase-label"><span class="eyebrow">Durchdenken und entwerfen</span></div>
+      <ol class="phases">
+        <li class="phase now"><span class="now-tag">jetzt</span><span class="n">1</span><span class="t">Rückfragen + Lastenheft</span><span class="d">Lastenheft v1.0 und diese Übersicht</span><span class="gate">Freigabe</span></li>
+        <li class="phase"><span class="n">2</span><span class="t">Konzept</span><span class="d">Ortungsprinzip, Blockschaltbild, Varianten mit Empfehlung, Reichweite, Zielwerte, visuelle Konzeptübersicht</span><span class="gate">Freigabe</span></li>
+        <li class="phase"><span class="n">3</span><span class="t">Machbarkeitstest</span><span class="d">Steckbrett-Aufbau, Messanleitung fürs Oszilloskop</span><span class="gate">Freigabe</span></li>
+        <li class="phase"><span class="n">4</span><span class="t">Schaltung + Stückliste</span><span class="d">Schaltpläne, Stückliste mit Preisen, Budget-Check</span><span class="gate">Freigabe</span></li>
+      </ol>
+    </div>
+    <div class="switch">Übergang zur Umsetzung</div>
+    <div class="phase-group">
+      <div class="phase-label"><span class="eyebrow">Umsetzen</span></div>
+      <ol class="phases" start="5">
+        <li class="phase"><span class="n">5</span><span class="t">Platine / Aufbauplan</span><span class="d">KiCad-Projekt oder Netzliste bzw. Lochrasterplan</span><span class="gate">Freigabe</span></li>
+        <li class="phase"><span class="n">6</span><span class="t">Firmware</span><span class="d">Sketche für Sender und Handgerät, Arduino IDE</span><span class="gate">Freigabe</span></li>
+        <li class="phase"><span class="n">7</span><span class="t">Gehäuse</span><span class="d">Quellcode, STL, Druckeinstellungen</span><span class="gate">Freigabe</span></li>
+        <li class="phase"><span class="n">8</span><span class="t">Inbetriebnahme</span><span class="d">Abgleich, Tests, Bedienungsanleitung</span><span class="gate">Abnahme</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="fragen" aria-labelledby="h-fragen">
+    <div class="sec-head">
+      <span class="eyebrow">Lastenheft Kap. 14</span>
+      <h2 id="h-fragen">Offene Fragen an dich</h2>
+      <p class="muted">Zu jeder Frage steht mein Vorschlag. Wenn er passt, reicht „ok“. Die ausführliche Fassung mit Begründungen steht in <span class="mono">docs/lastenheft.md</span>.</p>
+    </div>
+    <div class="qgroups">
+      <div class="qgroup">
+        <h3>Werkstatt und Beschaffung</h3>
+        <ul class="qs">
+          <li class="qitem"><span class="qid">F-01</span><span class="qt">Welches Bambu-Modell, welche Düse?</span><span class="qv"><b>Vorschlag:</b> 0,4 mm, Teile bis 25 cm</span></li>
+          <li class="qitem"><span class="qid">F-02</span><span class="qt">Nutzt du KiCad? Version, Erfahrung?</span><span class="qv"><b>Vorschlag:</b> komplettes KiCad-Projekt, du bestellst nur</span></li>
+          <li class="qitem"><span class="qid">F-03</span><span class="qt">Bezugsquellen, Platinen aus China okay, Vorbestückung okay, 0805/SOIC löten?</span><span class="qv"><b>Vorschlag:</b> JLCPCB + Reichelt, Module evtl. AliExpress</span></li>
+          <li class="qitem"><span class="qid">F-04</span><span class="qt">Oszilloskop (Modell, FFT?), Funktionsgenerator, was liegt in der Bastelkiste?</span><span class="qv">Für den Steckbrett-Test nehme ich, was du hast.</span></li>
+          <li class="qitem"><span class="qid">F-05</span><span class="qt">Längere Testleitung (≥ 50–100 m)? Einfacher Tonsucher als Vergleich?</span><span class="qv">Messlatte für „spürbar besser“</span></li>
+        </ul>
+      </div>
+      <div class="qgroup">
+        <h3>Einsatz</h3>
+        <ul class="qs">
+          <li class="qitem"><span class="qid">F-06</span><span class="qt">Gewichtung: Ortung / Bündel / Ader am Ende?</span><span class="qv"><b>Vorschlag:</b> 50 / 30 / 20 %</span></li>
+          <li class="qitem"><span class="qid">F-07</span><span class="qt">Wo versagt dein Tonsucher heute? Wie und wie tief liegen die Leitungen?</span><span class="qv">Darauf optimieren wir.</span></li>
+          <li class="qitem"><span class="qid">F-08</span><span class="qt">Längste Leitung? Auch Cat, Koax, NYM?</span><span class="qv"><b>Vorschlag:</b> 500 m; Cat und Koax Soll, NYM Kann</span></li>
+          <li class="qitem"><span class="qid">F-09</span><span class="qt">Leitung am Anfang komplett frei? Schirm lösbar? Alle Adern gemeinsam anschließbar?</span><span class="qv"><b>Vorschlag:</b> ja / ja / ja</span></li>
+          <li class="qitem"><span class="qid">F-10</span><span class="qt">Gibt es am Einspeiseort meist eine Erde (PAS, Heizungsrohr, Trasse)?</span><span class="qv">Rückweg über Erde bringt meist die größte Reichweite.</span></li>
+          <li class="qitem"><span class="qid">F-11</span><span class="qt">Fernes Ende bekannt und erreichbar? Ringleitungen häufig?</span><span class="qv">Entscheidet, ob am Ende ein Stromkreis zu schließen ist.</span></li>
+          <li class="qitem"><span class="qid">F-12</span><span class="qt">Welche Geräte hängen am Ende, welches ist am empfindlichsten?</span><span class="qv">Bestimmt die höchste Spannung zwischen zwei Adern.</span></li>
+          <li class="qitem"><span class="qid">F-13</span><span class="qt">Fremdspannung: laufende Zentrale? Versehentlich 230 V?</span><span class="qv"><b>Vorschlag:</b> 60 V DC / 50 V AC überstehen und warnen; 230 V sicher ausfallen</span></li>
+        </ul>
+      </div>
+      <div class="qgroup">
+        <h3>Sender</h3>
+        <ul class="qs">
+          <li class="qitem"><span class="qid">F-14</span><span class="qt">Messleitungen fest oder 4-mm-Buchsen? Länge?</span><span class="qv"><b>Vorschlag:</b> fest, 3 × 1 m Silikonlitze, rot / schwarz / grün-gelb</span></li>
+          <li class="qitem"><span class="qid">F-15</span><span class="qt">LEDs oder kleines OLED am Sender?</span><span class="qv"><b>Vorschlag:</b> OLED, zeigt Strom in mA, Fremdspannung in V, Widerstand in Ω</span></li>
+          <li class="qitem"><span class="qid">F-16</span><span class="qt">AA oder AAA, Akkus, Abschaltzeit?</span><span class="qv"><b>Vorschlag:</b> AA in beiden, NiMH-tauglich; Sender 2 h, Handgerät 10 min ohne Signal</span></li>
+        </ul>
+      </div>
+      <div class="qgroup">
+        <h3>Handgerät</h3>
+        <ul class="qs">
+          <li class="qitem"><span class="qid">F-17</span><span class="qt">Bauform: Stab, Pistole oder flach?</span><span class="qv"><b>Vorschlag:</b> Stab, 22–25 cm, Sensorkopf vorn, feine Spitze</span></li>
+          <li class="qitem"><span class="qid">F-18</span><span class="qt">Kopfhörer, Richtungsanzeige, Tiefenschätzung?</span><span class="qv"><b>Vorschlag:</b> Kopfhörer ja, Rest in Phase 2 prüfen</span></li>
+        </ul>
+      </div>
+      <div class="qgroup">
+        <h3>Rahmen</h3>
+        <ul class="qs">
+          <li class="qitem"><span class="qid">F-19</span><span class="qt">Was zählt in die 40 €?</span><span class="qv"><b>Vorschlag:</b> alles im Gerät + Platinen und Versand anteilig; ohne Batterien, Filament, Werkzeug</span></li>
+          <li class="qitem"><span class="qid">F-20</span><span class="qt">Wie viele Sätze? Gibt es einen Termin?</span><span class="qv"><b>Vorschlag:</b> 1 Satz, keine feste Frist</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="lieferumfang" aria-labelledby="h-lief">
+    <div class="sec-head">
+      <span class="eyebrow">Lastenheft Kap. 10–11</span>
+      <h2 id="h-lief">Was du am Ende bekommst</h2>
+    </div>
+    <div class="deliver">
+<pre class="tree">docs/
+  lastenheft.md               <span class="c">was das Gerät können muss</span>
+  lastenheft-uebersicht.html  <span class="c">diese Seite</span>
+  entscheidungen.md           <span class="c">jede Entscheidung mit Begründung</span>
+  konzept.md                  <span class="c">Phase 2</span>
+  machbarkeitstest.md         <span class="c">Phase 3</span>
+  inbetriebnahme.md           <span class="c">Phase 8</span>
+  bedienungsanleitung.md      <span class="c">Phase 8: welcher Modus wann</span>
+hardware/sender/              <span class="c">Schaltplan, KiCad bzw. Aufbauplan</span>
+hardware/handgeraet/
+firmware/sender/              <span class="c">Arduino-Sketch</span>
+firmware/handgeraet/
+gehaeuse/                     <span class="c">Quellcode, STL, Druckeinstellungen</span>
+stueckliste.csv               <span class="c">Bezugsquelle und Preis</span></pre>
+      <div class="budget">
+        <span class="eyebrow">Budget B-01 … B-03</span>
+        <span class="amount">40 €<small>pro Satz</small></span>
+        <ul>
+          <li>Sender und Handgerät zusammen</li>
+          <li>Funktion geht vor Preis</li>
+          <li>Vor einer Überschreitung sprechen wir darüber</li>
+          <li>Was zählt: F-19 · Aufteilung: Phase 4</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>Lastenheft v0.1 · Entwurf vom 13.10.2026</span>
+    <span>Nächster Schritt: deine Antworten auf F-01 … F-20, dann v1.0 zur Freigabe</span>
+  </footer>
+</div>
