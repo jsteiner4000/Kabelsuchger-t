@@ -114,20 +114,85 @@ Verweise wie S-13 oder F-09 beziehen sich auf das [Lastenheft](lastenheft.md).
 
 ---
 
-## Offen (wird in Phase 2 entschieden)
+## Vorgeschlagen in Phase 2 (wartet auf Freigabe des Konzepts)
 
-| Thema | Lastenheft |
-|---|---|
-| Ortungsprinzip: elektrisches Feld, Magnetfeld oder beides | H-03 |
-| Einspeisemodi und wie sie umgeschaltet werden | S-03 |
-| Frequenz(en), Modulation/Kennung, Ausgangsleistung | S-01, S-04, S-11, S-17 |
-| Auswertung im Handgerät (Filter, Synchrondemodulation, Goertzel …) | H-05 |
-| Wie die gesuchte Leitung in der Trasse von übersprechenden Nachbarn unterschieden wird | U-13 |
-| Mikrocontroller beider Geräte | E-02 |
-| Aufbauart (Module, Lochraster, eigene Platine, Herstellerbestückung) | E-01, E-07 |
-| Displaygröße und -typ | A-02 |
-| Bauform des Handgeräts | H-11 |
-| Fremdspannungswarnung ja/nein | S-13 |
-| Durchgangs-/Schleifentest: Messverfahren und Grenzen | S-14 |
-| Richtungsanzeige und Tiefenschätzung | H-14, H-15 |
-| Zielwerte der Abnahmetests | Kap. 9 |
+Begründungen ausführlich in [`konzept.md`](konzept.md); die Kapitelnummern beziehen sich darauf.
+
+### E-015 Magnetfeld als Hauptprinzip, E-Feld als Spezialwerkzeug
+- **Datum:** 13.10.2026 · **Status:** vorgeschlagen
+- **Inhalt:** Ortung über das Magnetfeld (Ferritspulen). E-Feld-Spitze nur für Bündel und abisolierte Adern.
+- **Begründung:** Bei kHz schirmen feuchter Putz, Beton, Bewehrung und geerdete Schirme das E-Feld ab,
+  das Magnetfeld nicht (Kap. 1.1, 1.5). Am offenen Ende fließt kein Strom, dort braucht man das E-Feld.
+- **Verworfen:** nur E-Feld (Variante A). Erfüllt U-09 und U-13 nicht.
+
+### E-016 Hauptmodus „Bündel gegen Erde“ (G), dazu Modi A und P
+- **Datum:** 13.10.2026 · **Status:** vorgeschlagen
+- **Inhalt:** G: alle Adern + Schirm gemeinsam (WAGO) gegen Erde, Schirm am Anfang gelöst. A: eine Ader gegen
+  den Rest (Identifikation am Ende). P: Paar (Durchgang, Länge, Paar finden). Umschaltung mit 2 Relais.
+- **Begründung:** Hin- und Rückstrom im selben Kabel heben sich auf (Ader/Ader: bei 10 cm ca. 1/70 des Feldes,
+  verdrillt nahezu null; Kap. 1.2). Mit Rückweg über Erde bleibt das volle Feld. In G sieht ein Gerät am Ende
+  keine Spannung (U-07), und die sechs Fälle des Lastenhefts reduzieren sich auf „Erde am Ende ja/nein“.
+- **Verworfen:** Ader/Ader und Ader/Schirm als Ortungsmodus (Feld bleibt im Kabel).
+
+### E-017 Zweiton-Signal und drei Frequenzsätze
+- **Datum:** 13.10.2026 · **Status:** vorgeschlagen, Feinabstimmung nach Phase 3
+- **Inhalt:** Standard 8225 Hz + 4112,5 Hz (Stromrichtung), Tief 1025 Hz + 512,5 Hz, Hoch 32,9 kHz.
+  Frequenzen zwischen den 50-Hz-Oberwellen; Handgerät erkennt den Satz selbst.
+- **Begründung:** 8 kHz ist der Profi-Kompromiss. Tief: weniger Übersprechen, besser bei Stahl, braucht Erde am
+  Ende. Hoch: offenes Ende +24 dB. Spulen sind unabgestimmt, die Frequenz ist reine Firmware (Kap. 4.1).
+
+### E-018 Stromrichtung nach dem CD-Prinzip mit Referenztaste
+- **Datum:** 13.10.2026 · **Status:** vorgeschlagen
+- **Inhalt:** Phasenvergleich von Ortungs- und Richtungston; Referenz einmal in Sendernähe setzen; Anzeige
+  → HIN / ← ZURÜCK / ?. Der Zweiton dient gleichzeitig als Kennung (S-17).
+- **Begründung:** Löst U-13 (volle Trassen); bewährt bei Radiodetection („Current Direction“). „?“ statt
+  falschem Pfeil bei unklarer Lage.
+
+### E-019 Handgerät: 24-bit-Wandler PCM1808 und digitale Lock-in-Auswertung
+- **Datum:** 13.10.2026 · **Status:** vorgeschlagen
+- **Inhalt:** H-Spule, V-Spule, E-Spitze → Vorverstärker (×1/×30) → PCM1808 (Stereo, ≈ 90 kHz) → ESP32-S3.
+  IQ-Demodulation mit 2–10 Hz Bandbreite.
+- **Begründung:** Der ESP32-interne ADC (12 bit, max. 83 kS/s, verrauscht) reicht für Dynamik und Phase nicht.
+  Lock-in liefert Betrag und Phase fortlaufend; daraus folgen Links/Rechts, Null, Tiefe, Stromrichtung.
+- **Verworfen:** analoger Bandpass (zu breit, keine Phase); Goertzel (geht, aber blockweise; Lock-in ist flexibler).
+
+### E-020 Mikrocontroller: Sender ESP32-S2 mini, Handgerät ESP32-S3
+- **Datum:** 13.10.2026 · **Status:** vorgeschlagen
+- **Begründung:** Der S2 hat einen D/A-Wandler für die Signalerzeugung, und Julius hat schon einen. Der S3 hat ein
+  Gleitkomma-Rechenwerk und zwei Kerne (Rechnen und Anzeige getrennt), dadurch ist die Firmware lesbarer.
+  Beide lassen sich über USB in der Arduino IDE programmieren.
+
+### E-021 Sender-Endstufe L272 in Brücke an 24 V, max. 15 V eff
+- **Datum:** 13.10.2026 · **Status:** vorgeschlagen, Prüfung in Phase 3/4
+- **Inhalt:** Stufen Fein (5 V / 5 mA), Normal (15 V / 30 mA), Max (15 V / 60 mA). Schutz: Serienwiderstand,
+  PTC, TVS, Firmware-Strombegrenzung. In A/P Spannung hart auf ca. 12 V Spitze begrenzt.
+- **Begründung:** THT (DIP-8), geringer Ruhestrom, genug Spannung für kapazitive Last; 15 V eff liegen sicher
+  unter 25 V eff (S-04).
+
+### E-022 Fremdspannungswarnung (S-13): ja, als Sperre ohne „spannungsfrei“-Anzeige
+- **Datum:** 13.10.2026 · **Status:** vorgeschlagen
+- **Begründung:** Zuverlässig, solange sie nur warnt und nie bestätigt (Kap. 6.5).
+
+### E-023 Durchgang (S-14): ja, plus Lastbild und Längenschätzung
+- **Datum:** 13.10.2026 · **Status:** vorgeschlagen
+- **Inhalt:** DC-Messung ≤ 1 mA / ≤ 3,3 V in beiden Polaritäten; AC-Lastbild aus Spannung, Strom und Phase;
+  Länge offener Paare aus der Kapazität (≈ 100 nF/km), gekennzeichnet als Schätzung.
+
+### E-024 Bauform Handgerät: Paddel-Stab ca. 22 cm mit Hals ≥ 6 cm
+- **Datum:** 13.10.2026 · **Status:** vorgeschlagen, Halslänge nach Messung in Phase 3
+- **Begründung:** Spulen weit weg vom Digitalteil (Störungen); Kopf 90 mm breit für 80-mm-Ferritstab; passt auf
+  25,6 cm Bauraum. Handkontakt am Griff verbessert die E-Spitze.
+
+### E-025 Anzeige: OLED 1,3″ in beiden Geräten, Feld in nT
+- **Datum:** 13.10.2026 · **Status:** vorgeschlagen
+- **Inhalt:** Handgerät über SPI für flüssige Grafik. Feld nach Kalibrierung mit dem Sender in nT (A-01).
+
+### E-026 Aufbau: eigene Platinen (KiCad, JLCPCB), nur THT und Module
+- **Datum:** 13.10.2026 · **Status:** vorgeschlagen
+- **Begründung:** E-01/E-006; Analogteil und Spulenumfeld brauchen ein sauberes Layout. Spulen werden selbst
+  gewickelt (gedruckter Spulenkörper, Akkuschrauber).
+
+### E-027 Variante C, Kosten ca. 50 € pro Satz
+- **Datum:** 13.10.2026 · **Status:** **wartet auf Julius' Entscheidung** (Budget > 40 €, B-02)
+- **Begründung:** Variante B wäre nur ca. 5 € billiger, kann aber keine Stromrichtung, kein Links/Rechts und
+  keine Tiefe. Den Großteil der Kosten tragen Displays, Platinen, Batteriehalter und Messleitungen (Kap. 8, 11).

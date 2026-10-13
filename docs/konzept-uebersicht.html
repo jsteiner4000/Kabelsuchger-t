@@ -1,0 +1,1145 @@
+<title>Kabelsuchgerät Konzept</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: technisches Zeichnungsblatt wie das Lastenheft. Schriftfeld oben, darunter Blattinhalte untereinander, max. 1080 px. */
+:root{
+  --paper:#edf0f3;
+  --sheet:#ffffff;
+  --ink:#16202a;
+  --muted:#556371;
+  --rule:#c5cdd5;
+  --bma:#c41e2e;
+  --signal:#c08400;
+  --pe:#2e8a3d;
+  --wall:#e2e6ea;
+  --hatch:#b6c0c9;
+  --muss-bg:#fbe5e7; --muss-fg:#9a1523;
+  --soll-bg:#e2eaf3; --soll-fg:#22456a;
+  --kann-bg:#eceff2; --kann-fg:#4d5965;
+  --good-fg:#1d6b2c; --good-bg:#e1f2e4;
+  --warn-fg:#8a5a00; --warn-bg:#fbefd5;
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a;
+  --grid:#e6e9ec; --axis:#b9c2cb;
+  --oled-bezel:#20262c; --oled-bg:#050708; --oled-fg:#dcefff;
+  --f-display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
+  --f-body:"IBM Plex Sans","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0f1419; --sheet:#171e25; --ink:#e3e8ed; --muted:#97a4b0; --rule:#2b3640;
+    --bma:#ff5d65; --signal:#efb33b; --pe:#5bc46b; --wall:#1c242c; --hatch:#34414c;
+    --muss-bg:#3b1a1f; --muss-fg:#ff9ca2; --soll-bg:#1a2b3c; --soll-fg:#9cc3ec; --kann-bg:#222a31; --kann-fg:#aab5bf;
+    --good-fg:#7fd98d; --good-bg:#16301c; --warn-fg:#f2c56b; --warn-bg:#33280f;
+    --s1:#3987e5; --s2:#d95926; --s3:#199e70;
+    --grid:#232c35; --axis:#3a4652;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0f1419; --sheet:#171e25; --ink:#e3e8ed; --muted:#97a4b0; --rule:#2b3640;
+  --bma:#ff5d65; --signal:#efb33b; --pe:#5bc46b; --wall:#1c242c; --hatch:#34414c;
+  --muss-bg:#3b1a1f; --muss-fg:#ff9ca2; --soll-bg:#1a2b3c; --soll-fg:#9cc3ec; --kann-bg:#222a31; --kann-fg:#aab5bf;
+  --good-fg:#7fd98d; --good-bg:#16301c; --warn-fg:#f2c56b; --warn-bg:#33280f;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70;
+  --grid:#232c35; --axis:#3a4652;
+  color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.55}
+.wrap{max-width:1080px;margin:0 auto;padding-inline:max(16px,3vw);padding-block:28px 72px;display:flex;flex-direction:column;gap:56px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.1}
+h1{font-size:clamp(2.6rem,7vw,4.2rem);font-weight:700;letter-spacing:.01em}
+h2{font-size:clamp(1.7rem,3.6vw,2.2rem);font-weight:600}
+h3{font-size:1.3rem;font-weight:600;letter-spacing:.02em}
+p{margin:0}
+.lead{font-size:1.08rem;max-width:64ch}
+.muted{color:var(--muted)}
+.mono{font-family:var(--f-mono)}
+.eyebrow{font-family:var(--f-mono);font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+section{display:flex;flex-direction:column;gap:18px}
+.sec-head{display:flex;flex-direction:column;gap:6px;max-width:72ch}
+
+/* Schriftfeld */
+.titleblock{display:grid;grid-template-columns:2.2fr 1fr 1fr 1fr;border:1.5px solid var(--ink);background:var(--sheet)}
+.titleblock>div{padding:10px 14px;border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);min-width:0;display:flex;flex-direction:column;gap:2px}
+.titleblock>div:nth-child(4n){border-right:0}
+.titleblock>div:nth-last-child(-n+4){border-bottom:0}
+.tb-k{font-family:var(--f-mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.tb-v{font-weight:600}
+.tb-v.big{font-family:var(--f-display);font-size:1.5rem;font-weight:700;line-height:1.1}
+.status{display:inline-flex;align-items:center;gap:8px}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--bma);flex:none}
+.hero{display:flex;flex-direction:column;gap:14px}
+
+/* Kernaussagen + Entscheidung */
+.keys{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:12px;margin:0;padding:0;list-style:none}
+.keys li{background:var(--sheet);border:1px solid var(--rule);padding:14px 16px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.keys b{font-family:var(--f-display);font-size:1.2rem;font-weight:600}
+.decision{border:2px solid var(--bma);background:var(--sheet);padding:18px 20px;display:grid;grid-template-columns:auto 1fr;gap:6px 18px;align-items:start}
+.decision .q{font-family:var(--f-display);font-size:3rem;font-weight:700;line-height:.9;color:var(--bma)}
+.decision h3{font-size:1.45rem}
+.decision p{max-width:70ch}
+
+/* Abbildungen */
+figure{margin:0}
+.figure{background:var(--sheet);border:1px solid var(--rule);padding:18px 18px 12px;overflow-x:auto}
+.figure svg{display:block;width:100%;height:auto}
+.figure svg.wide{min-width:720px}
+.figcap{font-size:.86rem;color:var(--muted);margin-top:8px;max-width:84ch}
+.s-dev{fill:var(--sheet);stroke:var(--ink);stroke-width:2}
+.s-head{fill:var(--ink)}
+.s-screen{fill:var(--paper);stroke:var(--ink);stroke-width:1}
+.s-bar{fill:var(--bma)}
+.s-wall{fill:var(--wall)}
+.s-hatchfill{fill:url(#hatch)}
+.hatch-line{stroke:var(--hatch);stroke-width:1.5}
+.s-term{fill:var(--sheet);stroke:var(--ink);stroke-width:2}
+.s-term-off{fill:var(--sheet);stroke:var(--rule);stroke-width:2}
+.s-field{stroke:var(--signal);stroke-width:2;fill:none;stroke-dasharray:5 5}
+.s-earth{stroke:var(--pe);stroke-width:2.5}
+.s-lead-a{stroke:var(--bma);stroke-width:2.5;fill:none}
+.s-lead-b{stroke:var(--ink);stroke-width:2.5;fill:none}
+.s-lead-e{stroke:var(--pe);stroke-width:2.5;fill:none;stroke-dasharray:8 4}
+.s-int{stroke:var(--muted);stroke-width:1.5;fill:none;stroke-dasharray:3 3}
+.s-jacket{fill:none;stroke:var(--muted);stroke-width:1.5}
+.s-jacketfill{fill:var(--wall);stroke:var(--muted);stroke-width:1.5}
+.s-shield{fill:none;stroke:var(--muted);stroke-width:1;stroke-dasharray:4 3}
+.s-wago{fill:var(--soll-bg);stroke:var(--ink);stroke-width:1.5}
+.s-core-sig{stroke:var(--bma);stroke-width:2.5;fill:none;stroke-linecap:round}
+.s-core-ink{stroke:var(--ink);stroke-width:2.5;fill:none;stroke-linecap:round}
+.s-core-mute{stroke:var(--rule);stroke-width:2.5;fill:none;stroke-linecap:round}
+.s-cond{fill:var(--sheet);stroke-width:2}
+.s-cond-a{stroke:var(--bma)}
+.s-cond-b{stroke:var(--ink)}
+.s-dotsig{fill:var(--bma)}
+.s-cross{stroke:var(--ink);stroke-width:2}
+.s-bundle{fill:var(--bma)}
+.s-bundledot{fill:var(--sheet)}
+.s-tray{fill:var(--wall);stroke:var(--rule);stroke-width:1.5}
+.s-target{stroke:var(--bma);stroke-width:5;fill:none;stroke-linecap:round}
+.s-neigh{stroke:var(--muted);stroke-width:3;fill:none;stroke-linecap:round}
+.s-earthbus{stroke:var(--pe);stroke-width:3}
+.s-couple{stroke:var(--signal);stroke-width:1.5;stroke-dasharray:3 3}
+.s-readout{fill:var(--sheet);stroke-width:1.5}
+.s-ro-a{stroke:var(--bma)}
+.s-ro-b{stroke:var(--muted)}
+.s-ah-sig{fill:var(--bma)}
+.s-ah-mute{fill:var(--muted)}
+.s-block{fill:var(--sheet);stroke:var(--ink);stroke-width:1.5}
+.s-block-key{fill:var(--soll-bg);stroke:var(--ink);stroke-width:1.5}
+.s-zone{fill:none;stroke:var(--muted);stroke-width:1.2;stroke-dasharray:5 4}
+.s-conn{stroke:var(--ink);stroke-width:1.5;fill:none}
+.s-ah{fill:var(--ink)}
+.s-rod{fill:var(--hatch);stroke:var(--ink);stroke-width:1.2}
+.s-dim{stroke:var(--muted);stroke-width:1.2;fill:none}
+.s-leader{stroke:var(--muted);stroke-width:1;fill:none}
+.s-cell{fill:var(--paper);stroke:var(--ink);stroke-width:1}
+.s-contact{fill:var(--muted)}
+.s-t{fill:var(--ink);font-family:var(--f-body);font-size:13px}
+.s-tm{fill:var(--muted);font-family:var(--f-body);font-size:12px}
+.s-tt{fill:var(--ink);font-family:var(--f-mono);font-size:10.5px}
+.s-ts{fill:var(--ink);font-family:var(--f-display);font-size:18px;font-weight:600;letter-spacing:.03em}
+.s-bt{fill:var(--ink);font-family:var(--f-body);font-size:13px;font-weight:600}
+.s-bs{fill:var(--muted);font-family:var(--f-body);font-size:11px}
+
+/* Modi */
+.modes{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:16px}
+.mode{background:var(--sheet);border:1px solid var(--rule);padding:16px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.mode.main{border:2px solid var(--bma)}
+.mode .tag{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.mode svg{width:100%;height:auto;display:block}
+.mode ul{margin:0;padding-left:18px;font-size:.92rem;display:flex;flex-direction:column;gap:3px}
+
+/* Matrix */
+.matrix-wrap{overflow-x:auto}
+.matrix{display:grid;grid-template-columns:minmax(150px,1fr) 1.3fr 1.3fr;min-width:600px;border:1px solid var(--rule);background:var(--sheet)}
+.matrix>div{padding:10px 12px;border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);min-width:0}
+.matrix>div:nth-child(3n){border-right:0}
+.matrix>div:nth-last-child(-n+3){border-bottom:0}
+.mx-h{background:var(--paper);font-size:.88rem}
+.mx-h b{display:block;font-family:var(--f-display);font-size:1.1rem;font-weight:600}
+.mx-c{display:flex;flex-direction:column;gap:6px;font-size:.9rem}
+.pill{display:inline-flex;align-items:center;gap:6px;font-family:var(--f-mono);font-size:.7rem;letter-spacing:.05em;text-transform:uppercase;padding:2px 7px;border-radius:3px;align-self:flex-start}
+.pill.good{background:var(--good-bg);color:var(--good-fg)}
+.pill.warn{background:var(--warn-bg);color:var(--warn-fg)}
+.pill i{font-style:normal;font-weight:600}
+.note{border-left:3px solid var(--signal);padding:8px 14px;background:var(--sheet);max-width:84ch;font-size:.93rem}
+.note.key{border-left-color:var(--bma)}
+
+/* Diagramme (Charts) */
+.chart{position:relative;background:var(--sheet);border:1px solid var(--rule);padding:16px 16px 10px}
+.chart-scroll{overflow-x:auto}
+.chart svg{display:block;width:100%;height:auto;min-width:620px}
+.chart svg:focus-visible{outline:2px solid var(--s1);outline-offset:2px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:.88rem;margin-bottom:8px}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.key-line{width:18px;height:0;border-top:2px solid;display:inline-block}
+.key-rect{width:12px;height:12px;border-radius:2px;display:inline-block}
+.k1{border-color:var(--s1);background:var(--s1)} .k2{border-color:var(--s2);background:var(--s2)} .k3{border-color:var(--s3);background:var(--s3)}
+.key-line.k1,.key-line.k2,.key-line.k3{background:none}
+.g-grid{stroke:var(--grid);stroke-width:1}
+.g-axis{stroke:var(--axis);stroke-width:1}
+.g-tick{fill:var(--muted);font-family:var(--f-body);font-size:11px;font-variant-numeric:tabular-nums}
+.g-note{fill:var(--ink);font-family:var(--f-body);font-size:11.5px}
+.g-thresh{stroke:var(--ink);stroke-width:1.5}
+.g-line{fill:none;stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.g-line.s1{stroke:var(--s1)} .g-line.s2{stroke:var(--s2)} .g-line.s3{stroke:var(--s3)}
+.g-dot{stroke:var(--sheet);stroke-width:2}
+.g-dot.s1{fill:var(--s1)} .g-dot.s2{fill:var(--s2)} .g-dot.s3{fill:var(--s3)}
+.g-seg.s1{fill:var(--s1)} .g-seg.s2{fill:var(--s2)} .g-seg.s3{fill:var(--s3)}
+.g-seg{cursor:default}
+.g-seg:hover,.g-seg:focus{opacity:.82;outline:none}
+.g-cross{stroke:var(--muted);stroke-width:1}
+.g-budget{stroke:var(--ink);stroke-width:1.5}
+.g-lab{fill:var(--ink);font-family:var(--f-body);font-size:12px}
+.g-labs{fill:var(--muted);font-family:var(--f-body);font-size:11.5px}
+.tip{position:absolute;pointer-events:none;background:var(--sheet);border:1px solid var(--rule);box-shadow:0 4px 14px rgba(0,0,0,.14);padding:8px 10px;font-size:.84rem;min-width:170px;z-index:2}
+.tip .tt{color:var(--muted);font-size:.78rem;margin-bottom:4px}
+.tip .row{display:flex;align-items:center;gap:8px;justify-content:space-between}
+.tip .row span:first-child{display:inline-flex;align-items:center;gap:6px;color:var(--muted)}
+.tip .row b{font-variant-numeric:tabular-nums}
+
+/* Tabellen */
+.table-wrap{overflow-x:auto;background:var(--sheet);border:1px solid var(--rule)}
+table{border-collapse:collapse;width:100%;min-width:640px;font-size:.92rem}
+th,td{text-align:left;padding:8px 12px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-family:var(--f-mono);font-size:.7rem;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);font-weight:500;background:var(--paper)}
+tr:last-child td{border-bottom:0}
+td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+td.strong{font-weight:600}
+tr.rec td{background:var(--soll-bg)}
+td.id{font-family:var(--f-mono);font-size:.82rem;color:var(--muted);white-space:nowrap}
+
+/* OLED-Mockups */
+.screens{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:16px}
+.screen{background:var(--sheet);border:1px solid var(--rule);padding:14px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.screen svg{width:100%;height:auto;display:block;max-width:420px}
+.o-bez{fill:var(--oled-bezel)}
+.o-bg{fill:var(--oled-bg)}
+.o-t{fill:var(--oled-fg);font-family:var(--f-mono);font-size:6.5px}
+.o-s{fill:var(--oled-fg);font-family:var(--f-mono);font-size:5.5px}
+.o-big{fill:var(--oled-fg);font-family:var(--f-display);font-weight:700}
+.o-fill{fill:var(--oled-fg)}
+.o-line{stroke:var(--oled-fg);stroke-width:.6;fill:none}
+.o-out{stroke:var(--oled-fg);stroke-width:.7;fill:none}
+.o-area{fill:var(--oled-fg);opacity:.22}
+
+/* Zwei Spalten */
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
+.card{background:var(--sheet);border:1px solid var(--rule);padding:16px 18px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.card ul,.card ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:5px;font-size:.93rem}
+footer{border-top:1.5px solid var(--ink);padding-top:14px;font-size:.86rem;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 24px}
+
+@media (max-width:860px){
+  .titleblock{grid-template-columns:1fr 1fr}
+  .titleblock>div{border-right:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+  .titleblock>div:nth-child(2n){border-right:0}
+  .titleblock>div:nth-last-child(-n+4){border-bottom:1px solid var(--rule)}
+  .titleblock>div:nth-last-child(-n+2){border-bottom:0}
+  .two{grid-template-columns:1fr}
+}
+@media (max-width:520px){
+  .decision{grid-template-columns:1fr}
+}
+</style>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div class="titleblock" aria-label="Schriftfeld">
+      <div><span class="tb-k">Projekt</span><span class="tb-v big">Kabelsuchgerät · Sender + Handgerät</span></div>
+      <div><span class="tb-k">Dokument</span><span class="tb-v">Konzept</span></div>
+      <div><span class="tb-k">Version</span><span class="tb-v mono">1.0</span></div>
+      <div><span class="tb-k">Datum</span><span class="tb-v mono">13.10.2026</span></div>
+      <div><span class="tb-k">Status</span><span class="tb-v status"><span class="dot" aria-hidden="true"></span>Zur Freigabe durch Julius</span></div>
+      <div><span class="tb-k">Phase</span><span class="tb-v mono">2 von 8</span></div>
+      <div><span class="tb-k">Grundlage</span><span class="tb-v">Lastenheft v1.0</span></div>
+      <div><span class="tb-k">Quelle</span><span class="tb-v mono" style="font-size:.85rem">docs/konzept.md</span></div>
+    </div>
+    <h1>Magnetfeld statt Tonsucher</h1>
+    <p class="lead">Wir orten über das Magnetfeld des Stroms, nicht über die Spannung. Dafür speist der Sender alle Adern und den Schirm gemeinsam gegen Erde ein, damit kein Rückstrom im selben Kabel das Feld aufhebt. Das Handgerät wertet es mit zwei Spulen und digitaler Lock-in-Technik aus, so wie Profigeräte.</p>
+    <ul class="keys">
+      <li><b>Durch Wand und Beton</b><span class="muted">Das Magnetfeld geht ungehindert durch Putz, Mauerwerk und Beton, mit Verzerrung auch durch Stahlbeton.</span></li>
+      <li><b>Volle Trassen</b><span class="muted">Ein Stromrichtungspfeil trennt die gesuchte Leitung von Nachbarkabeln, auf die das Signal übergesprungen ist.</span></li>
+      <li><b>Echte Messwerte</b><span class="muted">Feld in nT, Strom in mA, Durchgang in Ω, Länge aus der Kapazität. Nichts ist geschönt.</span></li>
+    </ul>
+  </header>
+
+  <section aria-labelledby="h-dec">
+    <div class="decision">
+      <span class="q" aria-hidden="true">?</span>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <span class="eyebrow">Deine Entscheidung für die Freigabe</span>
+        <h3 id="h-dec">Variante C für ca. 50 € pro Satz?</h3>
+        <p>Die empfohlene Variante liegt geschätzt rund <b>10 € über dem Ziel von 40 €</b>. Die abgespeckte Variante B wäre nur ca. 5 € billiger, hätte aber keine Stromrichtung, kein Links/Rechts und keine Tiefe. Der Großteil der Kosten steckt in Displays, Platinen, Batteriehaltern und Messleitungen, die jede Variante braucht. Den Vergleich findest du unten unter „Drei Varianten“.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="ausloeschung" aria-labelledby="h-aus">
+    <div class="sec-head">
+      <span class="eyebrow">Konzept Kap. 1.2</span>
+      <h2 id="h-aus">Warum Ader/Ader nicht trägt</h2>
+      <p class="muted">Fließt der Strom auf einer Ader hin und auf der Nachbarader zurück, heben sich beide Felder fast auf. Liegt der Rückweg weit weg in der Gebäudeerde, bleibt das ganze Feld übrig.</p>
+    </div>
+    <figure class="figure">
+      <svg class="wide" viewBox="0 0 760 252" role="img" aria-label="Links: Querschnitt eines Aderpaars mit Hin- und Rückstrom, die Felder bleiben am Kabel und am Handgerät kommt fast nichts an. Rechts: Bündel gegen Erde, das Feld breitet sich in weiten Kreisen aus und ist am Handgerät messbar.">
+        <line x1="380" y1="10" x2="380" y2="240" class="s-leader"/>
+        <text x="190" y="26" text-anchor="middle" class="s-ts">Ader / Ader</text>
+        <text x="190" y="44" text-anchor="middle" class="s-tm">hin und zurück im selben Kabel</text>
+        <circle cx="190" cy="135" r="36" class="s-jacketfill"/>
+        <circle cx="174" cy="135" r="13" class="s-field"/>
+        <circle cx="206" cy="135" r="13" class="s-field"/>
+        <circle cx="174" cy="135" r="8" class="s-cond s-cond-a"/>
+        <circle cx="174" cy="135" r="2.6" class="s-dotsig"/>
+        <circle cx="206" cy="135" r="8" class="s-cond s-cond-b"/>
+        <line x1="201" y1="130" x2="211" y2="140" class="s-cross"/>
+        <line x1="211" y1="130" x2="201" y2="140" class="s-cross"/>
+        <text x="166" y="88" text-anchor="middle" class="s-tm">hin</text>
+        <text x="216" y="88" text-anchor="middle" class="s-tm">zurück</text>
+        <rect x="306" y="124" width="30" height="16" rx="5" class="s-head"/>
+        <rect x="316" y="104" width="10" height="20" class="s-dev"/>
+        <text x="321" y="160" text-anchor="middle" class="s-t">≈ 0</text>
+        <text x="190" y="214" text-anchor="middle" class="s-tm">Die Felder heben sich nach wenigen Zentimetern auf.</text>
+
+        <text x="570" y="26" text-anchor="middle" class="s-ts">Modus G: Bündel gegen Erde</text>
+        <text x="570" y="44" text-anchor="middle" class="s-tm">Rückweg weit weg über die Erde</text>
+        <circle cx="520" cy="135" r="88" class="s-field" opacity=".35"/>
+        <circle cx="520" cy="135" r="66" class="s-field" opacity=".55"/>
+        <circle cx="520" cy="135" r="44" class="s-field" opacity=".8"/>
+        <circle cx="520" cy="135" r="26" class="s-field"/>
+        <circle cx="520" cy="135" r="14" class="s-bundle"/>
+        <circle cx="520" cy="135" r="3.2" class="s-bundledot"/>
+        <rect x="676" y="124" width="30" height="16" rx="5" class="s-head"/>
+        <rect x="686" y="104" width="10" height="20" class="s-dev"/>
+        <text x="691" y="160" text-anchor="middle" class="s-t">messbar</text>
+        <line x1="720" y1="204" x2="750" y2="204" class="s-earth"/>
+        <line x1="725" y1="211" x2="745" y2="211" class="s-earth"/>
+        <line x1="730" y1="218" x2="740" y2="218" class="s-earth"/>
+        <text x="570" y="244" text-anchor="middle" class="s-tm">Der Rückstrom verteilt sich in der Gebäudeerde, weit weg vom Kabel.</text>
+      </svg>
+      <figcaption class="figcap">Querschnitt durch das Kabel. ⊙ Strom aus der Zeichenebene heraus, ⊗ hinein. Beim Aderpaar liegen Hin- und Rückstrom ca. 1,5 mm auseinander.</figcaption>
+    </figure>
+
+    <div class="chart" id="chart1">
+      <h3 style="font-size:1.15rem;margin-bottom:6px">Magnetfeld bei 1 mA Strom über dem Abstand</h3>
+      <div class="legend" aria-hidden="true">
+        <span><i class="key-line k1"></i>Bündel gegen Erde (Modus G)</span>
+        <span><i class="key-line k2"></i>Ader/Ader, unverdrillt</span>
+        <span><i class="key-line k3"></i>Ader/Ader, verdrillt (Schlaglänge 10 cm)</span>
+      </div>
+      <div class="chart-scroll">
+        <svg id="c1" viewBox="0 0 720 330" role="img" tabindex="0" aria-label="Logarithmisches Diagramm: Magnetfeld bei 1 mA über dem Abstand von 1 cm bis 2 m. Bündel gegen Erde fällt von 20 nT auf 0,1 nT, also bis 2 m über der Schwelle. Das unverdrillte Paar liegt schon bei 2 cm unter 1 nT und erreicht bei 10 cm 0,03 nT. Das verdrillte Paar fällt ab etwa 10 cm steil ab."></svg>
+      </div>
+      <div class="tip" id="tip1" hidden></div>
+      <p class="figcap">Gerechnet mit <span class="mono">docs/berechnungen/feldmodell.py</span>. Die waagerechte Linie ist die praktische Schwelle, ab der das Handgerät eine Leitung sicher findet; sie liegt ca. 1000-fach über der Rauschgrenze der Spule. Zeiger oder Pfeiltasten zeigen die Werte.</p>
+      <div class="table-wrap" style="margin-top:10px">
+        <table style="min-width:520px">
+          <thead><tr><th>Abstand</th><th>Bündel gegen Erde</th><th>Paar unverdrillt</th><th>Paar verdrillt</th></tr></thead>
+          <tbody>
+            <tr><td class="num">2 cm</td><td class="num">10 nT</td><td class="num">0,75 nT</td><td class="num">0,67 nT</td></tr>
+            <tr><td class="num">10 cm</td><td class="num">2 nT</td><td class="num">0,03 nT</td><td class="num">0,001 nT</td></tr>
+            <tr><td class="num">30 cm</td><td class="num">0,67 nT</td><td class="num">0,003 nT</td><td class="num">≈ 0</td></tr>
+            <tr><td class="num">1 m</td><td class="num">0,2 nT</td><td class="num">0,0003 nT</td><td class="num">≈ 0</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="modi" aria-labelledby="h-modi">
+    <div class="sec-head">
+      <span class="eyebrow">Konzept Kap. 3 · Lastenheft S-03</span>
+      <h2 id="h-modi">Drei Einspeisemodi</h2>
+      <p class="muted">Klemmen: A rot, B schwarz, E grün-gelb. Zwei Relais im Sender schalten um, den Modus wählst du per Taste.</p>
+    </div>
+    <div class="modes">
+      <article class="mode main">
+        <span class="tag">Hauptmodus · Verfolgen</span>
+        <h3>G · Bündel gegen Erde</h3>
+        <svg viewBox="0 0 300 162" role="img" aria-label="Alle Adern und der Schirm gehen in eine WAGO-Klemme, die an A hängt. E geht an Erde. B bleibt frei.">
+          <rect x="8" y="28" width="62" height="104" rx="8" class="s-dev"/>
+          <text x="39" y="46" text-anchor="middle" class="s-tt">SENDER</text>
+          <text x="54" y="68" text-anchor="end" class="s-tt">A</text>
+          <text x="54" y="94" text-anchor="end" class="s-tt">B</text>
+          <text x="54" y="120" text-anchor="end" class="s-tt">E</text>
+          <text x="244" y="46" text-anchor="middle" class="s-tm">Leitung</text>
+          <rect x="196" y="52" width="96" height="76" rx="10" class="s-jacket"/>
+          <rect x="201" y="57" width="86" height="66" rx="7" class="s-shield"/>
+          <line x1="150" y1="70" x2="292" y2="70" class="s-core-sig"/>
+          <line x1="150" y1="82" x2="292" y2="82" class="s-core-sig"/>
+          <line x1="150" y1="94" x2="292" y2="94" class="s-core-sig"/>
+          <line x1="150" y1="106" x2="292" y2="106" class="s-core-sig"/>
+          <line x1="150" y1="118" x2="204" y2="118" class="s-core-sig"/>
+          <rect x="128" y="62" width="22" height="64" rx="3" class="s-wago"/>
+          <text x="139" y="142" text-anchor="middle" class="s-tt">WAGO</text>
+          <path d="M128 94 C 102 94, 98 64, 75 64" class="s-lead-a"/>
+          <path d="M75 116 C 96 116, 100 128, 100 140" class="s-lead-e"/>
+          <line x1="88" y1="142" x2="112" y2="142" class="s-earth"/>
+          <line x1="92" y1="148" x2="108" y2="148" class="s-earth"/>
+          <line x1="96" y1="154" x2="104" y2="154" class="s-earth"/>
+          <circle cx="70" cy="64" r="4.5" class="s-term"/>
+          <circle cx="70" cy="90" r="4.5" class="s-term-off"/>
+          <circle cx="70" cy="116" r="4.5" class="s-term"/>
+          <text x="294" y="148" text-anchor="end" class="s-tm">Ende: Gerät sieht 0 V</text>
+        </svg>
+        <ul>
+          <li>Alle Adern und den Schirm in eine WAGO, A daran; E an PE/PAS</li>
+          <li>Schirm am Anfang von der Erde lösen</li>
+          <li>Für Unterputz, Trasse, Stahlbeton, lange Leitungen</li>
+        </ul>
+      </article>
+      <article class="mode">
+        <span class="tag">Identifikation am Ende</span>
+        <h3>A · Ader gegen Rest</h3>
+        <svg viewBox="0 0 300 162" role="img" aria-label="Die gesuchte Ader hängt an A. Alle übrigen Adern und der Schirm gehen über eine WAGO an B. B und E sind im Sender verbunden, E geht an Erde.">
+          <rect x="8" y="28" width="62" height="104" rx="8" class="s-dev"/>
+          <text x="39" y="46" text-anchor="middle" class="s-tt">SENDER</text>
+          <text x="50" y="68" text-anchor="end" class="s-tt">A</text>
+          <text x="50" y="94" text-anchor="end" class="s-tt">B</text>
+          <text x="50" y="120" text-anchor="end" class="s-tt">E</text>
+          <path d="M70 90 H60 V116 H70" class="s-int"/>
+          <text x="244" y="46" text-anchor="middle" class="s-tm">Leitung</text>
+          <rect x="196" y="52" width="96" height="76" rx="10" class="s-jacket"/>
+          <rect x="201" y="57" width="86" height="66" rx="7" class="s-shield"/>
+          <path d="M292 70 H150 C 116 70, 100 64, 75 64" class="s-core-sig"/>
+          <line x1="150" y1="82" x2="292" y2="82" class="s-core-ink"/>
+          <line x1="150" y1="94" x2="292" y2="94" class="s-core-ink"/>
+          <line x1="150" y1="106" x2="292" y2="106" class="s-core-ink"/>
+          <line x1="150" y1="118" x2="204" y2="118" class="s-core-ink"/>
+          <rect x="128" y="76" width="22" height="50" rx="3" class="s-wago"/>
+          <text x="139" y="142" text-anchor="middle" class="s-tt">WAGO</text>
+          <path d="M128 100 C 104 100, 98 90, 75 90" class="s-lead-b"/>
+          <path d="M75 116 C 96 116, 100 128, 100 140" class="s-lead-e"/>
+          <line x1="88" y1="142" x2="112" y2="142" class="s-earth"/>
+          <line x1="92" y1="148" x2="108" y2="148" class="s-earth"/>
+          <line x1="96" y1="154" x2="104" y2="154" class="s-earth"/>
+          <circle cx="70" cy="64" r="4.5" class="s-term"/>
+          <circle cx="70" cy="90" r="4.5" class="s-term"/>
+          <circle cx="70" cy="116" r="4.5" class="s-term"/>
+          <text x="294" y="148" text-anchor="end" class="s-tm">Ende: Ader suchen</text>
+        </svg>
+        <ul>
+          <li>Nur die gesuchte Ader trägt Spannung, alles andere liegt auf Erde</li>
+          <li>Am fernen, abisolierten Ende findet die E-Spitze genau diese Ader</li>
+          <li>Spannung A–B hart auf ca. 12 V Spitze begrenzt</li>
+        </ul>
+      </article>
+      <article class="mode">
+        <span class="tag">Messen · Paar finden</span>
+        <h3>P · Paar / Durchgang</h3>
+        <svg viewBox="0 0 300 162" role="img" aria-label="Ader 1 an A, Ader 2 an B. Die übrigen Adern bleiben frei. E wird nicht benutzt.">
+          <rect x="8" y="28" width="62" height="104" rx="8" class="s-dev"/>
+          <text x="39" y="46" text-anchor="middle" class="s-tt">SENDER</text>
+          <text x="54" y="68" text-anchor="end" class="s-tt">A</text>
+          <text x="54" y="94" text-anchor="end" class="s-tt">B</text>
+          <text x="54" y="120" text-anchor="end" class="s-tt">E</text>
+          <text x="244" y="46" text-anchor="middle" class="s-tm">Leitung</text>
+          <rect x="196" y="52" width="96" height="76" rx="10" class="s-jacket"/>
+          <rect x="201" y="57" width="86" height="66" rx="7" class="s-shield"/>
+          <path d="M292 70 H150 C 116 70, 100 64, 75 64" class="s-core-sig"/>
+          <path d="M292 82 H150 C 116 82, 100 90, 75 90" class="s-core-ink"/>
+          <line x1="160" y1="94" x2="292" y2="94" class="s-core-mute"/>
+          <line x1="160" y1="106" x2="292" y2="106" class="s-core-mute"/>
+          <line x1="160" y1="118" x2="204" y2="118" class="s-core-mute"/>
+          <circle cx="70" cy="64" r="4.5" class="s-term"/>
+          <circle cx="70" cy="90" r="4.5" class="s-term"/>
+          <circle cx="70" cy="116" r="4.5" class="s-term-off"/>
+          <text x="294" y="148" text-anchor="end" class="s-tm">Durchgang, Länge</text>
+        </svg>
+        <ul>
+          <li>Durchgang in Ω mit ≤ 1 mA, Deutung offen / gebrückt / Abschlusswiderstand</li>
+          <li>Offenes Paar: Länge aus der Kapazität (≈ 100 nF/km)</li>
+          <li>Nicht zum Verfolgen: Hin- und Rückstrom heben sich auf</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section id="faelle" aria-labelledby="h-faelle">
+    <div class="sec-head">
+      <span class="eyebrow">Konzept Kap. 1.4 und 3 · Lastenheft U-05, U-06</span>
+      <h2 id="h-faelle">Die sechs Fälle, gelöst</h2>
+      <p class="muted">In Modus G tragen alle Adern dasselbe Signal. Ob am Ende gebrückt ist, spielt dann keine Rolle mehr. Es zählt nur noch, ob das Ende eine Verbindung zur Erde hat.</p>
+    </div>
+    <div class="matrix-wrap">
+      <div class="matrix" role="table" aria-label="Fälle nach Leitungsende und Schirm mit empfohlenem Modus">
+        <div class="mx-h" role="columnheader"><span class="eyebrow">Ende ↓ · Schirm →</span></div>
+        <div class="mx-h" role="columnheader"><b>Schirm geerdet</b>am Anfang lösen und mit in die WAGO</div>
+        <div class="mx-h" role="columnheader"><b>Schirm nicht geerdet</b>einfach mit in die WAGO</div>
+
+        <div class="mx-h" role="rowheader"><b>Ende offen</b>Strom fließt kapazitiv in die Umgebung</div>
+        <div class="mx-c" role="cell"><span class="pill good"><i>G</i> sehr gut</span>Ist der Schirm am fernen Ende geerdet, fließt der volle Strom über die ganze Länge.</div>
+        <div class="mx-c" role="cell"><span class="pill warn"><i>G</i> gut</span>Die letzten 10–20 % der Länge sind schwächer. Bei langen Leitungen Satz „Hoch“.</div>
+
+        <div class="mx-h" role="rowheader"><b>Ende gebrückt</b>Brücke ist in Modus G egal</div>
+        <div class="mx-c" role="cell"><span class="pill good"><i>G</i> sehr gut</span>wie oben</div>
+        <div class="mx-c" role="cell"><span class="pill warn"><i>G</i> gut</span>wie oben. Durchgang prüfen mit Modus P.</div>
+
+        <div class="mx-h" role="rowheader"><b>Gerät am Ende</b>Melder, Kamera, Zentrale</div>
+        <div class="mx-c" role="cell"><span class="pill good"><i>G</i> sehr gut</span>Das Gerät sieht 0 V. Ist es geerdet, schließt es sogar den Kreis.</div>
+        <div class="mx-c" role="cell"><span class="pill warn"><i>G</i> gut</span>Das Gerät sieht 0 V.</div>
+      </div>
+    </div>
+    <p class="note key"><b>Tipp für BMA-Ringe:</b> Ein Ende einspeisen, das andere Ende in der Zentrale an PE legen. Dann fließt der volle Strom einmal um den ganzen Ring.</p>
+  </section>
+
+  <section id="richtung" aria-labelledby="h-richtung">
+    <div class="sec-head">
+      <span class="eyebrow">Konzept Kap. 4.2 · Lastenheft U-13</span>
+      <h2 id="h-richtung">Stromrichtung trennt die Leitung vom Übersprechen</h2>
+      <p class="muted">Der Sender schickt zwei fest gekoppelte Töne. Das Handgerät vergleicht sie und erkennt daran, ob der Strom „hin“ oder „zurück“ fließt. Radiodetection nennt das Current Direction.</p>
+    </div>
+    <figure class="figure">
+      <svg class="wide" viewBox="0 0 760 250" role="img" aria-label="Draufsicht auf eine Trasse. Die gesuchte Leitung führt vom Sender weg und trägt 8 mA in Richtung hin. Nachbarkabel, auf die das Signal überkoppelt, sind an der Zentrale geerdet und führen 1 bis 2 mA zurück zur Zentrale.">
+        <rect x="150" y="40" width="590" height="170" rx="6" class="s-tray"/>
+        <text x="726" y="58" text-anchor="end" class="s-tm">Trasse</text>
+        <line x1="120" y1="40" x2="120" y2="206" class="s-earthbus"/>
+        <line x1="106" y1="208" x2="134" y2="208" class="s-earth"/>
+        <line x1="110" y1="215" x2="130" y2="215" class="s-earth"/>
+        <line x1="114" y1="222" x2="126" y2="222" class="s-earth"/>
+        <text x="120" y="242" text-anchor="middle" class="s-tm">Erde Zentrale</text>
+        <line x1="120" y1="70" x2="730" y2="70" class="s-neigh"/>
+        <line x1="120" y1="100" x2="730" y2="100" class="s-neigh"/>
+        <line x1="120" y1="160" x2="730" y2="160" class="s-neigh"/>
+        <line x1="120" y1="190" x2="730" y2="190" class="s-neigh"/>
+        <rect x="14" y="98" width="74" height="54" rx="8" class="s-dev"/>
+        <text x="51" y="129" text-anchor="middle" class="s-tt">SENDER</text>
+        <path d="M88 125 C 110 125, 120 130, 150 130 H730" class="s-target"/>
+        <line x1="390" y1="106" x2="390" y2="124" class="s-couple"/>
+        <line x1="390" y1="136" x2="390" y2="154" class="s-couple"/>
+        <line x1="570" y1="106" x2="570" y2="124" class="s-couple"/>
+        <line x1="570" y1="136" x2="570" y2="154" class="s-couple"/>
+        <text x="398" y="119" class="s-tm">überkoppelt</text>
+        <polygon points="316,130 302,123 302,137" class="s-ah-sig"/>
+        <polygon points="496,130 482,123 482,137" class="s-ah-sig"/>
+        <polygon points="676,130 662,123 662,137" class="s-ah-sig"/>
+        <polygon points="302,70 312,65 312,75" class="s-ah-mute"/>
+        <polygon points="482,70 492,65 492,75" class="s-ah-mute"/>
+        <polygon points="662,70 672,65 672,75" class="s-ah-mute"/>
+        <polygon points="302,100 312,95 312,105" class="s-ah-mute"/>
+        <polygon points="482,100 492,95 492,105" class="s-ah-mute"/>
+        <polygon points="662,100 672,95 672,105" class="s-ah-mute"/>
+        <polygon points="302,160 312,155 312,165" class="s-ah-mute"/>
+        <polygon points="482,160 492,155 492,165" class="s-ah-mute"/>
+        <polygon points="662,160 672,155 672,165" class="s-ah-mute"/>
+        <polygon points="302,190 312,185 312,195" class="s-ah-mute"/>
+        <polygon points="482,190 492,185 492,195" class="s-ah-mute"/>
+        <polygon points="662,190 672,185 672,195" class="s-ah-mute"/>
+        <rect x="186" y="119" width="104" height="22" rx="4" class="s-readout s-ro-a"/>
+        <text x="238" y="134" text-anchor="middle" class="s-tt">→ HIN · 8 mA</text>
+        <rect x="186" y="89" width="104" height="22" rx="4" class="s-readout s-ro-b"/>
+        <text x="238" y="104" text-anchor="middle" class="s-tt">← ZURÜCK · 1 mA</text>
+        <rect x="186" y="149" width="104" height="22" rx="4" class="s-readout s-ro-b"/>
+        <text x="238" y="164" text-anchor="middle" class="s-tt">← ZURÜCK · 2 mA</text>
+      </svg>
+      <figcaption class="figcap">Beispielwerte. Die gesuchte Leitung trägt immer den größten Strom und zeigt „hin“. Nachbarn, die an der Zentrale geerdet sind, führen das übergekoppelte Signal zurück und zeigen „zurück“. Hängt ein Nachbar erst am fernen Ende an Erde, kann auch er „hin“ zeigen. Bei unklarer Lage zeigt das Display deshalb „?“ statt eines falschen Pfeils. Die Referenz setzt man einmal in Sendernähe per Taste.</figcaption>
+    </figure>
+  </section>
+
+  <section id="sender" aria-labelledby="h-sender">
+    <div class="sec-head">
+      <span class="eyebrow">Konzept Kap. 6</span>
+      <h2 id="h-sender">Sender</h2>
+      <p class="muted">Der Sender erzeugt die Tonsumme digital, verstärkt sie auf bis zu 15 V eff und misst am Ausgang Spannung, Strom und Phase. Daraus erkennt er, ob das Ende offen oder geerdet ist.</p>
+    </div>
+    <figure class="figure">
+      <svg class="wide" viewBox="0 0 900 272" role="img" aria-label="Blockschaltbild Sender. Versorgung: 4 AA, Ein/Aus, Hochsetzsteller 24 V für die Endstufe und 3,3 V für den ESP32-S2. Signal: ESP32-S2 DAC, Tiefpass, Endstufe L272, Strommessung, Schutz, Relais für den Modus, Klemmen A, B, E. Spannung, Strom, Phase und Durchgang gehen zurück zum ADC des ESP32.">
+        <rect x="20" y="24" width="110" height="44" rx="6" class="s-block"/>
+        <text x="75" y="51" text-anchor="middle" class="s-bt">4 × AA</text>
+        <rect x="170" y="24" width="120" height="44" rx="6" class="s-block"/>
+        <text x="230" y="43" text-anchor="middle" class="s-bt">Ein/Aus</text>
+        <text x="230" y="59" text-anchor="middle" class="s-bs">selbsthaltend</text>
+        <rect x="325" y="24" width="115" height="44" rx="6" class="s-block"/>
+        <text x="382" y="43" text-anchor="middle" class="s-bt">Hochsetzsteller</text>
+        <text x="382" y="59" text-anchor="middle" class="s-bs">24 V</text>
+        <line x1="130" y1="46" x2="163" y2="46" class="s-conn"/><polygon points="170,46 162,42 162,50" class="s-ah"/>
+        <line x1="290" y1="46" x2="318" y2="46" class="s-conn"/><polygon points="325,46 317,42 317,50" class="s-ah"/>
+        <line x1="382" y1="68" x2="382" y2="111" class="s-conn"/><polygon points="382,118 378,110 386,110" class="s-ah"/>
+        <text x="390" y="98" class="s-bs">24 V</text>
+        <path d="M230 68 V92 H90 V111" class="s-conn"/><polygon points="90,118 86,110 94,110" class="s-ah"/>
+        <text x="160" y="87" text-anchor="middle" class="s-bs">3,3 V</text>
+
+        <rect x="20" y="118" width="140" height="56" rx="6" class="s-block-key"/>
+        <text x="90" y="142" text-anchor="middle" class="s-bt">ESP32-S2 mini</text>
+        <text x="90" y="160" text-anchor="middle" class="s-bs">DAC · ADC · Steuerung</text>
+        <rect x="205" y="118" width="80" height="56" rx="6" class="s-block"/>
+        <text x="245" y="151" text-anchor="middle" class="s-bt">Tiefpass</text>
+        <rect x="325" y="118" width="115" height="56" rx="6" class="s-block"/>
+        <text x="382" y="142" text-anchor="middle" class="s-bt">Endstufe L272</text>
+        <text x="382" y="160" text-anchor="middle" class="s-bs">Brücke, ±21 V</text>
+        <rect x="480" y="118" width="95" height="56" rx="6" class="s-block"/>
+        <text x="527" y="142" text-anchor="middle" class="s-bt">Strom</text>
+        <text x="527" y="160" text-anchor="middle" class="s-bs">Messung (Shunt)</text>
+        <rect x="615" y="118" width="85" height="56" rx="6" class="s-block"/>
+        <text x="657" y="142" text-anchor="middle" class="s-bt">Schutz</text>
+        <text x="657" y="160" text-anchor="middle" class="s-bs">R · PTC · TVS</text>
+        <rect x="740" y="118" width="80" height="56" rx="6" class="s-block"/>
+        <text x="780" y="142" text-anchor="middle" class="s-bt">Relais</text>
+        <text x="780" y="160" text-anchor="middle" class="s-bs">Modus G·A·P</text>
+        <line x1="160" y1="146" x2="198" y2="146" class="s-conn"/><polygon points="205,146 197,142 197,150" class="s-ah"/>
+        <line x1="285" y1="146" x2="318" y2="146" class="s-conn"/><polygon points="325,146 317,142 317,150" class="s-ah"/>
+        <line x1="440" y1="146" x2="473" y2="146" class="s-conn"/><polygon points="480,146 472,142 472,150" class="s-ah"/>
+        <line x1="575" y1="146" x2="608" y2="146" class="s-conn"/><polygon points="615,146 607,142 607,150" class="s-ah"/>
+        <line x1="700" y1="146" x2="733" y2="146" class="s-conn"/><polygon points="740,146 732,142 732,150" class="s-ah"/>
+        <text x="182" y="138" text-anchor="middle" class="s-bs">Ton</text>
+        <line x1="820" y1="128" x2="852" y2="128" class="s-lead-a"/>
+        <line x1="820" y1="146" x2="852" y2="146" class="s-lead-b"/>
+        <line x1="820" y1="164" x2="852" y2="164" class="s-lead-e"/>
+        <circle cx="856" cy="128" r="4" class="s-term"/>
+        <circle cx="856" cy="146" r="4" class="s-term"/>
+        <circle cx="856" cy="164" r="4" class="s-term"/>
+        <text x="866" y="132" class="s-tt">A</text>
+        <text x="866" y="150" class="s-tt">B</text>
+        <text x="866" y="168" class="s-tt">E</text>
+
+        <path d="M527 174 V196" class="s-conn"/>
+        <path d="M780 174 V196 H90 V181" class="s-conn"/><polygon points="90,174 86,182 94,182" class="s-ah"/>
+        <text x="440" y="214" text-anchor="middle" class="s-bs">Spannung · Strom · Phase · Durchgang (1 mA) → ADC</text>
+        <line x1="50" y1="174" x2="50" y2="222" class="s-conn"/>
+        <rect x="20" y="222" width="140" height="40" rx="6" class="s-block"/>
+        <text x="90" y="247" text-anchor="middle" class="s-bt">OLED 1,3″ · Tasten</text>
+      </svg>
+      <figcaption class="figcap">Die Endstufe arbeitet als Brücke an 24 V. Kurzschluss: Die Firmware regelt den Strom in wenigen ms herunter; dahinter stecken Serienwiderstand, PTC und die thermische Abschaltung des L272. Fremdspannung bis 60 V DC / 50 V AC fangen TVS-Dioden und PTC ab.</figcaption>
+    </figure>
+    <div class="two">
+      <div class="card">
+        <h3>Was der Sender anzeigt</h3>
+        <ul>
+          <li><b>Strom in mA:</b> fließt überhaupt etwas?</li>
+          <li><b>Lastbild:</b> „kapazitiv → Ende offen“ oder „ohmsch → Erde am Ende“</li>
+          <li><b>Länge</b> eines offenen Paars aus der Kapazität (Schätzung, ±25 %)</li>
+          <li><b>Durchgang in Ω</b> mit Deutung, gemessen in beiden Polaritäten</li>
+          <li><b>Erde prüfen</b>, wenn in Modus G kaum Strom fließt</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Fremdspannung: warnen, nie bestätigen</h3>
+        <ul>
+          <li>Vor jedem Einschalten misst der Sender DC und AC an den Klemmen</li>
+          <li>Ab 3 V sperrt er den Ausgang und zeigt den Wert</li>
+          <li>Er zeigt <b>nie</b> „spannungsfrei“: Eine Klemme ohne Kontakt misst auch 0 V</li>
+          <li>Ersetzt keinen Spannungsprüfer; so steht es auch in der Anleitung</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="handgeraet" aria-labelledby="h-hand">
+    <div class="sec-head">
+      <span class="eyebrow">Konzept Kap. 5 und 7</span>
+      <h2 id="h-hand">Handgerät</h2>
+      <p class="muted">Zwei Spulen und eine E-Spitze, ein 24-bit-Wandler und ein ESP32-S3, der mit 2–10 Hz Bandbreite nur unsere Frequenzen auswertet. Alles andere fällt raus: 50 Hz, Schaltnetzteile, LED-Treiber.</p>
+    </div>
+    <figure class="figure">
+      <svg class="wide" viewBox="0 0 900 300" role="img" aria-label="Blockschaltbild Handgerät. H-Spule über Vorverstärker auf Kanal L des PCM1808. V-Spule über Vorverstärker und E-Spitze über Impedanzwandler gehen auf einen Umschalter, dann auf Kanal R. PCM1808 über I2S an den ESP32-S3. Der ESP32-S3 treibt OLED und Ton und liest Drehgeber und Tasten.">
+        <rect x="10" y="24" width="150" height="212" rx="10" class="s-zone"/>
+        <text x="20" y="42" class="s-bs">Sensorkopf</text>
+        <rect x="25" y="50" width="120" height="46" rx="6" class="s-block"/>
+        <text x="85" y="71" text-anchor="middle" class="s-bt">H-Spule</text>
+        <text x="85" y="87" text-anchor="middle" class="s-bs">waagerecht</text>
+        <rect x="25" y="114" width="120" height="46" rx="6" class="s-block"/>
+        <text x="85" y="135" text-anchor="middle" class="s-bt">V-Spule</text>
+        <text x="85" y="151" text-anchor="middle" class="s-bs">senkrecht</text>
+        <rect x="25" y="178" width="120" height="46" rx="6" class="s-block"/>
+        <text x="85" y="199" text-anchor="middle" class="s-bt">E-Spitze</text>
+        <text x="85" y="215" text-anchor="middle" class="s-bs">Bündel, Ader</text>
+
+        <rect x="200" y="50" width="130" height="46" rx="6" class="s-block"/>
+        <text x="265" y="71" text-anchor="middle" class="s-bt">Vorverstärker</text>
+        <text x="265" y="87" text-anchor="middle" class="s-bs">×1 / ×30</text>
+        <rect x="200" y="114" width="130" height="46" rx="6" class="s-block"/>
+        <text x="265" y="135" text-anchor="middle" class="s-bt">Vorverstärker</text>
+        <text x="265" y="151" text-anchor="middle" class="s-bs">×1 / ×30</text>
+        <rect x="200" y="178" width="130" height="46" rx="6" class="s-block"/>
+        <text x="265" y="199" text-anchor="middle" class="s-bt">Impedanzwandler</text>
+        <text x="265" y="215" text-anchor="middle" class="s-bs">hochohmig</text>
+        <line x1="145" y1="73" x2="193" y2="73" class="s-conn"/><polygon points="200,73 192,69 192,77" class="s-ah"/>
+        <line x1="145" y1="137" x2="193" y2="137" class="s-conn"/><polygon points="200,137 192,133 192,141" class="s-ah"/>
+        <line x1="145" y1="201" x2="193" y2="201" class="s-conn"/><polygon points="200,201 192,197 192,205" class="s-ah"/>
+
+        <rect x="370" y="126" width="90" height="88" rx="6" class="s-block"/>
+        <text x="415" y="166" text-anchor="middle" class="s-bt">Umschalter</text>
+        <text x="415" y="184" text-anchor="middle" class="s-bs">CD4053</text>
+        <line x1="330" y1="137" x2="363" y2="137" class="s-conn"/><polygon points="370,137 362,133 362,141" class="s-ah"/>
+        <line x1="330" y1="201" x2="363" y2="201" class="s-conn"/><polygon points="370,201 362,197 362,205" class="s-ah"/>
+
+        <rect x="500" y="50" width="110" height="164" rx="6" class="s-block-key"/>
+        <text x="555" y="124" text-anchor="middle" class="s-bt">PCM1808</text>
+        <text x="555" y="142" text-anchor="middle" class="s-bs">24 bit · Stereo</text>
+        <text x="555" y="158" text-anchor="middle" class="s-bs">≈ 90 kHz</text>
+        <text x="508" y="77" class="s-bs">L</text>
+        <text x="508" y="174" class="s-bs">R</text>
+        <line x1="330" y1="73" x2="493" y2="73" class="s-conn"/><polygon points="500,73 492,69 492,77" class="s-ah"/>
+        <line x1="460" y1="170" x2="493" y2="170" class="s-conn"/><polygon points="500,170 492,166 492,174" class="s-ah"/>
+
+        <rect x="650" y="50" width="130" height="164" rx="6" class="s-block-key"/>
+        <text x="715" y="108" text-anchor="middle" class="s-bt">ESP32-S3</text>
+        <text x="715" y="128" text-anchor="middle" class="s-bs">Kern 1: Lock-in</text>
+        <text x="715" y="146" text-anchor="middle" class="s-bs">Kern 2: Anzeige,</text>
+        <text x="715" y="162" text-anchor="middle" class="s-bs">Ton, Bedienung</text>
+        <line x1="610" y1="132" x2="643" y2="132" class="s-conn"/><polygon points="650,132 642,128 642,136" class="s-ah"/>
+        <text x="627" y="124" text-anchor="middle" class="s-bs">I²S</text>
+
+        <rect x="816" y="50" width="78" height="40" rx="6" class="s-block"/>
+        <text x="855" y="75" text-anchor="middle" class="s-bt">OLED 1,3″</text>
+        <rect x="816" y="110" width="78" height="44" rx="6" class="s-block"/>
+        <text x="855" y="129" text-anchor="middle" class="s-bt">Ton</text>
+        <text x="855" y="145" text-anchor="middle" class="s-bs">Sinus, 28 mm</text>
+        <rect x="816" y="174" width="78" height="40" rx="6" class="s-block"/>
+        <text x="855" y="190" text-anchor="middle" class="s-bt">Drehgeber</text>
+        <text x="855" y="205" text-anchor="middle" class="s-bs">+ 2 Tasten</text>
+        <line x1="780" y1="70" x2="809" y2="70" class="s-conn"/><polygon points="816,70 808,66 808,74" class="s-ah"/>
+        <line x1="780" y1="132" x2="809" y2="132" class="s-conn"/><polygon points="816,132 808,128 808,136" class="s-ah"/>
+        <line x1="816" y1="194" x2="787" y2="194" class="s-conn"/><polygon points="780,194 788,190 788,198" class="s-ah"/>
+
+        <rect x="200" y="252" width="694" height="38" rx="6" class="s-block"/>
+        <text x="547" y="276" text-anchor="middle" class="s-bs">4 × AA → Ein/Aus → Hochsetzsteller → 5 V rauscharm (Analogteil) · 3,3 V vom Board (Digitalteil)</text>
+      </svg>
+      <figcaption class="figcap">Die Spulen sind nicht abgestimmt, dadurch bleibt die Phase stabil. Erst das macht Links/Rechts und Stromrichtung zuverlässig, und die Frequenz ist reine Firmware. Kanal R schaltet zwischen V-Spule (Ortung) und E-Spitze (Bündel, Ader) um. Die Spulen haben einen Schirm aus Kupferfolie, damit das E-Feld nicht ins Magnetsignal einstreut.</figcaption>
+    </figure>
+
+    <figure class="figure">
+      <svg class="wide" viewBox="0 0 690 446" role="img" aria-label="Bauformskizze. Links das Handgerät von vorn: Paddel-Stab, ca. 220 mm lang, Sensorkopf 90 mm breit unten mit waagerechter und senkrechter Spule und E-Spitze, darüber ein Hals von mindestens 6 cm, oben der Griff mit Display, Drehgeber, Tasten und 4 AA. Rechts der Sender von oben: Box ca. 130 mal 75 mm mit OLED, drei Tasten, drei Messleitungen mit Zugentlastung und einer 4-mm-Buchse.">
+        <text x="170" y="22" text-anchor="middle" class="s-ts">Handgerät, von vorn</text>
+        <rect x="134" y="40" width="72" height="192" rx="14" class="s-dev"/>
+        <line x1="158" y1="47" x2="182" y2="47" class="s-leader"/>
+        <line x1="158" y1="51" x2="182" y2="51" class="s-leader"/>
+        <rect x="144" y="58" width="52" height="34" rx="2" class="s-screen"/>
+        <rect x="150" y="80" width="5" height="6" class="s-bar"/>
+        <rect x="157" y="76" width="5" height="10" class="s-bar"/>
+        <rect x="164" y="71" width="5" height="15" class="s-bar"/>
+        <circle cx="170" cy="116" r="10" class="s-term"/>
+        <circle cx="152" cy="140" r="5" class="s-term"/>
+        <circle cx="188" cy="140" r="5" class="s-term"/>
+        <rect x="134" y="100" width="5" height="44" class="s-contact"/>
+        <rect x="148" y="152" width="21" height="76" rx="4" class="s-cell"/>
+        <rect x="171" y="152" width="21" height="76" rx="4" class="s-cell"/>
+        <rect x="146" y="232" width="48" height="96" class="s-dev"/>
+        <rect x="98" y="328" width="144" height="64" rx="12" class="s-dev"/>
+        <rect x="106" y="372" width="128" height="11" rx="5" class="s-rod"/>
+        <rect x="165" y="334" width="10" height="34" rx="5" class="s-rod"/>
+        <polygon points="163,392 177,392 170,406" class="s-head"/>
+
+        <line x1="206" y1="74" x2="252" y2="74" class="s-leader"/>
+        <text x="256" y="78" class="s-t">Display 1,3″</text>
+        <line x1="180" y1="116" x2="252" y2="116" class="s-leader"/>
+        <text x="256" y="120" class="s-t">Drehgeber + 2 Tasten</text>
+        <line x1="192" y1="190" x2="252" y2="190" class="s-leader"/>
+        <text x="256" y="194" class="s-t">4 × AA (2 × 2)</text>
+        <text x="126" y="116" text-anchor="end" class="s-tm">Handkontakt</text>
+        <text x="126" y="130" text-anchor="end" class="s-tm">(für E-Spitze)</text>
+        <line x1="214" y1="232" x2="214" y2="328" class="s-dim"/>
+        <line x1="208" y1="232" x2="220" y2="232" class="s-dim"/>
+        <line x1="208" y1="328" x2="220" y2="328" class="s-dim"/>
+        <text x="224" y="276" class="s-t">Hals ≥ 6 cm</text>
+        <text x="224" y="292" class="s-tm">Abstand Spulen ↔ Digitalteil</text>
+        <line x1="175" y1="350" x2="252" y2="350" class="s-leader"/>
+        <text x="256" y="354" class="s-t">V-Spule (senkrecht)</text>
+        <line x1="234" y1="378" x2="252" y2="378" class="s-leader"/>
+        <text x="256" y="382" class="s-t">H-Spule (quer)</text>
+        <text x="184" y="404" class="s-tm">E-Spitze</text>
+        <line x1="30" y1="40" x2="30" y2="392" class="s-dim"/>
+        <line x1="24" y1="40" x2="36" y2="40" class="s-dim"/>
+        <line x1="24" y1="392" x2="36" y2="392" class="s-dim"/>
+        <text x="20" y="250" text-anchor="middle" class="s-tm" transform="rotate(-90 20 250)">≈ 220 mm</text>
+        <line x1="98" y1="420" x2="242" y2="420" class="s-dim"/>
+        <line x1="98" y1="414" x2="98" y2="426" class="s-dim"/>
+        <line x1="242" y1="414" x2="242" y2="426" class="s-dim"/>
+        <text x="170" y="438" text-anchor="middle" class="s-tm">≈ 90 mm</text>
+
+        <text x="540" y="22" text-anchor="middle" class="s-ts">Sender, von oben</text>
+        <line x1="470" y1="106" x2="470" y2="60" class="s-lead-a"/>
+        <line x1="500" y1="106" x2="500" y2="60" class="s-lead-b"/>
+        <line x1="530" y1="106" x2="530" y2="60" class="s-lead-e"/>
+        <rect x="464" y="50" width="12" height="12" rx="2" class="s-head"/>
+        <rect x="494" y="50" width="12" height="12" rx="2" class="s-head"/>
+        <rect x="524" y="50" width="12" height="12" rx="2" class="s-head"/>
+        <text x="470" y="44" text-anchor="middle" class="s-tt">A</text>
+        <text x="500" y="44" text-anchor="middle" class="s-tt">B</text>
+        <text x="530" y="44" text-anchor="middle" class="s-tt">E</text>
+        <rect x="436" y="110" width="208" height="120" rx="12" class="s-dev"/>
+        <rect x="464" y="104" width="12" height="10" rx="2" class="s-cell"/>
+        <rect x="494" y="104" width="12" height="10" rx="2" class="s-cell"/>
+        <rect x="524" y="104" width="12" height="10" rx="2" class="s-cell"/>
+        <circle cx="604" cy="124" r="6" class="s-term"/>
+        <line x1="610" y1="120" x2="640" y2="96" class="s-leader"/>
+        <text x="644" y="94" class="s-tm">4 mm</text>
+        <rect x="452" y="128" width="84" height="48" rx="2" class="s-screen"/>
+        <circle cx="572" cy="148" r="8" class="s-term"/>
+        <circle cx="596" cy="148" r="8" class="s-term"/>
+        <circle cx="620" cy="148" r="8" class="s-term"/>
+        <text x="596" y="172" text-anchor="middle" class="s-tt">MODUS STUFE OK</text>
+        <text x="540" y="210" text-anchor="middle" class="s-tt">NUR AN SPANNUNGSFREIEN LEITUNGEN</text>
+        <line x1="436" y1="246" x2="644" y2="246" class="s-dim"/>
+        <line x1="436" y1="240" x2="436" y2="252" class="s-dim"/>
+        <line x1="644" y1="240" x2="644" y2="252" class="s-dim"/>
+        <text x="540" y="266" text-anchor="middle" class="s-tm">≈ 130 mm</text>
+        <line x1="660" y1="110" x2="660" y2="230" class="s-dim"/>
+        <line x1="654" y1="110" x2="666" y2="110" class="s-dim"/>
+        <line x1="654" y1="230" x2="666" y2="230" class="s-dim"/>
+        <text x="672" y="174" text-anchor="middle" class="s-tm" transform="rotate(-90 672 174)">≈ 75 mm</text>
+        <text x="540" y="298" text-anchor="middle" class="s-t">Leitungen mit Zugentlastung</text>
+        <text x="540" y="316" text-anchor="middle" class="s-tm">4 × AA im Boden, Magnet hinten</text>
+        <text x="540" y="332" text-anchor="middle" class="s-tm">(hält am Zentralengehäuse)</text>
+      </svg>
+      <figcaption class="figcap">Maße sind Richtwerte; endgültig nach den Platinen in Phase 7. Beide Teile passen auf 25,6 cm Bauraum und lassen sich als Halbschalen ohne Stützmaterial drucken.</figcaption>
+    </figure>
+  </section>
+
+  <section id="anzeige" aria-labelledby="h-anzeige">
+    <div class="sec-head">
+      <span class="eyebrow">Konzept Kap. 5.3, 6.4, 7.3 · Lastenheft A-01 … A-03</span>
+      <h2 id="h-anzeige">So soll die Anzeige aussehen</h2>
+      <p class="muted">Entwürfe im Maßstab des 1,3″-OLED (128 × 64 Pixel). Alle Zahlen sind echte Messwerte mit Einheit; der E-Pegel ist als „rel“ gekennzeichnet, weil er nicht kalibriert ist.</p>
+    </div>
+    <div class="screens">
+      <figure class="screen">
+        <svg viewBox="0 0 136 72" role="img" aria-label="Handgerät, Ortung: 3,8 nT, Leitung rechts, Strom hin, Pegelbalken mit Spitzenwert und Verlaufsgraph mit einer Beule über der Leitung.">
+          <rect x="0" y="0" width="136" height="72" rx="5" class="o-bez"/>
+          <rect x="4" y="4" width="128" height="64" class="o-bg"/>
+          <text x="7" y="12" class="o-t">ORTUNG</text>
+          <text x="50" y="12" class="o-t">8,2k</text>
+          <rect x="78" y="6.5" width="17" height="7" class="o-out"/>
+          <text x="86.5" y="11.8" text-anchor="middle" class="o-s">REF</text>
+          <rect x="110" y="6.5" width="15" height="7" class="o-out"/>
+          <rect x="125.5" y="8.5" width="2" height="3" class="o-fill"/>
+          <rect x="111.5" y="8" width="9" height="4" class="o-fill"/>
+          <line x1="4" y1="16" x2="132" y2="16" class="o-line" opacity=".5"/>
+          <text x="7" y="40" class="o-big" font-size="25">3,8</text>
+          <text x="40" y="40" class="o-t">nT</text>
+          <polygon points="80,30 88,25.5 88,34.5" class="o-out"/>
+          <line x1="100" y1="24" x2="100" y2="36" class="o-line"/>
+          <polygon points="120,30 112,25.5 112,34.5" class="o-fill"/>
+          <text x="82" y="45" class="o-t">I → HIN</text>
+          <rect x="7" y="48.5" width="122" height="5" class="o-out"/>
+          <rect x="7" y="48.5" width="76" height="5" class="o-fill"/>
+          <line x1="93" y1="47" x2="93" y2="55" class="o-line"/>
+          <polygon points="7,66 13,66 19,65.8 25,65.5 31,65 37,64.4 43,63.5 49,62.5 55,61.2 61,60 67,58.8 73,57.9 79,57.3 85,57.1 91,57.4 97,58.2 103,59.5 109,61 115,62.6 121,64 127,65 127,66" class="o-area"/>
+          <polyline points="7,66 13,66 19,65.8 25,65.5 31,65 37,64.4 43,63.5 49,62.5 55,61.2 61,60 67,58.8 73,57.9 79,57.3 85,57.1 91,57.4 97,58.2 103,59.5 109,61 115,62.6 121,64 127,65" class="o-out"/>
+        </svg>
+        <figcaption><b>Handgerät · Ortung.</b> Feld in nT, Leitung liegt rechts (gefüllter Pfeil), Strom „hin“, Balken mit Spitzenwert, unten der Verlauf der letzten 2 s beim Überstreichen.</figcaption>
+      </figure>
+      <figure class="screen">
+        <svg viewBox="0 0 136 72" role="img" aria-label="Handgerät, Bündel: E-Pegel 47 dB relativ, großer Pfeil hin, Magnetfeld 12 nT, Referenz gesetzt.">
+          <rect x="0" y="0" width="136" height="72" rx="5" class="o-bez"/>
+          <rect x="4" y="4" width="128" height="64" class="o-bg"/>
+          <text x="7" y="12" class="o-t">BÜNDEL</text>
+          <text x="50" y="12" class="o-t">E-SPITZE</text>
+          <rect x="110" y="6.5" width="15" height="7" class="o-out"/>
+          <rect x="125.5" y="8.5" width="2" height="3" class="o-fill"/>
+          <rect x="111.5" y="8" width="7" height="4" class="o-fill"/>
+          <line x1="4" y1="16" x2="132" y2="16" class="o-line" opacity=".5"/>
+          <text x="7" y="40" class="o-big" font-size="25">47</text>
+          <text x="31" y="40" class="o-t">dB rel</text>
+          <rect x="78" y="26" width="28" height="7" class="o-fill"/>
+          <polygon points="106,20 122,29.5 106,39" class="o-fill"/>
+          <text x="100" y="47" text-anchor="middle" class="o-t">HIN</text>
+          <rect x="7" y="50" width="122" height="5" class="o-out"/>
+          <rect x="7" y="50" width="108" height="5" class="o-fill"/>
+          <text x="7" y="64" class="o-s">MAGNET 12 nT · REF OK</text>
+        </svg>
+        <figcaption><b>Handgerät · Bündel.</b> Mit der Spitze die Kabel abtasten: E-Pegel plus Stromrichtung. Die richtige Leitung hat den höchsten Pegel und zeigt „hin“.</figcaption>
+      </figure>
+      <figure class="screen">
+        <svg viewBox="0 0 136 72" role="img" aria-label="Sender, Modus G: 15,0 Volt, 7,2 Milliampere, Last 2,1 Kiloohm bei minus 84 Grad, also kapazitiv, Ende offen, Kapazität etwa 9,3 Nanofarad, Stufe normal, Restzeit 1 Stunde 52.">
+          <rect x="0" y="0" width="136" height="72" rx="5" class="o-bez"/>
+          <rect x="4" y="4" width="128" height="64" class="o-bg"/>
+          <text x="7" y="12" class="o-t">MODUS G</text>
+          <text x="55" y="12" class="o-t">8,2+4,1k</text>
+          <rect x="110" y="6.5" width="15" height="7" class="o-out"/>
+          <rect x="125.5" y="8.5" width="2" height="3" class="o-fill"/>
+          <rect x="111.5" y="8" width="10" height="4" class="o-fill"/>
+          <line x1="4" y1="16" x2="132" y2="16" class="o-line" opacity=".5"/>
+          <text x="7" y="31" class="o-big" font-size="15">15,0 V</text>
+          <text x="70" y="31" class="o-big" font-size="15">7,2 mA</text>
+          <text x="7" y="42" class="o-t">LAST 2,1 kΩ ∠ −84°</text>
+          <text x="7" y="52" class="o-t">→ KAPAZITIV: ENDE OFFEN</text>
+          <text x="7" y="64" class="o-s">C ≈ 9,3 nF · NORMAL · 1:52 h</text>
+        </svg>
+        <figcaption><b>Sender · Betrieb.</b> Spannung, Strom und Lastbild. Hier ist das Ende offen; bei Erde am Ende stünde „ohmsch: Erde am Ende“.</figcaption>
+      </figure>
+      <figure class="screen">
+        <svg viewBox="0 0 136 72" role="img" aria-label="Sender, Durchgang A–B: 7,4 Ohm, gebrückt, etwa 2 mal 51 Meter bei 0,8 Millimeter, beide Polaritäten gleich, also kein Gerät am Ende.">
+          <rect x="0" y="0" width="136" height="72" rx="5" class="o-bez"/>
+          <rect x="4" y="4" width="128" height="64" class="o-bg"/>
+          <text x="7" y="12" class="o-t">DURCHGANG A–B</text>
+          <rect x="110" y="6.5" width="15" height="7" class="o-out"/>
+          <rect x="125.5" y="8.5" width="2" height="3" class="o-fill"/>
+          <rect x="111.5" y="8" width="10" height="4" class="o-fill"/>
+          <line x1="4" y1="16" x2="132" y2="16" class="o-line" opacity=".5"/>
+          <text x="7" y="39" class="o-big" font-size="23">7,4 Ω</text>
+          <text x="7" y="49" class="o-t">GEBRÜCKT ≈ 2 × 51 m</text>
+          <text x="7" y="58" class="o-s">0,8 mm · 73,2 Ω/km (Datenblatt)</text>
+          <text x="7" y="66" class="o-s">+/− GLEICH: KEIN GERÄT</text>
+        </svg>
+        <figcaption><b>Sender · Durchgang.</b> Widerstand in Ω, daraus die Schleifenlänge mit der Annahme laut Datenblatt. Gemessen wird in beiden Polaritäten; weichen sie ab, meldet er „Gerät am Ende?“.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section id="reichweite" aria-labelledby="h-reich">
+    <div class="sec-head">
+      <span class="eyebrow">Konzept Kap. 9</span>
+      <h2 id="h-reich">Realistische Reichweiten</h2>
+      <p class="muted">Modus G, Frequenzsatz Standard, Stufe Normal. Die Erwartung ist bewusst vorsichtiger als die Rechnung, weil Rückströme in Nachbarleitern und Metall das Feld schwächen. Gemessen wird in Phase 3.</p>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Situation</th><th>Rechnung</th><th>Erwartung</th><th>Einfacher Tonsucher</th></tr></thead>
+        <tbody>
+          <tr><td>Unterputz, 30 m, Ende offen</td><td class="num">7 mA, &gt; 1 m</td><td class="strong">sicher ab ≥ 50 cm Abstand, ±1 cm genau</td><td>1–5 cm</td></tr>
+          <tr><td>Hohlwand, Gipskarton</td><td class="num">&gt; 1 m</td><td class="strong">≥ 50 cm</td><td>5–15 cm</td></tr>
+          <tr><td>Beton, 20 cm</td><td class="num">&gt; 1 m</td><td class="strong">durch, ±2 cm</td><td>kaum</td></tr>
+          <tr><td>Stahlbeton, 20 cm Decke</td><td class="num">&gt; 1 m</td><td class="strong">durch, ±3–5 cm (Verzerrung)</td><td>nein</td></tr>
+          <tr><td>Kunststoff- oder Gittertrasse, 100 m, Ende offen, von unten</td><td class="num">7,7 m Mitte · 1,5 m bei 90 %</td><td class="strong">1–2 m über ca. 80 % der Länge, letztes Stück von der Leiter</td><td>nur an der Trasse</td></tr>
+          <tr><td>Trasse, Ende geerdet</td><td class="num">30 mA, sehr weit</td><td class="strong">≥ 2 m auf ganzer Länge</td><td>–</td></tr>
+          <tr><td>Blech-Kabelrinne, von unten</td><td class="num">–</td><td class="strong">stark eingeschränkt (0–50 cm); an der Rinne arbeiten, Satz „Tief“ testen</td><td>nur an der Rinne</td></tr>
+          <tr><td>500 m, Ende offen</td><td class="num">19 mA · 3,9 m bei 90 %</td><td class="strong">≥ 1 m bis ca. 90 % der Länge</td><td>–</td></tr>
+          <tr><td>Richtige Leitung in voller Trasse</td><td class="num">–</td><td class="strong">sicher an der Trasse (Betrag + Richtung + E-Spitze)</td><td>Ratespiel</td></tr>
+          <tr><td>Ader am abisolierten Ende</td><td class="num">–</td><td class="strong">eindeutig (Modus A)</td><td>geht</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note"><b>Zu deinen 500 m:</b> Nicht die Länge ist das Problem, sondern der Rückweg. In Modus G treibt der Sender bei 500 m sogar mehr Strom als bei 30 m, weil die Leitung mehr Kapazität hat. Nicht gehen wird es im Stahlrohr und aus größerer Entfernung bei Blech-Kabelrinnen.</p>
+  </section>
+
+  <section id="varianten" aria-labelledby="h-var">
+    <div class="sec-head">
+      <span class="eyebrow">Konzept Kap. 8 und 11</span>
+      <h2 id="h-var">Drei Varianten</h2>
+      <p class="muted">Kosten geschätzt nach Preisen chinesischer Händler (AliExpress, LCSC), ±20 %. Bei Reichelt liegen sie ca. 30–50 % höher. Die genaue Stückliste folgt in Phase 4.</p>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th></th><th>A · Tonsucher verbessert</th><th>B · Magnetisch einfach</th><th>C · Profi-Prinzip</th></tr></thead>
+        <tbody>
+          <tr><td>Einspeisung</td><td>Ader gegen Erde, Rechteck 1 kHz</td><td>Modus G, ein Ton</td><td>Modus G/A/P, Zweiton, 3 Frequenzsätze</td></tr>
+          <tr><td>Handgerät</td><td>E-Sonde, Analogfilter</td><td>1 Spule + E-Spitze, ESP-ADC 12 bit</td><td>2 Spulen + E-Spitze, 24 bit, Lock-in</td></tr>
+          <tr><td>Beton, Stahlbeton</td><td>nein</td><td>ja</td><td>ja</td></tr>
+          <tr><td>Volle Trasse (U-13)</td><td>alles piept</td><td>nur Betrag</td><td>Betrag + Stromrichtung + E-Spitze</td></tr>
+          <tr><td>Links/Rechts, Null, Tiefe</td><td>nein</td><td>nein</td><td>ja</td></tr>
+          <tr><td>Sender misst</td><td>nichts</td><td>Strom</td><td>Strom, Lastbild, Länge, Durchgang</td></tr>
+          <tr><td>Erfüllt das Lastenheft</td><td>nein</td><td>teilweise</td><td>ja</td></tr>
+          <tr class="rec"><td class="strong">Kosten pro Satz</td><td class="num strong">ca. 37 €</td><td class="num strong">ca. 45 €</td><td class="num strong">ca. 50 € · Empfehlung</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="chart" id="chart2">
+      <h3 style="font-size:1.15rem;margin-bottom:6px">Kosten pro Satz nach Baugruppe</h3>
+      <div class="legend" aria-hidden="true">
+        <span><i class="key-rect k1"></i>Sender</span>
+        <span><i class="key-rect k2"></i>Handgerät</span>
+        <span><i class="key-rect k3"></i>Platinen (anteilig, inkl. Versand)</span>
+      </div>
+      <div class="chart-scroll">
+        <svg id="c2" viewBox="0 0 720 210" role="img" aria-label="Gestapelte Balken: A 13 plus 15 plus 9 gleich 37 Euro; B 16,50 plus 19,50 plus 9 gleich 45 Euro; C 20 plus 22,50 plus 9 gleich 51,50 Euro. Das Ziel von 40 Euro überschreiten B und C."></svg>
+      </div>
+      <div class="tip" id="tip2" hidden></div>
+      <p class="figcap">Sender / Handgerät / Platinen: A 13 / 15 / 9 €, B 16,50 / 19,50 / 9 €, C 20 / 22,50 / 9 €. Den ESP32-S2 mini im Sender hast du schon, das spart bei dir ca. 3 €.</p>
+    </div>
+  </section>
+
+  <section id="phase3" aria-labelledby="h-p3">
+    <div class="sec-head">
+      <span class="eyebrow">Konzept Kap. 12</span>
+      <h2 id="h-p3">Was der Machbarkeitstest klären muss</h2>
+      <p class="muted">Ohne Platine: Steckbrett, die Module und zwei gewickelte Spulen. Die Werte schaust du dir im seriellen Plotter der Arduino IDE an; dein Oszilloskop braucht kein FFT.</p>
+    </div>
+    <div class="two">
+      <div class="card">
+        <h3>Messen</h3>
+        <ol>
+          <li>PCM1808 am ESP32-S3 in Betrieb nehmen: Takt, Abtastrate, Rauschen</li>
+          <li>Spule wickeln und mit bekanntem Strom kalibrieren, mit und ohne Schirm</li>
+          <li>Abstand zum Digitalteil: Wie lang muss der Hals sein?</li>
+          <li>Reichweite an der Testtrommel und in einer echten Trasse, Frequenzsätze im Vergleich</li>
+          <li>Stromrichtung: Bündel aus 5–10 Kabeln, wie oft stimmt der Pfeil?</li>
+          <li>Sendersignal und L272 an 10–100 nF Last</li>
+        </ol>
+      </div>
+      <div class="card">
+        <h3>Nach Freigabe ins Lastenheft</h3>
+        <ul>
+          <li>Zielwerte für T-01 … T-16 (Konzept Kap. 10)</li>
+          <li>S-13 Fremdspannung: umgesetzt als Sperre ohne „spannungsfrei“-Anzeige</li>
+          <li>S-14 Durchgang: umgesetzt, dazu Lastbild und Längenschätzung</li>
+          <li>H-14 Links/Rechts und H-15 Tiefe: umgesetzt ohne Zusatzhardware</li>
+          <li>Neu: Handgerät erkennt den Frequenzsatz selbst; Feld in nT</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>Konzept v1.0 · 13.10.2026 · Grundlage Lastenheft v1.0</span>
+    <span>Nächster Schritt: deine Freigabe und deine Antwort zum Budget, dann Phase 3 (Machbarkeitstest)</span>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var NS = 'http://www.w3.org/2000/svg';
+  function el(tag, attrs, parent){
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function txt(parent, x, y, s, cls, anchor){
+    var t = el('text', {x:x, y:y, 'class':cls, 'text-anchor':anchor || 'start'}, parent);
+    t.textContent = s;
+    return t;
+  }
+  function de(n, d){ return n.toFixed(d).replace('.', ','); }
+  function fmtB(nT){
+    if (nT < 1e-6) return '≈ 0';
+    if (nT >= 1) return de(nT, nT >= 10 ? 0 : 1) + ' nT';
+    var pT = nT * 1000;
+    if (pT >= 10) return de(pT, 0) + ' pT';
+    if (pT >= 1) return de(pT, 1) + ' pT';
+    return pT.toPrecision(2).replace('.', ',') + ' pT';
+  }
+  function fmtR(r){ return r < 1 ? de(r * 100, r < 0.1 ? 1 : 0) + ' cm' : de(r, 2) + ' m'; }
+  function keyLine(cls){ var i = document.createElement('i'); i.className = 'key-line ' + cls; return i; }
+  function row(tip, keyEl, name, value){
+    var d = document.createElement('div'); d.className = 'row';
+    var a = document.createElement('span'); if (keyEl) a.appendChild(keyEl); a.appendChild(document.createTextNode(name));
+    var b = document.createElement('b'); b.textContent = value;
+    d.appendChild(a); d.appendChild(b); tip.appendChild(d);
+  }
+  function placeTip(tip, box, px, py){
+    var w = tip.offsetWidth, h = tip.offsetHeight, bw = box.clientWidth;
+    var x = px + 14; if (x + w > bw - 6) x = px - w - 14; if (x < 6) x = 6;
+    var y = py - h - 10; if (y < 6) y = py + 16;
+    tip.style.left = x + 'px'; tip.style.top = y + 'px';
+  }
+
+  /* ---------- Diagramm 1: Feld über Abstand (log-log) ---------- */
+  var D = {"r":[0.01,0.0112,0.0126,0.0141,0.0158,0.0178,0.02,0.0224,0.0251,0.0282,0.0316,0.0355,0.0398,0.0447,0.0501,0.0562,0.0631,0.0708,0.0794,0.0891,0.1,0.1122,0.1259,0.1413,0.1585,0.1778,0.1995,0.2239,0.2512,0.2818,0.3162,0.3548,0.3981,0.4467,0.5012,0.5623,0.631,0.7079,0.7943,0.8913,1.0,1.122,1.259,1.413,1.585,1.778,1.995],"einzel":[20.0,17.83,15.89,14.16,12.62,11.25,10.02,8.934,7.962,7.096,6.325,5.637,5.024,4.477,3.991,3.557,3.17,2.825,2.518,2.244,2.0,1.783,1.589,1.416,1.262,1.125,1.002,0.8934,0.7962,0.7096,0.6325,0.5637,0.5024,0.4477,0.3991,0.3557,0.317,0.2825,0.2518,0.2244,0.2,0.1783,0.1589,0.1416,0.1262,0.1125,0.1002],"paar":[3.0,2.383,1.893,1.504,1.194,0.9487,0.7536,0.5986,0.4755,0.3777,0.3,0.2383,0.1893,0.1504,0.1194,0.09487,0.07536,0.05986,0.04755,0.03777,0.03,0.02383,0.01893,0.01504,0.01194,0.009487,0.007536,0.005986,0.004755,0.003777,0.003,0.002383,0.001893,0.001504,0.001194,0.0009487,0.0007536,0.0005986,0.0004755,0.0003777,0.0003,0.0002383,0.0001893,0.0001504,0.0001194,9.487e-05,7.536e-05],"verdrillt":[2.962,2.338,1.84,1.442,1.125,0.8716,0.67,0.5097,0.383,0.2834,0.206,0.1465,0.1016,0.06848,0.04462,0.02797,0.01678,0.009578,0.005165,0.002612,0.001228,0.0005324,0.0002104,7.496e-05,2.377e-05,6.608e-06,1.586e-06,3.224e-07,5.442e-08,7.455e-09,8.078e-10,6.728e-11,4.17e-12,1.855e-13,5.689e-15,1.149e-16,1.452e-18,1.085e-20,4.494e-23,9.601e-26,9.756e-29,4.307e-32,7.463e-36,4.528e-40,8.46e-45,4.217e-50,4.774e-56]};
+  var c1 = document.getElementById('c1'), tip1 = document.getElementById('tip1'), box1 = document.getElementById('chart1');
+  var X0 = 70, X1 = 588, Y0 = 16, Y1 = 290;
+  var LX0 = Math.log10(0.01), LX1 = Math.log10(2), LY0 = -5, LY1 = 2;
+  function sx(r){ return X0 + (Math.log10(r) - LX0) / (LX1 - LX0) * (X1 - X0); }
+  function sy(b){ return Y1 - (Math.log10(b) - LY0) / (LY1 - LY0) * (Y1 - Y0); }
+  [[100,'100 nT'],[10,'10 nT'],[1,'1 nT'],[0.1,'0,1 nT'],[0.01,'10 pT'],[0.001,'1 pT'],[0.0001,'0,1 pT'],[0.00001,'0,01 pT']].forEach(function(t){
+    var y = sy(t[0]); el('line', {x1:X0, x2:X1, y1:y, y2:y, 'class':'g-grid'}, c1); txt(c1, X0 - 8, y + 4, t[1], 'g-tick', 'end');
+  });
+  [[0.01,'1 cm'],[0.02,'2 cm'],[0.05,'5 cm'],[0.1,'10 cm'],[0.2,'20 cm'],[0.5,'50 cm'],[1,'1 m'],[2,'2 m']].forEach(function(t){
+    var x = sx(t[0]); el('line', {x1:x, x2:x, y1:Y0, y2:Y1, 'class':'g-grid'}, c1); txt(c1, x, Y1 + 18, t[1], 'g-tick', 'middle');
+  });
+  el('line', {x1:X0, x2:X1, y1:Y1, y2:Y1, 'class':'g-axis'}, c1);
+  txt(c1, (X0 + X1) / 2, Y1 + 36, 'Abstand Sensor – Leitung', 'g-tick', 'middle');
+  var yth = sy(0.1);
+  el('line', {x1:X0, x2:X1, y1:yth, y2:yth, 'class':'g-thresh'}, c1);
+  txt(c1, X1 - 6, yth + 16, 'praktische Schwelle 0,1 nT', 'g-note', 'end');
+  var SER = [
+    {k:'einzel', cls:'s1', name:'Bündel gegen Erde', end:'Modus G'},
+    {k:'paar', cls:'s2', name:'Paar unverdrillt', end:'Paar unverdrillt'},
+    {k:'verdrillt', cls:'s3', name:'Paar verdrillt', end:'verdrillt'}
+  ];
+  SER.forEach(function(s){
+    var d = '', last = -1;
+    for (var i = 0; i < D.r.length; i++){
+      var v = D[s.k][i]; if (v < 1e-5) break;
+      d += (i ? 'L' : 'M') + sx(D.r[i]).toFixed(1) + ' ' + sy(v).toFixed(1);
+      last = i;
+    }
+    el('path', {d:d, 'class':'g-line ' + s.cls}, c1);
+    var lx = sx(D.r[last]), ly = sy(D[s.k][last]);
+    if (last === D.r.length - 1) txt(c1, lx + 8, ly + 4, s.end, 'g-lab');
+    else txt(c1, lx + 8, ly - 2, s.end + ': fällt steil ab', 'g-lab');
+  });
+  var cross = el('line', {x1:0, x2:0, y1:Y0, y2:Y1, 'class':'g-cross', visibility:'hidden'}, c1);
+  var dots = SER.map(function(s){ return el('circle', {r:4.5, 'class':'g-dot ' + s.cls, visibility:'hidden'}, c1); });
+  var hit = el('rect', {x:X0, y:Y0, width:X1 - X0, height:Y1 - Y0, fill:'transparent'}, c1);
+  var idx1 = 20;
+  function show1(i){
+    idx1 = Math.max(0, Math.min(D.r.length - 1, i));
+    var x = sx(D.r[idx1]);
+    cross.setAttribute('x1', x); cross.setAttribute('x2', x); cross.setAttribute('visibility', 'visible');
+    SER.forEach(function(s, j){
+      var v = D[s.k][idx1];
+      if (v >= 1e-5){ dots[j].setAttribute('cx', x); dots[j].setAttribute('cy', sy(v)); dots[j].setAttribute('visibility', 'visible'); }
+      else dots[j].setAttribute('visibility', 'hidden');
+    });
+    tip1.textContent = '';
+    var tt = document.createElement('div'); tt.className = 'tt'; tt.textContent = 'Abstand ' + fmtR(D.r[idx1]) + ' · Strom 1 mA'; tip1.appendChild(tt);
+    SER.forEach(function(s){ row(tip1, keyLine(s.cls === 's1' ? 'k1' : s.cls === 's2' ? 'k2' : 'k3'), s.name, fmtB(D[s.k][idx1])); });
+    tip1.hidden = false;
+    var bb = c1.getBoundingClientRect(), cb = box1.getBoundingClientRect();
+    var scale = bb.width / 720;
+    placeTip(tip1, box1, bb.left - cb.left + x * scale, bb.top - cb.top + Y0 * scale + 40);
+  }
+  function hide1(){ cross.setAttribute('visibility', 'hidden'); dots.forEach(function(d){ d.setAttribute('visibility', 'hidden'); }); tip1.hidden = true; }
+  function nearest(px){
+    var lr = LX0 + (px - X0) / (X1 - X0) * (LX1 - LX0), best = 0, bd = 1e9;
+    for (var i = 0; i < D.r.length; i++){ var dd = Math.abs(Math.log10(D.r[i]) - lr); if (dd < bd){ bd = dd; best = i; } }
+    return best;
+  }
+  hit.addEventListener('pointermove', function(ev){
+    var bb = c1.getBoundingClientRect(); var px = (ev.clientX - bb.left) / bb.width * 720; show1(nearest(px));
+  });
+  hit.addEventListener('pointerleave', hide1);
+  c1.addEventListener('focus', function(){ show1(idx1); });
+  c1.addEventListener('blur', hide1);
+  c1.addEventListener('keydown', function(ev){
+    if (ev.key === 'ArrowRight'){ show1(idx1 + 1); ev.preventDefault(); }
+    else if (ev.key === 'ArrowLeft'){ show1(idx1 - 1); ev.preventDefault(); }
+    else if (ev.key === 'Escape'){ hide1(); }
+  });
+
+  /* ---------- Diagramm 2: Kosten gestapelt ---------- */
+  var c2 = document.getElementById('c2'), tip2 = document.getElementById('tip2'), box2 = document.getElementById('chart2');
+  var BX0 = 150, BX1 = 640, MAXE = 60;
+  function bx(v){ return BX0 + v / MAXE * (BX1 - BX0); }
+  var ROWS = [
+    {name:'A · Tonsucher', seg:[13, 15, 9]},
+    {name:'B · Magnetisch', seg:[16.5, 19.5, 9]},
+    {name:'C · Profi-Prinzip', seg:[20, 22.5, 9]}
+  ];
+  var SEGN = ['Sender', 'Handgerät', 'Platinen'], SEGC = ['s1', 's2', 's3'];
+  for (var v = 0; v <= MAXE; v += 10){
+    var x = bx(v); el('line', {x1:x, x2:x, y1:30, y2:172, 'class':'g-grid'}, c2); txt(c2, x, 190, v + ' €', 'g-tick', 'middle');
+  }
+  var xb = bx(40);
+  el('line', {x1:xb, x2:xb, y1:22, y2:176, 'class':'g-budget'}, c2);
+  txt(c2, xb, 16, 'Ziel 40 €', 'g-lab', 'middle');
+  ROWS.forEach(function(r, ri){
+    var yc = 56 + ri * 46, h = 22, y = yc - h / 2, acc = 0;
+    txt(c2, BX0 - 12, yc + 4, r.name, 'g-lab', 'end');
+    r.seg.forEach(function(s, si){
+      var xa = bx(acc), xe = bx(acc + s), w = xe - xa - (si < 2 ? 2 : 0), node;
+      if (si === 2){
+        var rr = 4;
+        node = el('path', {d:'M' + xa + ' ' + y + 'H' + (xa + w - rr) + 'a' + rr + ' ' + rr + ' 0 0 1 ' + rr + ' ' + rr + 'V' + (y + h - rr) + 'a' + rr + ' ' + rr + ' 0 0 1 -' + rr + ' ' + rr + 'H' + xa + 'Z', 'class':'g-seg ' + SEGC[si], tabindex:'0'}, c2);
+      } else {
+        node = el('rect', {x:xa, y:y, width:w, height:h, 'class':'g-seg ' + SEGC[si], tabindex:'0'}, c2);
+      }
+      var label = r.name + ' · ' + SEGN[si];
+      var val = de(s, s % 1 ? 2 : 0) + ' €';
+      node.setAttribute('aria-label', label + ': ' + val);
+      function on(ev){
+        tip2.textContent = '';
+        var tt = document.createElement('div'); tt.className = 'tt'; tt.textContent = r.name; tip2.appendChild(tt);
+        var k = document.createElement('i'); k.className = 'key-rect k' + (si + 1);
+        row(tip2, k, SEGN[si], val);
+        tip2.hidden = false;
+        var bb = c2.getBoundingClientRect(), cb = box2.getBoundingClientRect(), sc = bb.width / 720;
+        placeTip(tip2, box2, bb.left - cb.left + (xa + w / 2) * sc, bb.top - cb.top + y * sc);
+      }
+      node.addEventListener('pointerenter', on);
+      node.addEventListener('focus', on);
+      node.addEventListener('pointerleave', function(){ tip2.hidden = true; });
+      node.addEventListener('blur', function(){ tip2.hidden = true; });
+      acc += s;
+    });
+    var total = r.seg[0] + r.seg[1] + r.seg[2];
+    txt(c2, bx(total) + 8, yc + 4, 'ca. ' + de(total, total % 1 ? 2 : 0) + ' €', 'g-lab');
+  });
+})();
+</script>

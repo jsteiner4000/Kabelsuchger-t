@@ -6,7 +6,8 @@ Ein **Sender** speist ein Suchsignal in eine spannungsfreie Leitung ein, ein
 
 ## Stand
 
-**Phase 1 von 8:** Lastenheft v1.0 liegt zur Freigabe vor (Antworten aus den Rückfragen eingearbeitet).
+**Phase 2 von 8:** Lastenheft v1.0 ist freigegeben. Das Konzept v1.0 liegt zur Freigabe vor; offen ist die
+Budgetentscheidung (Variante C, ca. 50 € pro Satz).
 
 ## Dokumente
 
@@ -14,6 +15,9 @@ Ein **Sender** speist ein Suchsignal in eine spannungsfreie Leitung ein, ein
 |---|---|
 | [`docs/lastenheft.md`](docs/lastenheft.md) | Was das Gerät können muss: Anforderungen, Abnahmetests, offene Fragen |
 | [`docs/lastenheft-uebersicht.html`](docs/lastenheft-uebersicht.html) | Dasselbe als visuelle Übersicht, veröffentlicht unter <https://claude.ai/artifact/R5hurM3dSdJBk6UaUzjGMM> (privat) |
+| [`docs/konzept.md`](docs/konzept.md) | Wie das Gerät funktioniert: Physik, Einspeisemodi, Signal, Auswertung, Varianten, Reichweiten, Budget |
+| [`docs/konzept-uebersicht.html`](docs/konzept-uebersicht.html) | Konzept als visuelle Übersicht, veröffentlicht unter <https://claude.ai/artifact/VZtH7KZhMHQYaksFrRsrAv> (privat) |
+| [`docs/berechnungen/feldmodell.py`](docs/berechnungen/feldmodell.py) | Feld- und Reichweitenrechnung zum Konzept (nur Python-Standardbibliothek) |
 | [`docs/entscheidungen.md`](docs/entscheidungen.md) | Jede Entscheidung mit Begründung |
 | [`stueckliste.csv`](stueckliste.csv) | Stückliste (ab Phase 4), Trennzeichen `;` |
 

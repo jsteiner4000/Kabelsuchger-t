@@ -4,7 +4,7 @@
 |---|---|
 | **Version** | 1.0 |
 | **Stand** | 13.10.2026 |
-| **Status** | Zur Freigabe durch Julius |
+| **Status** | Freigegeben durch Julius am 13.10.2026 |
 | **Auftraggeber** | Julius |
 | **Bearbeitung** | Claude (Entwicklungspartner) |
 | **Visuelle Übersicht** | [`lastenheft-uebersicht.html`](lastenheft-uebersicht.html) (Link zur veröffentlichten Seite siehe README) |
@@ -351,13 +351,13 @@ Ausführlich erklärt und gelöst werden diese Punkte im Konzept (Phase 2).
 | AN-3 | Empfindlichstes Gerät am Leitungsende: 12-V-Melder bzw. 12-V-Kamera. |
 | AN-4 | Bei Zielkonflikten hat die Ortung in Trasse und unter Putz Vorrang vor den anderen Aufgaben. |
 
-### 14.2 Noch offen, blockiert nichts
+### 14.2 Nachfragen (beantwortet zur Freigabe)
 
-| ID | Frage | Gebraucht in |
-|---|---|---|
-| O-1 | Welches Oszilloskop (Modell), hat es eine FFT-Funktion? | Phase 3 (Messanleitung) |
-| O-2 | Welches Modell ist dein Vergleichs-Tonsucher? | T-13 |
-| O-3 | Trassen: Hängen sie meist unter der Decke, und suchst du von unten oder von der Leiter aus? | Phase 2 (Reichweite in Trassen) |
+| ID | Frage | Antwort | Auswirkung |
+|---|---|---|---|
+| O-1 | Welches Oszilloskop, mit FFT? | „ein ganz normales“, Modell unbekannt | Messanleitung Phase 3 setzt kein FFT voraus; Spektren zeigt das Handgerät selbst |
+| O-2 | Vergleichs-Tonsucher? | Kabelsuchfunktion eines China-IP-Kamera-Testers, eigentlich für Netzwerkkabel, reicht nicht weit | Referenz für T-13 |
+| O-3 | Trassen: von unten oder von der Leiter? | unterschiedlich | Konzept rechnet mit beidem (Reichweite von unten 1–2 m, an der Trasse direkt) |
 
 ---
 
@@ -366,4 +366,5 @@ Ausführlich erklärt und gelöst werden diese Punkte im Konzept (Phase 2).
 | Version | Datum | Änderung |
 |---|---|---|
 | 0.1 | 13.10.2026 | Erster Entwurf aus dem Auftrag; offene Fragen F-01 … F-20 |
+| 1.0.1 | 13.10.2026 | Freigabe durch Julius; Antworten O-1 … O-3 eingetragen |
 | 1.0 | 13.10.2026 | Antworten F-01 … F-20 eingearbeitet: kein SMD-Löten (E-01), OLED in beiden Geräten mit Anzeige-Grundsätzen (Kap. 5a), Schwerpunkt Trasse/Unterputz mit Selektivität (U-13), Länge 300 m Muss / 500 m Soll, NYM als Kann, Durchgangstest auf Soll, kein Kopfhöreranschluss, Fremdspannung 60 V DC / 50 V AC; neue Tests T-14 … T-16 |
