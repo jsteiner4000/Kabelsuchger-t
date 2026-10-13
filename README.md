@@ -11,8 +11,10 @@ wertet mit 24-bit-Wandler und digitaler Lock-in-Technik aus.
 
 ## Stand
 
-**Phase 3 von 8:** Machbarkeitstest auf dem Steckbrett. Lastenheft und Konzept sind freigegeben. Jetzt
-werden die Teile bestellt, die Prototypen aufgebaut und vermessen.
+**Phase 3 von 8, angehalten:** Julius möchte ein einfacheres und günstigeres Gerät. Vorschlag
+[`docs/variante-einfach.md`](docs/variante-einfach.md) (ca. 35 € pro Satz) wartet auf Freigabe. Bis dahin bitte
+nichts von der alten Einkaufsliste bestellen. Neue Form des Handgeräts (Abtastfläche oben):
+[`gehaeuse/konzept/`](gehaeuse/konzept/).
 
 ## Dokumente
 
@@ -22,6 +24,7 @@ werden die Teile bestellt, die Prototypen aufgebaut und vermessen.
 | [`docs/konzept.md`](docs/konzept.md) | Wie es funktioniert: Physik, Einspeisemodi, Signal, Auswertung, Varianten, Reichweiten, Budget | <https://claude.ai/artifact/VZtH7KZhMHQYaksFrRsrAv> |
 | [`docs/machbarkeitstest.md`](docs/machbarkeitstest.md) | Einkaufsliste, Steckbrett-Aufbau, Spulen wickeln, Software, Messprogramm M1–M9 | <https://claude.ai/artifact/EqZmsoxrUWFYdXUHB5X285> |
 | [`docs/messprotokoll-phase3.md`](docs/messprotokoll-phase3.md) | Messprotokoll zum Ausfüllen | |
+| [`docs/variante-einfach.md`](docs/variante-einfach.md) | Vorschlag: einfache Variante, was bleibt, was fliegt, Kosten | |
 | [`docs/entscheidungen.md`](docs/entscheidungen.md) | Jede Entscheidung mit Begründung | |
 | [`docs/berechnungen/feldmodell.py`](docs/berechnungen/feldmodell.py) | Feld- und Reichweitenrechnung (nur Python-Standardbibliothek) | |
 | [`stueckliste.csv`](stueckliste.csv) | Stückliste (ab Phase 4), Trennzeichen `;` | |
@@ -43,6 +46,7 @@ firmware/machbarkeit/
 firmware/sender/               Endgültige Firmware (Phase 6)
 firmware/handgeraet/
 gehaeuse/                      Gehäuse (Phase 7)
+  konzept/                     Ansichtsmodell beider Geräte (OpenSCAD + Bilder)
 stueckliste.csv
 ```
 

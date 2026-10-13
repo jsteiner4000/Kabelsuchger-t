@@ -239,3 +239,21 @@ Spulen bestätigt.
 - **Datum:** 13.10.2026 · **Status:** beschlossen
 - **Inhalt:** Stiel aus M20-Isolierrohr, Spulenkabel aus J-Y(St)Y-Reststück (je Spule ein Paar, Schirm an GND).
 - **Begründung:** Vorhandenes Material, abgeschirmt, definierte Geometrie für reproduzierbare Messungen.
+
+## Neuausrichtung (Phase 3)
+
+### E-033 Abtastfläche des Handgeräts oben am Kopf
+- **Datum:** 13.10.2026 · **Status:** beschlossen (Vorgabe von Julius, ändert E-024)
+- **Inhalt:** Das Handgerät ist ein Stab: oben der Sensorkopf mit der Abtastfläche auf der Stirnseite, darunter
+  Display und Tasten, unten der Griff mit den Batterien. Die Spule liegt quer im Kopf, direkt unter der Fläche.
+- **Begründung:** Man hält das Gerät wie eine Taschenlampe gegen Wand oder Decke und schaut dabei aufs Display.
+  Eine Abtastfläche unten am Gerät passt nicht zu dieser Haltung.
+- **Ansicht:** `gehaeuse/konzept/ansicht.scad` und die PNG-Bilder daneben.
+
+### E-034 Variante „Einfach“ statt Variante C
+- **Datum:** 13.10.2026 · **Status:** vorgeschlagen, wartet auf Freigabe (würde E-027 ersetzen)
+- **Inhalt:** Hardware wie Variante B (eine Spule, Wandler im ESP32-S3), Software wie Variante C (Zweiton, Lock-in,
+  Stromrichtung). Sender ohne Display, Relais und Messschaltung (3 LEDs). Keine E-Feld-Spitze, keine
+  Durchgangsprüfung, nur der Standard-Frequenzsatz. Ca. 35 € pro Satz.
+- **Begründung:** Variante C ist Julius zu teuer und zu aufwendig. Die Reichweite hängt hauptsächlich an
+  Einspeisung, Strom und Spule, und die bleiben gleich. Details: `docs/variante-einfach.md`.
