@@ -121,6 +121,10 @@ section{display:flex;flex-direction:column;gap:18px}
 .muss{background:var(--muss-bg);color:var(--muss-fg)}
 .soll{background:var(--soll-bg);color:var(--soll-fg)}
 .kann{background:var(--kann-bg);color:var(--kann-fg);outline:1px dashed var(--rule)}
+.weg{background:transparent;color:var(--muted);outline:1px solid var(--rule)}
+.struck{text-decoration:line-through;color:var(--muted)}
+.notes{display:flex;flex-direction:column;gap:10px}
+.note.key{border-left-color:var(--bma)}
 .legend{display:flex;flex-wrap:wrap;gap:14px;font-size:.88rem;align-items:center}
 .legend span{display:inline-flex;gap:6px;align-items:center}
 .notlist{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:10px 24px;margin:0;padding:0;list-style:none}
@@ -211,15 +215,15 @@ footer{border-top:1.5px solid var(--ink);padding-top:14px;font-size:.86rem;color
     <div class="titleblock" aria-label="Schriftfeld">
       <div><span class="tb-k">Projekt</span><span class="tb-v big">Kabelsuchgerät · Sender + Handgerät</span></div>
       <div><span class="tb-k">Dokument</span><span class="tb-v">Lastenheft</span></div>
-      <div><span class="tb-k">Version</span><span class="tb-v mono">0.1 Entwurf</span></div>
+      <div><span class="tb-k">Version</span><span class="tb-v mono">1.0</span></div>
       <div><span class="tb-k">Datum</span><span class="tb-v mono">13.10.2026</span></div>
-      <div><span class="tb-k">Status</span><span class="tb-v status"><span class="dot" aria-hidden="true"></span>Rückfragen offen (F-01 … F-20)</span></div>
+      <div><span class="tb-k">Status</span><span class="tb-v status"><span class="dot" aria-hidden="true"></span>Zur Freigabe durch Julius</span></div>
       <div><span class="tb-k">Phase</span><span class="tb-v mono">1 von 8</span></div>
       <div><span class="tb-k">Auftraggeber</span><span class="tb-v">Julius</span></div>
       <div><span class="tb-k">Quelle</span><span class="tb-v mono" style="font-size:.85rem">docs/lastenheft.md</span></div>
     </div>
     <h1>Kabelsuchgerät</h1>
-    <p class="lead">Ein Sender speist ein Suchsignal in eine spannungsfreie EMA/BMA-Leitung ein, ein Handgerät verfolgt sie von außen, auch durch Wände. Diese Seite zeigt auf einen Blick, <b>was</b> wir bauen wollen. <b>Wie</b> wir es bauen, klärt das Konzept in Phase 2.</p>
+    <p class="lead">Ein Sender speist ein Suchsignal in eine spannungsfreie EMA/BMA-Leitung ein, ein Handgerät verfolgt sie von außen, vor allem in Kabeltrassen und unter Putz. Diese Seite zeigt auf einen Blick, <b>was</b> wir bauen wollen. <b>Wie</b> wir es bauen, klärt das Konzept in Phase 2.</p>
   </header>
 
   <section id="system" aria-labelledby="h-system">
@@ -316,15 +320,15 @@ footer{border-top:1.5px solid var(--ink);padding-top:14px;font-size:.86rem;color
         <rect x="898" y="256" width="16" height="28" rx="3" class="s-iconbox"/>
         <text x="922" y="275" class="s-t">Gerät</text>
       </svg>
-      <p class="figcap">Der Sender hat drei Klemmen: Ader A, Ader B und Schirm/Erde. Welche Einspeisemodi es am Ende gibt (A·B, A·Schirm, A·Erde oder Kombinationen), entscheidet das Konzept. Die Leitung ist beim Suchen immer spannungsfrei, 2 m bis mehrere hundert Meter lang, der Schirm geerdet oder nicht.</p>
+      <p class="figcap">Der Sender hat drei Klemmen: Ader A, Ader B und Schirm/Erde. Welche Einspeisemodi es am Ende gibt (A·B, A·Schirm, A·Erde oder Kombinationen), entscheidet das Konzept. Die Leitung ist beim Suchen immer spannungsfrei und am Anfang komplett abgeklemmt. Länge bis 300 m (Muss) bzw. 500 m (Soll), Schirm geerdet oder nicht, das ferne Ende mal zugänglich, mal unbekannt.</p>
     </div>
   </section>
 
   <section id="aufgaben" aria-labelledby="h-aufgaben">
     <div class="sec-head">
-      <span class="eyebrow">Lastenheft Kap. 2, Frage F-06</span>
+      <span class="eyebrow">Lastenheft Kap. 2, F-06, F-07</span>
       <h2 id="h-aufgaben">Drei Suchaufgaben</h2>
-      <p class="muted">Das Handgerät muss alle drei können. Wie wichtig welche ist, beantwortest du in F-06.</p>
+      <p class="muted">Das Handgerät muss alle drei können. Schwerpunkt sind Kabeltrassen und Leitungen unter Putz.</p>
     </div>
     <div class="tasks">
       <article class="task">
@@ -379,7 +383,10 @@ footer{border-top:1.5px solid var(--ink);padding-top:14px;font-size:.86rem;color
         <p class="muted">Im Verteiler oder in der Dose liegen die Adern frei. Die Spitze findet die Ader mit dem Signal.</p>
       </article>
     </div>
-    <p class="note">Eine einzelne Ader in einem geschlossenen Kabel lässt sich von außen nicht von ihren Nachbaradern unterscheiden. Das geht nur am offenen Ende.</p>
+    <div class="notes">
+      <p class="note key"><b>Neu: U-13 Selektivität (Muss).</b> In einer vollen Trasse springt das Signal auf Nachbarkabel über. Die gesuchte Leitung muss sich trotzdem eindeutig abheben, auch in Metall- und Gitterrinnen.</p>
+      <p class="note">Eine einzelne Ader in einem geschlossenen Kabel lässt sich von außen nicht von ihren Nachbaradern unterscheiden. Das geht nur am offenen Ende.</p>
+    </div>
   </section>
 
   <section id="anforderungen" aria-labelledby="h-anf">
@@ -394,7 +401,7 @@ footer{border-top:1.5px solid var(--ink);padding-top:14px;font-size:.86rem;color
     </div>
     <div class="reqgrid">
       <div class="reqblock">
-        <h3>Sender <span class="eyebrow">S-01 … S-17</span></h3>
+        <h3>Sender <span class="eyebrow">S-01 … S-18</span></h3>
         <ul class="reqs">
           <li><span class="rid">S-01</span><span class="chip muss">Muss</span><span class="rtext">Suchsignal, das das Handgerät eindeutig erkennt</span></li>
           <li><span class="rid">S-02</span><span class="chip muss">Muss</span><span class="rtext">Drei Anschlüsse: Ader A, Ader B, Schirm/Erde</span></li>
@@ -402,36 +409,37 @@ footer{border-top:1.5px solid var(--ink);padding-top:14px;font-size:.86rem;color
           <li><span class="rid">S-04</span><span class="chip muss">Muss</span><span class="rtext">Ausgang ≤ 25 V AC eff bzw. 60 V DC (Schutzkleinspannung)</span></li>
           <li><span class="rid">S-05</span><span class="chip muss">Muss</span><span class="rtext">Dauerhaft kurzschlussfest, jede Klemmenkombination</span></li>
           <li><span class="rid">S-06</span><span class="chip muss">Muss</span><span class="rtext">Stabil an langen Leitungen bis zur Maximallänge</span></li>
-          <li><span class="rid">S-07</span><span class="chip muss">Muss</span><span class="rtext">AA- oder AAA-Batterien, NiMH-tauglich</span></li>
-          <li><span class="rid">S-08</span><span class="chip muss">Muss</span><span class="rtext">Automatische Abschaltung, nicht zu früh (läuft unbeaufsichtigt)</span></li>
-          <li><span class="rid">S-09</span><span class="chip muss">Muss</span><span class="rtext">Anzeige: Betrieb, Modus, Batterie, Fehler</span></li>
-          <li><span class="rid">S-10</span><span class="chip soll">Soll</span><span class="rtext">Eingespeisten Strom anzeigen</span></li>
+          <li><span class="rid">S-07</span><span class="chip muss">Muss</span><span class="rtext">AA-Zellen, Alkaline und NiMH</span></li>
+          <li><span class="rid">S-08</span><span class="chip muss">Muss</span><span class="rtext">Abschaltung 2 h nach letzter Bedienung, umschaltbar 30 min / 8 h</span></li>
+          <li><span class="rid">S-09</span><span class="chip muss">Muss</span><span class="rtext">OLED: Betrieb, Modus, Batterie, Fehler</span></li>
+          <li><span class="rid">S-10</span><span class="chip soll">Soll</span><span class="rtext">Eingespeisten Strom in mA anzeigen</span></li>
           <li><span class="rid">S-11</span><span class="chip soll">Soll</span><span class="rtext">Mindestens zwei Leistungsstufen</span></li>
-          <li><span class="rid">S-12</span><span class="chip muss">Muss</span><span class="rtext">Übersteht Fremdspannung ohne Schaden (Wert: F-13)</span></li>
-          <li><span class="rid">S-13</span><span class="chip kann">Kann</span><span class="rtext">Fremdspannungswarnung, nur wenn zuverlässig</span></li>
-          <li><span class="rid">S-14</span><span class="chip kann">Kann</span><span class="rtext">Durchgangs-/Schleifentest, nur wenn eindeutig</span></li>
-          <li><span class="rid">S-15</span><span class="chip muss">Muss</span><span class="rtext">Krokodilklemmen, Zugentlastung</span></li>
+          <li><span class="rid">S-12</span><span class="chip muss">Muss</span><span class="rtext">Übersteht 60 V DC / 50 V AC dauerhaft</span></li>
+          <li><span class="rid">S-13</span><span class="chip kann">Kann</span><span class="rtext">Fremdspannungswarnung, nur wenn zuverlässig und nicht mit Spannungsprüfer zu verwechseln</span></li>
+          <li><span class="rid">S-14</span><span class="chip soll">Soll</span><span class="rtext">Durchgangstest: Schleifenwiderstand in Ω, offen / gebrückt / Abschlusswiderstand</span></li>
+          <li><span class="rid">S-15</span><span class="chip muss">Muss</span><span class="rtext">3 × 1 m Silikonlitze, Krokodilklemmen rot / schwarz / grün-gelb, Zugentlastung</span></li>
           <li><span class="rid">S-16</span><span class="chip soll">Soll</span><span class="rtext">Mindestens 8 h Dauerbetrieb</span></li>
           <li><span class="rid">S-17</span><span class="chip soll">Soll</span><span class="rtext">Signalkennung: Handgerät reagiert nur auf den eigenen Sender</span></li>
+          <li><span class="rid">S-18</span><span class="chip soll">Soll</span><span class="rtext">Mehrere Adern per WAGO anschließbar; 4-mm-Buchse für lange Erdleitung</span></li>
         </ul>
       </div>
       <div class="reqblock">
         <h3>Handgerät <span class="eyebrow">H-01 … H-15</span></h3>
         <ul class="reqs">
           <li><span class="rid">H-01</span><span class="chip muss">Muss</span><span class="rtext">Ton ändert sich mit der Signalstärke</span></li>
-          <li><span class="rid">H-02</span><span class="chip muss">Muss</span><span class="rtext">OLED mit Balken und Zahlenwert</span></li>
+          <li><span class="rid">H-02</span><span class="chip muss">Muss</span><span class="rtext">OLED mit Balken und Zahlenwert (Gestaltung A-01 … A-03)</span></li>
           <li><span class="rid">H-03</span><span class="chip muss">Muss</span><span class="rtext">Ortungsprinzip nach Konzept, aktiver Modus sichtbar</span></li>
           <li><span class="rid">H-04</span><span class="chip muss">Muss</span><span class="rtext">Bündel-Modus: feine Spitze, Empfindlichkeit regelbar</span></li>
           <li><span class="rid">H-05</span><span class="chip muss">Muss</span><span class="rtext">Zeigt nur das Sendersignal: 50 Hz, Schaltnetzteile, LED-Treiber werden unterdrückt</span></li>
           <li><span class="rid">H-06</span><span class="chip muss">Muss</span><span class="rtext">Empfindlichkeit von Hand einstellbar</span></li>
           <li><span class="rid">H-07</span><span class="chip soll">Soll</span><span class="rtext">Automatische Empfindlichkeit</span></li>
-          <li><span class="rid">H-08</span><span class="chip muss">Muss</span><span class="rtext">AA/AAA, NiMH-tauglich, Abschaltung stört nicht beim Suchen</span></li>
+          <li><span class="rid">H-08</span><span class="chip muss">Muss</span><span class="rtext">AA, NiMH-tauglich; aus nach 10 min ohne Bedienung und ohne Signal</span></li>
           <li><span class="rid">H-09</span><span class="chip muss">Muss</span><span class="rtext">Batterieanzeige</span></li>
           <li><span class="rid">H-10</span><span class="chip soll">Soll</span><span class="rtext">Lautstärke einstellbar, auch stumm</span></li>
-          <li><span class="rid">H-11</span><span class="chip soll">Soll</span><span class="rtext">Einhändig bedienbar, Display beim Suchen ablesbar</span></li>
+          <li><span class="rid">H-11</span><span class="chip soll">Soll</span><span class="rtext">So kompakt wie technisch sinnvoll, einhändig bedienbar</span></li>
           <li><span class="rid">H-12</span><span class="chip soll">Soll</span><span class="rtext">Ruhige Anzeige ohne Rauschsprünge</span></li>
-          <li><span class="rid">H-13</span><span class="chip kann">Kann</span><span class="rtext">Kopfhöreranschluss</span></li>
-          <li><span class="rid">H-14</span><span class="chip kann">Kann</span><span class="rtext">Richtungsanzeige links/rechts</span></li>
+          <li><span class="rid">H-13</span><span class="chip weg">entfällt</span><span class="rtext struck">Kopfhöreranschluss</span></li>
+          <li><span class="rid">H-14</span><span class="chip kann">Kann</span><span class="rtext">Richtungsanzeige links/rechts (Phase 2 prüft)</span></li>
           <li><span class="rid">H-15</span><span class="chip kann">Kann</span><span class="rtext">Tiefenschätzung (nur magnetisch, nur Schätzung)</span></li>
         </ul>
       </div>
@@ -452,24 +460,36 @@ footer{border-top:1.5px solid var(--ink);padding-top:14px;font-size:.86rem;color
       <div class="reqblock">
         <h3>Elektronik und Fertigung <span class="eyebrow">E-01 … E-07</span></h3>
         <ul class="reqs">
-          <li><span class="rid">E-01</span><span class="chip muss">Muss</span><span class="rtext">Nur handlötbar (THT, 0805, SOIC) oder vom Hersteller bestückt</span></li>
-          <li><span class="rid">E-02</span><span class="chip muss">Muss</span><span class="rtext">Mikrocontroller in der Arduino IDE programmierbar</span></li>
+          <li><span class="rid">E-01</span><span class="chip muss">Muss</span><span class="rtext">Kein SMD-Löten: nur THT und fertige Module; SMD nur vom Hersteller bestückt</span></li>
+          <li><span class="rid">E-02</span><span class="chip muss">Muss</span><span class="rtext">Arduino IDE; vorhandener ESP32-S2 mini für den Steckbrett-Test</span></li>
           <li><span class="rid">E-03</span><span class="chip soll">Soll</span><span class="rtext">Programmieren über USB, ohne Extra-Programmer</span></li>
           <li><span class="rid">E-04</span><span class="chip muss">Muss</span><span class="rtext">Beschriftete Messpunkte für Multimeter und Oszilloskop</span></li>
           <li><span class="rid">E-05</span><span class="chip muss">Muss</span><span class="rtext">Firmware kommentiert, Parameter an einer Stelle</span></li>
           <li><span class="rid">E-06</span><span class="chip muss">Muss</span><span class="rtext">Steckbrett-Test vor der Platinenbestellung</span></li>
-          <li><span class="rid">E-07</span><span class="chip muss">Muss</span><span class="rtext">KiCad-Projekt, Netzliste oder Lochrasterplan</span></li>
+          <li><span class="rid">E-07</span><span class="chip muss">Muss</span><span class="rtext">KiCad-Projekt mit Fertigungsdaten, möglichst automatisiert erstellt</span></li>
         </ul>
       </div>
     </div>
-    <div class="reqblock">
-      <h3>Bewusst nicht dabei <span class="eyebrow">Kap. 8.2</span></h3>
-      <ul class="notlist">
-        <li>Suche an Leitungen unter Spannung, Einspeisung in Netzspannung</li>
-        <li>Passive 50-Hz-Ortung von Netzleitungen als Bohrschutz: „kein Ausschlag“ hieße nicht „keine Leitung“ (Vorschlag E-005)</li>
-        <li>Funk oder App</li>
-        <li>CE-Verfahren (Eigenbau); trotzdem kleine Sendeleistung und übliche Frequenzbereiche</li>
-      </ul>
+    <div class="reqgrid">
+      <div class="reqblock">
+        <h3>Anzeige in beiden Geräten <span class="eyebrow">A-01 … A-03</span></h3>
+        <ul class="reqs">
+          <li><span class="rid">A-01</span><span class="chip muss">Muss</span><span class="rtext">Jeder Zahlenwert ist ein echter Messwert mit Einheit (mA, V, Ω, dB). Nichts geschönt.</span></li>
+          <li><span class="rid">A-02</span><span class="chip soll">Soll</span><span class="rtext">Schick: Balken mit Spitzenwert, Verlaufsgraph, große Ziffern, flüssige Darstellung</span></li>
+          <li><span class="rid">A-03</span><span class="chip soll">Soll</span><span class="rtext">Sender und Handgerät im gleichen Look</span></li>
+        </ul>
+      </div>
+      <div class="reqblock">
+        <h3>Bewusst nicht dabei <span class="eyebrow">Kap. 8.2</span></h3>
+        <ul class="notlist">
+          <li>Suche an Leitungen unter Spannung, Einspeisung in Netzspannung</li>
+          <li>Passive 50-Hz-Ortung als Bohrschutz: „kein Ausschlag“ hieße nicht „keine Leitung“ (E-005)</li>
+          <li>Kopfhöreranschluss</li>
+          <li>Schutz gegen 230 V (kommt laut dir nie vor)</li>
+          <li>Funk oder App</li>
+          <li>CE-Verfahren (Eigenbau); trotzdem kleine Sendeleistung</li>
+        </ul>
+      </div>
     </div>
   </section>
 
@@ -525,17 +545,20 @@ footer{border-top:1.5px solid var(--ink);padding-top:14px;font-size:.86rem;color
         <tbody>
           <tr><td class="id">T-01</td><td>Freie Leitung (≥ 50 m), Ende offen: Erkennungsabstand in Luft, je Einspeisemodus</td><td class="id">U-05 H-03</td><td class="goal">Phase 2</td></tr>
           <tr><td class="id">T-02</td><td>Wie T-01, Ende gebrückt bzw. geerdet</td><td class="id">U-05 S-03</td><td class="goal">Phase 2</td></tr>
-          <tr><td class="id">T-03</td><td>Leitung in oder hinter Mauerwerk: Erkennungsabstand, Ortungsgenauigkeit</td><td class="id">U-09</td><td class="goal">Phase 2</td></tr>
+          <tr><td class="id">T-03</td><td>Leitung unter Putz bzw. in Mauerwerk: Erkennungsabstand, Ortungsgenauigkeit</td><td class="id">U-08 U-09</td><td class="goal">Phase 2</td></tr>
           <tr><td class="id">T-04</td><td>Leitung in oder unter Stahlbeton (reales Objekt)</td><td class="id">U-09</td><td class="goal">Phase 2</td></tr>
-          <tr><td class="id">T-05</td><td>Richtige Leitung in einem Bündel von ≥ 10 Leitungen eindeutig finden</td><td class="id">H-04</td><td class="goal">Phase 2</td></tr>
+          <tr><td class="id">T-05</td><td>Trasse mit ≥ 10 Leitungen, auch Gitterrinne: gesuchte Leitung finden und verfolgen, obwohl Nachbarn übersprechen</td><td class="id">U-13 H-04</td><td class="goal">Phase 2</td></tr>
           <tr><td class="id">T-06</td><td>Richtige Ader am abisolierten Ende finden</td><td class="id">H-04</td><td class="goal">Phase 2</td></tr>
           <tr><td class="id">T-07</td><td>LED-Treiber, Schaltnetzteil, Leuchtstofflampe in 30 cm Abstand</td><td class="id">H-05</td><td class="goal">keine Fehlanzeige</td></tr>
           <tr><td class="id">T-08</td><td>Kurzschluss am Ausgang, 1 h, jede Klemmenkombination</td><td class="id">S-05</td><td class="goal">kein Schaden</td></tr>
-          <tr><td class="id">T-09</td><td>Endgerät angeschlossen (z. B. Melder, 12-V-Kamera), alle Modi</td><td class="id">U-07</td><td class="goal">kein Schaden</td></tr>
-          <tr><td class="id">T-10</td><td>Fremdspannung (Wert aus F-13) an den Klemmen</td><td class="id">S-12 S-13</td><td class="goal">kein Schaden</td></tr>
-          <tr><td class="id">T-11</td><td>Lange Leitung: Sender stabil, Signal am Ende noch ortbar</td><td class="id">S-06</td><td class="goal">Phase 2</td></tr>
+          <tr><td class="id">T-09</td><td>12-V-Melder bzw. 12-V-Kamera am Ende, alle Modi, auch verpolt</td><td class="id">U-07</td><td class="goal">kein Schaden</td></tr>
+          <tr><td class="id">T-10</td><td>60 V DC und 50 V AC an jeder Klemmenkombination</td><td class="id">S-12 S-13</td><td class="goal">kein Schaden</td></tr>
+          <tr><td class="id">T-11</td><td>Lange Leitung (300 m bzw. 500 m oder Trommel): Sender stabil, Signal am Ende ortbar</td><td class="id">U-03 S-06</td><td class="goal">Phase 2</td></tr>
           <tr><td class="id">T-12</td><td>Batterielaufzeit und automatische Abschaltung, beide Geräte</td><td class="id">S-08 S-16 H-08</td><td class="goal">Phase 2</td></tr>
-          <tr><td class="id">T-13</td><td>Vergleich mit einem einfachen Tonsucher unter gleichen Bedingungen</td><td class="id">Kap. 1</td><td class="goal">deutlich weiter</td></tr>
+          <tr><td class="id">T-13</td><td>Vergleich mit deinem Tonsucher unter gleichen Bedingungen</td><td class="id">Kap. 1</td><td class="goal">deutlich weiter</td></tr>
+          <tr><td class="id">T-14</td><td>Durchgangstest: Ende offen, gebrückt, mit Abschlusswiderstand</td><td class="id">S-14</td><td class="goal">richtig erkannt</td></tr>
+          <tr><td class="id">T-15</td><td>NYM, freigeschaltet: Ortung und Durchgangsmessung</td><td class="id">U-02b</td><td class="goal">Phase 2</td></tr>
+          <tr><td class="id">T-16</td><td>Angezeigte Werte gegen Multimeter bzw. Oszilloskop</td><td class="id">A-01</td><td class="goal">Phase 2</td></tr>
         </tbody>
       </table>
     </div>
@@ -550,7 +573,7 @@ footer{border-top:1.5px solid var(--ink);padding-top:14px;font-size:.86rem;color
     <div class="phase-group">
       <div class="phase-label"><span class="eyebrow">Durchdenken und entwerfen</span></div>
       <ol class="phases">
-        <li class="phase now"><span class="now-tag">jetzt</span><span class="n">1</span><span class="t">Rückfragen + Lastenheft</span><span class="d">Lastenheft v1.0 und diese Übersicht</span><span class="gate">Freigabe</span></li>
+        <li class="phase now"><span class="now-tag">jetzt</span><span class="n">1</span><span class="t">Rückfragen + Lastenheft</span><span class="d">Antworten eingearbeitet, v1.0 liegt zur Freigabe</span><span class="gate">Freigabe</span></li>
         <li class="phase"><span class="n">2</span><span class="t">Konzept</span><span class="d">Ortungsprinzip, Blockschaltbild, Varianten mit Empfehlung, Reichweite, Zielwerte, visuelle Konzeptübersicht</span><span class="gate">Freigabe</span></li>
         <li class="phase"><span class="n">3</span><span class="t">Machbarkeitstest</span><span class="d">Steckbrett-Aufbau, Messanleitung fürs Oszilloskop</span><span class="gate">Freigabe</span></li>
         <li class="phase"><span class="n">4</span><span class="t">Schaltung + Stückliste</span><span class="d">Schaltpläne, Stückliste mit Preisen, Budget-Check</span><span class="gate">Freigabe</span></li>
@@ -560,7 +583,7 @@ footer{border-top:1.5px solid var(--ink);padding-top:14px;font-size:.86rem;color
     <div class="phase-group">
       <div class="phase-label"><span class="eyebrow">Umsetzen</span></div>
       <ol class="phases" start="5">
-        <li class="phase"><span class="n">5</span><span class="t">Platine / Aufbauplan</span><span class="d">KiCad-Projekt oder Netzliste bzw. Lochrasterplan</span><span class="gate">Freigabe</span></li>
+        <li class="phase"><span class="n">5</span><span class="t">Platine</span><span class="d">KiCad-Projekt mit Fertigungsdaten</span><span class="gate">Freigabe</span></li>
         <li class="phase"><span class="n">6</span><span class="t">Firmware</span><span class="d">Sketche für Sender und Handgerät, Arduino IDE</span><span class="gate">Freigabe</span></li>
         <li class="phase"><span class="n">7</span><span class="t">Gehäuse</span><span class="d">Quellcode, STL, Druckeinstellungen</span><span class="gate">Freigabe</span></li>
         <li class="phase"><span class="n">8</span><span class="t">Inbetriebnahme</span><span class="d">Abgleich, Tests, Bedienungsanleitung</span><span class="gate">Abnahme</span></li>
@@ -571,53 +594,51 @@ footer{border-top:1.5px solid var(--ink);padding-top:14px;font-size:.86rem;color
   <section id="fragen" aria-labelledby="h-fragen">
     <div class="sec-head">
       <span class="eyebrow">Lastenheft Kap. 14</span>
-      <h2 id="h-fragen">Offene Fragen an dich</h2>
-      <p class="muted">Zu jeder Frage steht mein Vorschlag. Wenn er passt, reicht „ok“. Die ausführliche Fassung mit Begründungen steht in <span class="mono">docs/lastenheft.md</span>.</p>
+      <h2 id="h-fragen">Deine Antworten und was daraus folgt</h2>
+      <p class="muted">Links deine Antwort, darunter, welche Anforderung sich dadurch geändert hat.</p>
     </div>
     <div class="qgroups">
       <div class="qgroup">
         <h3>Werkstatt und Beschaffung</h3>
         <ul class="qs">
-          <li class="qitem"><span class="qid">F-01</span><span class="qt">Welches Bambu-Modell, welche Düse?</span><span class="qv"><b>Vorschlag:</b> 0,4 mm, Teile bis 25 cm</span></li>
-          <li class="qitem"><span class="qid">F-02</span><span class="qt">Nutzt du KiCad? Version, Erfahrung?</span><span class="qv"><b>Vorschlag:</b> komplettes KiCad-Projekt, du bestellst nur</span></li>
-          <li class="qitem"><span class="qid">F-03</span><span class="qt">Bezugsquellen, Platinen aus China okay, Vorbestückung okay, 0805/SOIC löten?</span><span class="qv"><b>Vorschlag:</b> JLCPCB + Reichelt, Module evtl. AliExpress</span></li>
-          <li class="qitem"><span class="qid">F-04</span><span class="qt">Oszilloskop (Modell, FFT?), Funktionsgenerator, was liegt in der Bastelkiste?</span><span class="qv">Für den Steckbrett-Test nehme ich, was du hast.</span></li>
-          <li class="qitem"><span class="qid">F-05</span><span class="qt">Längere Testleitung (≥ 50–100 m)? Einfacher Tonsucher als Vergleich?</span><span class="qv">Messlatte für „spürbar besser“</span></li>
+          <li class="qitem"><span class="qid">F-01</span><span class="qt">0,4-mm-Düse, Teile bis 25 cm</span><span class="qv"><b>→ G-01.</b> Modell nicht genannt, Annahme: Bauraum 256 mm</span></li>
+          <li class="qitem"><span class="qid">F-02</span><span class="qt">KiCad gern, per MCP</span><span class="qv"><b>→ E-07.</b> Werkzeug klären wir bis Phase 5</span></li>
+          <li class="qitem"><span class="qid">F-03</span><span class="qt">Kein SMD</span><span class="qv"><b>→ E-01.</b> Nur THT und fertige Module, SMD nur vom Hersteller bestückt</span></li>
+          <li class="qitem"><span class="qid">F-04</span><span class="qt">ESP32-S2 mini vorhanden</span><span class="qv"><b>→ E-02.</b> Kandidat für den Steckbrett-Test</span></li>
+          <li class="qitem"><span class="qid">F-05</span><span class="qt">Testleitung und Tonsucher vorhanden</span><span class="qv"><b>→ T-11, T-13</b> sind durchführbar</span></li>
         </ul>
       </div>
       <div class="qgroup">
         <h3>Einsatz</h3>
         <ul class="qs">
-          <li class="qitem"><span class="qid">F-06</span><span class="qt">Gewichtung: Ortung / Bündel / Ader am Ende?</span><span class="qv"><b>Vorschlag:</b> 50 / 30 / 20 %</span></li>
-          <li class="qitem"><span class="qid">F-07</span><span class="qt">Wo versagt dein Tonsucher heute? Wie und wie tief liegen die Leitungen?</span><span class="qv">Darauf optimieren wir.</span></li>
-          <li class="qitem"><span class="qid">F-08</span><span class="qt">Längste Leitung? Auch Cat, Koax, NYM?</span><span class="qv"><b>Vorschlag:</b> 500 m; Cat und Koax Soll, NYM Kann</span></li>
-          <li class="qitem"><span class="qid">F-09</span><span class="qt">Leitung am Anfang komplett frei? Schirm lösbar? Alle Adern gemeinsam anschließbar?</span><span class="qv"><b>Vorschlag:</b> ja / ja / ja</span></li>
-          <li class="qitem"><span class="qid">F-10</span><span class="qt">Gibt es am Einspeiseort meist eine Erde (PAS, Heizungsrohr, Trasse)?</span><span class="qv">Rückweg über Erde bringt meist die größte Reichweite.</span></li>
-          <li class="qitem"><span class="qid">F-11</span><span class="qt">Fernes Ende bekannt und erreichbar? Ringleitungen häufig?</span><span class="qv">Entscheidet, ob am Ende ein Stromkreis zu schließen ist.</span></li>
-          <li class="qitem"><span class="qid">F-12</span><span class="qt">Welche Geräte hängen am Ende, welches ist am empfindlichsten?</span><span class="qv">Bestimmt die höchste Spannung zwischen zwei Adern.</span></li>
-          <li class="qitem"><span class="qid">F-13</span><span class="qt">Fremdspannung: laufende Zentrale? Versehentlich 230 V?</span><span class="qv"><b>Vorschlag:</b> 60 V DC / 50 V AC überstehen und warnen; 230 V sicher ausfallen</span></li>
+          <li class="qitem"><span class="qid">F-06</span><span class="qt">Alle drei Suchaufgaben</span><span class="qv"><b>→</b> Ortung, Trasse/Bündel und Ader am Ende sind Muss</span></li>
+          <li class="qitem"><span class="qid">F-07</span><span class="qt">Meistens Trasse und Unterputz</span><span class="qv"><b>→ U-08, U-10, neu U-13</b> Selektivität in Trassen</span></li>
+          <li class="qitem"><span class="qid">F-08</span><span class="qt">500 m wäre super, eher unrealistisch; NYM durchmessen wäre cool</span><span class="qv"><b>→ U-03</b> 300 m Muss, 500 m Soll; <b>U-02b</b> NYM Kann; <b>S-14</b> auf Soll</span></li>
+          <li class="qitem"><span class="qid">F-09</span><span class="qt">Ja / ja / ja</span><span class="qv"><b>→ U-15.</b> Leitung frei, Schirm lösbar, Adern gemeinsam</span></li>
+          <li class="qitem"><span class="qid">F-10</span><span class="qt">Erde meist vorhanden</span><span class="qv"><b>→ U-15.</b> Einspeisung gegen Erde möglich</span></li>
+          <li class="qitem"><span class="qid">F-11</span><span class="qt">Fernes Ende: unterschiedlich</span><span class="qv"><b>→ U-14.</b> Muss ohne Eingriff am Ende funktionieren</span></li>
+          <li class="qitem"><span class="qid">F-12</span><span class="qt">Mal offen, mal gebrückt</span><span class="qv"><b>→ U-05, U-07.</b> Annahme: 12-V-Geräte sind die empfindlichsten</span></li>
+          <li class="qitem"><span class="qid">F-13</span><span class="qt">Niemals 230 V</span><span class="qv"><b>→ S-12</b> 60 V DC / 50 V AC; kein 230-V-Schutz gefordert</span></li>
         </ul>
       </div>
       <div class="qgroup">
-        <h3>Sender</h3>
+        <h3>Geräte und Rahmen</h3>
         <ul class="qs">
-          <li class="qitem"><span class="qid">F-14</span><span class="qt">Messleitungen fest oder 4-mm-Buchsen? Länge?</span><span class="qv"><b>Vorschlag:</b> fest, 3 × 1 m Silikonlitze, rot / schwarz / grün-gelb</span></li>
-          <li class="qitem"><span class="qid">F-15</span><span class="qt">LEDs oder kleines OLED am Sender?</span><span class="qv"><b>Vorschlag:</b> OLED, zeigt Strom in mA, Fremdspannung in V, Widerstand in Ω</span></li>
-          <li class="qitem"><span class="qid">F-16</span><span class="qt">AA oder AAA, Akkus, Abschaltzeit?</span><span class="qv"><b>Vorschlag:</b> AA in beiden, NiMH-tauglich; Sender 2 h, Handgerät 10 min ohne Signal</span></li>
+          <li class="qitem"><span class="qid">F-14</span><span class="qt">Feste Leitungen, evtl. auch mit WAGO</span><span class="qv"><b>→ S-15, neu S-18</b></span></li>
+          <li class="qitem"><span class="qid">F-15</span><span class="qt">OLED in beiden Geräten, schick, aber korrekt</span><span class="qv"><b>→ S-09, H-02, neu A-01 … A-03</b></span></li>
+          <li class="qitem"><span class="qid">F-16</span><span class="qt">AA, NiMH, 2 h / 10 min</span><span class="qv"><b>→ S-07, S-08, H-08</b></span></li>
+          <li class="qitem"><span class="qid">F-17</span><span class="qt">So kompakt wie technisch sinnvoll, du entscheidest</span><span class="qv"><b>→ H-11.</b> Bauform kommt mit dem Konzept</span></li>
+          <li class="qitem"><span class="qid">F-18</span><span class="qt">Kein Kopfhöreranschluss</span><span class="qv"><b>→ H-13 entfällt;</b> Richtung und Tiefe prüft Phase 2</span></li>
+          <li class="qitem"><span class="qid">F-19</span><span class="qt">Alles im Gerät + Platinen anteilig</span><span class="qv"><b>→ B-03</b></span></li>
+          <li class="qitem"><span class="qid">F-20</span><span class="qt">Ein Satz, kein Termin</span><span class="qv"><b>→ B-04</b></span></li>
         </ul>
       </div>
       <div class="qgroup">
-        <h3>Handgerät</h3>
+        <h3>Noch offen, blockiert nichts</h3>
         <ul class="qs">
-          <li class="qitem"><span class="qid">F-17</span><span class="qt">Bauform: Stab, Pistole oder flach?</span><span class="qv"><b>Vorschlag:</b> Stab, 22–25 cm, Sensorkopf vorn, feine Spitze</span></li>
-          <li class="qitem"><span class="qid">F-18</span><span class="qt">Kopfhörer, Richtungsanzeige, Tiefenschätzung?</span><span class="qv"><b>Vorschlag:</b> Kopfhörer ja, Rest in Phase 2 prüfen</span></li>
-        </ul>
-      </div>
-      <div class="qgroup">
-        <h3>Rahmen</h3>
-        <ul class="qs">
-          <li class="qitem"><span class="qid">F-19</span><span class="qt">Was zählt in die 40 €?</span><span class="qv"><b>Vorschlag:</b> alles im Gerät + Platinen und Versand anteilig; ohne Batterien, Filament, Werkzeug</span></li>
-          <li class="qitem"><span class="qid">F-20</span><span class="qt">Wie viele Sätze? Gibt es einen Termin?</span><span class="qv"><b>Vorschlag:</b> 1 Satz, keine feste Frist</span></li>
+          <li class="qitem"><span class="qid">O-1</span><span class="qt">Welches Oszilloskop, mit FFT?</span><span class="qv">für die Messanleitung in Phase 3</span></li>
+          <li class="qitem"><span class="qid">O-2</span><span class="qt">Welches Modell ist dein Tonsucher?</span><span class="qv">für den Vergleichstest T-13</span></li>
+          <li class="qitem"><span class="qid">O-3</span><span class="qt">Trassen unter der Decke: suchst du von unten oder von der Leiter?</span><span class="qv">für die Reichweite in Trassen (Phase 2)</span></li>
         </ul>
       </div>
     </div>
@@ -637,7 +658,7 @@ footer{border-top:1.5px solid var(--ink);padding-top:14px;font-size:.86rem;color
   machbarkeitstest.md         <span class="c">Phase 3</span>
   inbetriebnahme.md           <span class="c">Phase 8</span>
   bedienungsanleitung.md      <span class="c">Phase 8: welcher Modus wann</span>
-hardware/sender/              <span class="c">Schaltplan, KiCad bzw. Aufbauplan</span>
+hardware/sender/              <span class="c">Schaltplan, KiCad-Projekt</span>
 hardware/handgeraet/
 firmware/sender/              <span class="c">Arduino-Sketch</span>
 firmware/handgeraet/
@@ -657,7 +678,7 @@ stueckliste.csv               <span class="c">Bezugsquelle und Preis</span></pre
   </section>
 
   <footer>
-    <span>Lastenheft v0.1 · Entwurf vom 13.10.2026</span>
-    <span>Nächster Schritt: deine Antworten auf F-01 … F-20, dann v1.0 zur Freigabe</span>
+    <span>Lastenheft v1.0 · 13.10.2026</span>
+    <span>Nächster Schritt: deine Freigabe, dann Phase 2 (Konzept)</span>
   </footer>
 </div>

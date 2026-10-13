@@ -6,7 +6,7 @@ Ein **Sender** speist ein Suchsignal in eine spannungsfreie Leitung ein, ein
 
 ## Stand
 
-**Phase 1 von 8:** Rückfragen und Lastenheft (Entwurf v0.1).
+**Phase 1 von 8:** Lastenheft v1.0 liegt zur Freigabe vor (Antworten aus den Rückfragen eingearbeitet).
 
 ## Dokumente
 
